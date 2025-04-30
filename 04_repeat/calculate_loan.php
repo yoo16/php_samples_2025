@@ -1,31 +1,51 @@
 <?php
-// 借入額
-$start_loan = 20000000;
+// 初期ローン額（GETパラメータからintで受け取る、なければデフォルト20000000）
+$start_loan = $_GET['loan'] ?? 20000000;
+
+// 月々の支払額（GETパラメータからintで受け取る、なければデフォルト80000）
+$pay_by_month = $_GET['pay_by_month'] ?? 80000;
+
+// 利息（%/年）
+$interest_rate =  $_GET['interest_rate'] ?? 1;
+
 // ローン残高
 $loan = $start_loan;
-// 支払額（月）
-$pay_by_month = 80000;
-// 利息（年）
-$interest_rate = 0.01;
+
 // 利息
 $interest = 0;
+
+// 利息合計
+$total_interest = 0;
+
 // 支払い月数
 $month = 0;
 
 // ローンデータ初期化
 $values = [];
-// ローン残高がある場合は繰り返し
+// 支払い月数、利息計算ループ
 while ($loan > 0) {
+    // 月を増やす
     $month++;
-    $interest = ($loan * $interest_rate) / 12;
+    // 利息計算
+    $interest = ($loan * $interest_rate / 100) / 12;
+    // ローン残高計算
     $loan -= ($pay_by_month - $interest);
+    // 合計利息計算
+    $total_interest += $interest;
 
+    // 表示データ作成
     $values[] = [
         'month' => $month,
         'interest' => round($interest),
         'loan' => round($loan)
     ];
 }
+
+// 年数計算
+$year = ceil($month / 12);
+
+// 総支払額
+$total_payment = $pay_by_month * $month;
 ?>
 
 <!DOCTYPE html>
@@ -44,24 +64,50 @@ while ($loan > 0) {
         <h1 class="text-2xl text-center font-bold p-3">ローンシミュレーション</h1>
 
         <div class="my-2">
-            <table class="min-w-full table-auto border border-gray-300">
-                <thead class="bg-gray-200">
-                    <tr>
-                        <th class="px-4 py-2 border border-gray-300 text-left">借入額</th>
-                        <th class="px-4 py-2 border border-gray-300 text-left">返済額(月)</th>
-                        <th class="px-4 py-2 border border-gray-300 text-left">利息</th>
-                        <th class="px-4 py-2 border border-gray-300 text-left">月数</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="px-4 py-2 border border-gray-300 text-left">&yen;<?= number_format($start_loan) ?></td>
-                        <td class="px-4 py-2 border border-gray-300 text-left">&yen;<?= number_format($pay_by_month) ?></td>
-                        <td class="px-4 py-2 border border-gray-300 text-left"><?= $interest_rate * 100 ?>%</td>
-                        <td class="px-4 py-2 border border-gray-300 text-left"><?= $month ?>ヶ月</td>
-                    </tr>
-                </tbody>
-            </table>
+            <form action="" method="get">
+                <div class="px-4 py-2 border border-gray-300 text-left">
+                    <label class="font-bold p-4" for="">総借入額</label>
+                    <input class="px-4 py-2 border border-gray-300 text-right"
+                        name="loan"
+                        value="<?= $start_loan ?>" />
+                    <label class="font-bold p-4" for="">金利</label>
+                    <input class="px-4 py-2 border border-gray-300 text-right"
+                        name="interest_rate"
+                        value="<?= $interest_rate ?>" />
+                    %
+                </div>
+                <div class="px-4 py-2 border border-gray-300 text-left">
+                    <label class="font-bold p-4" for="">月返済額</label>
+                    <input class="px-4 py-2 border border-gray-300 text-right"
+                        name="pay_by_month"
+                        value="<?= $pay_by_month ?>" />
+                </div>
+                <div class="py-2 text-center">
+                    <button class="bg-sky-500 text-white px-3 py-2 rounded">計算</button>
+                    <a href="?" class="inline-block bg-gray-500 text-white px-3 py-2 rounded">クリア</a>
+                </div>
+            </form>
+
+            <div class="my-4">
+                <table class="min-w-full table-auto border border-gray-300">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-4 py-2 border border-gray-300 text-left">月数</th>
+                            <th class="px-4 py-2 border border-gray-300 text-left">年数</th>
+                            <th class="px-4 py-2 border border-gray-300 text-left">総利息</th>
+                            <th class="px-4 py-2 border border-gray-300 text-left">総支払額</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="px-4 py-2 border border-gray-300 text-left"><?= $month ?>ヶ月</td>
+                            <td class="px-4 py-2 border border-gray-300 text-left"><?= $year ?>年</td>
+                            <td class="px-4 py-2 border border-gray-300"><?= number_format(round($total_interest)) ?> 円</td>
+                            <td class="px-4 py-2 border border-gray-300"><?= number_format($total_payment) ?> 円</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div class="my-2">
