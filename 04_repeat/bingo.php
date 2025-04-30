@@ -42,10 +42,6 @@ $labels = ['B', 'I', 'N', 'G', 'O'];
 
             <?php foreach ($columns as $i => $rows): ?>
                 <?php foreach ($rows as $j => $value): ?>
-                    <?php
-                    // $value = $columns[$j][$i];
-                    $isFree = ($value === 'FREE');
-                    ?>
                     <div class="<?= $isFree ? 'bg-yellow-200' : 'bg-white' ?> p-4 border border-gray-300 hover:bg-green-100 transition">
                         <?= $value ?>
                     </div>
