@@ -1,0 +1,4 @@
+"id","name","email","password"
+1,"User1","user1@test.com","$2y$10$Mp41sHgRTvkX7doKxwmvu.PmWb638HA8QIKsz6RXi1ZWq3Ru5xPlW"
+2,"User2","user2@test.com","$2y$10$Mp41sHgRTvkX7doKxwmvu.PmWb638HA8QIKsz6RXi1ZWq3Ru5xPlW"
+3,"User3","user3@test.com","$2y$10$Mp41sHgRTvkX7doKxwmvu.PmWb638HA8QIKsz6RXi1ZWq3Ru5xPlW"
