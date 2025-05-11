@@ -2,9 +2,13 @@
 require_once 'Gemini.php';
 
 $result = '';
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['prompt'])) {
+// POSTリクエストが送信された場合
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // POSTリクエストからプロンプトを取得
     $prompt = $_POST['prompt'];
+    // Geminiクラスのインスタンスを作成
     $gemini = new Gemini();
+    // GeminiAPIにリクエストを送信
     $result = $gemini->chat($prompt);
 }
 ?>
