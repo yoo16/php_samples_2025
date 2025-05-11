@@ -1,5 +1,5 @@
 <?php
-require_once '../Gemini.php';
+require_once '../service/Gemini.php';
 require_once '../lib/Lang.php';
 
 // CORS設定
@@ -29,5 +29,5 @@ $posts['translate']  = $gemini->translate($posts['origin'], $posts['fromLang'], 
 // $posts['translate'] = "Hello";
 
 // JSON形式でレスポンス
-$json = json_encode($data);
+$json = json_encode($posts);
 echo $json;
