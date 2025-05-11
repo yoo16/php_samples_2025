@@ -1,5 +1,5 @@
 <?php
-require_once 'Gemini.php';
+require_once '../service/Gemini.php';
 
 $result = '';
 // POSTリクエストが送信された場合

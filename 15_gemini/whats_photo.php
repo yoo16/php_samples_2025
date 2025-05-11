@@ -1,5 +1,5 @@
 <?php
-require_once 'Gemini.php';
+require_once '../service/Gemini.php';
 
 $uploadedImagePath = '';
 $results = [];
