@@ -47,6 +47,9 @@ function selected($value, $selected)
                     </div>
                 </div>
 
+                <button id="micButton" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded my-2" onclick="startSpeech()">
+                    音声入力
+                </button>
                 <input id="result" class="my-1 p-2 w-full rounded text-gray-700 border">
                 <button id="startButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-2" onclick="handleTranslate()">
                     テキスト翻訳

@@ -53,35 +53,36 @@ const handleTranslate = () => {
 /**
  * 翻訳
  */
-const translate = async (text, fromLang, toLang) => {
+const translate = async (origin, fromLang, toLang) => {
     statusElement.textContent = "翻訳中...";
 
-    await fetch(TRANSLATION_URI, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            origin: text,
-            fromLang: fromLang,
-            toLang: toLang
-        })
-    })
-        .then(response => {
-            statusElement.textContent = "";
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log(data)
-            renderTranslation(data);
-        })
-        .catch(error => {
-            console.error('Fetch error:', error);
+    const data = { origin, fromLang, toLang }
+    try {
+        // Fetch APIを使用して翻訳リクエストを送信
+        const response = await fetch(TRANSLATION_URI, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
         });
+
+        statusElement.textContent = "";
+
+        if (!response.ok) {
+            throw new Error(`Network error: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log(result);
+        renderTranslation(result);
+
+    } catch (error) {
+        console.error('Fetch error:', error);
+        statusElement.textContent = "翻訳中にエラーが発生しました。";
+    }
 };
+
 
 // 翻訳結果を表示
 const renderTranslation = (translationData) => {

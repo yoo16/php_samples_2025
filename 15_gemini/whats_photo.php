@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $uploadedImagePath = uploadImage();
 
     // GeminiAPIに画像を送信
-    if ($uploadedImagePath) {
+    if ($uploadedImagePath && file_exists($uploadedImagePath)) {
         $gemini = new Gemini();
         $results = $gemini->image($uploadedImagePath);
     }
@@ -26,8 +26,10 @@ function uploadImage()
         mkdir($uploadDir, 0755, true);
     }
 
+    // アップロードされたファイルの情報を取得
+    $fileName = $_FILES['image']['name'];
     // 拡張子を取得
-    $extension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+    $extension = pathinfo($fileName, PATHINFO_EXTENSION);
     // アップロードファイル名
     $fileName = uniqid() . ".{$extension}";
     // アップロード画像の保存先
