@@ -7,11 +7,11 @@
 </div>
 
 <script>
-    function showLoading() {
+    function showLoading(duration = 2000) {
         const loadingModal = document.getElementById('modal-loading');
         loadingModal.classList.remove('hidden');
         setTimeout(() => {
             loadingModal.classList.add('hidden');
-        }, 2000);
+        }, duration);
     }
 </script>

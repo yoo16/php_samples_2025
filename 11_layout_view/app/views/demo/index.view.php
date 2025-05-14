@@ -9,3 +9,10 @@
         <button onClick="showLoading()" class="bg-sky-500 text-white p-4 rounded">ローディング</button>
     </div>
 </section>
+
+<script>
+    // ページが読み込まれたときにローディングを表示
+    // (() => {
+    //     showLoading(1000);
+    // })();
+</script>
