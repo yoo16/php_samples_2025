@@ -1,6 +1,9 @@
 <?php
 class User
 {
+    // CSVファイルからユーザデータを取得
+    private static $file = '../data/users.csv';
+
     /**
      * ユーザ情報を取得
      *
@@ -9,13 +12,13 @@ class User
     public function get()
     {
         // CSVファイルからユーザデータを取得
-        $file = '../data/users.csv';
-    
+        $file = self::$file;
+
         // CSVファイルが存在しない場合は例外をスロー
         if (!file_exists($file)) {
             throw new Exception("CSVファイルが見つかりません: $file");
         }
-    
+
         $users = [];
         // CSVファイルを開く
         if (($handle = fopen($file, 'r')) !== false) {
@@ -30,7 +33,7 @@ class User
         }
         return $users;
     }
-    
+
     /**
      * ユーザ情報をメールアドレスで取得
      *
@@ -41,7 +44,8 @@ class User
     {
         $users = $this->get();
         $index = array_search($email, array_column($users, 'email'));
-        return $users[$index] ?? null;
+        $user = $users[$index] ?? null;
+        return $user;
     }
 
     /**
@@ -53,9 +57,25 @@ class User
      */
     public function auth($email, $password)
     {
+        // ユーザ情報をメールアドレスで取得
         $user = $this->findByEmail($email);
+        // password_verify()関数を使用して、パスワードとハッシュを比較
         if ($user && password_verify($password, $user['password'])) {
             return $user;
         }
+    }
+
+    public function getAuth()
+    {
+        // セッションからユーザ情報を取得
+        if (isset($_SESSION['auth_user'])) {
+            return $_SESSION['auth_user'];
+        }
+    }
+
+    public function setAuth($user)
+    {
+        // セッションにユーザ情報を保存
+        $_SESSION['auth_user'] = $user;
     }
 }
