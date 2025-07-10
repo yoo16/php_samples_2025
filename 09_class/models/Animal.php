@@ -1,4 +1,4 @@
-<?php 
+<?php
 // require_once 'AnimalAbstract.php';
 require_once 'IAnimal.php';
 require_once 'GameCharacterable.php';
@@ -8,7 +8,7 @@ class Animal implements IAnimal, GameCharacterable
     // コンストラクタ
     public function __construct(string $name)
     {
-       $this->name = $name; 
+        $this->name = $name;
     }
 
     // プロパティ
