@@ -1,3 +1,11 @@
+## GD
+### php.ini の修正
+```ini
+extension=gd
+```
+
+## Composer インストール
+
 ## .env
 ```bash
 composer require vlucas/phpdotenv
