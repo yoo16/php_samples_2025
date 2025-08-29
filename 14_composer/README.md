@@ -4,29 +4,28 @@
 extension=gd
 ```
 
-## Composer インストール
-
-## .env
+## ライブラリインストール
+### .env
 ```bash
 composer require vlucas/phpdotenv
 ```
 
-## QRCode
+### QRCode
 ```bash
 composer require endroid/qr-code
 ```
 
-## Parsedown
+### Parsedown
 ```bash
 composer require erusev/parsedown
 ```
 
-## PHP Mailer
+### PHP Mailer
 ```bash
 composer require phpmailer/phpmailer
 ```
 
-### Gmail を使う場合の注意点
+## Gmail サーバの利用
 - 「安全性の低いアプリの許可」が必要（またはアプリパスワード）
 - Host: smtp.gmail.com
 - Port: 587
