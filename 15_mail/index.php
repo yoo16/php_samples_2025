@@ -8,9 +8,23 @@
 </head>
 
 <body class="bg-gray-100 p-8 text-gray-800">
+    <!-- ローディングオーバーレイ -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="flex flex-col items-center">
+            <!-- スピナー -->
+            <svg class="animate-spin h-12 w-12 text-white mb-4" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor"
+                    d="M4 12a8 8 0 018-8v8z"></path>
+            </svg>
+            <p class="text-white text-lg font-semibold">送信中...</p>
+        </div>
+    </div>
 
+    <!-- Main -->
     <div class="max-w-xl mx-auto bg-white p-6 rounded shadow">
-        <h1 class="text-2xl font-bold mb-4">お問い合わせフォーム</h1>
+        <h1 class="text-2xl text-center font-bold mb-4">お問い合わせフォーム</h1>
 
         <form action="send.php" method="POST" class="space-y-4" onsubmit="handleSubmit(event)">
             <div>
@@ -22,11 +36,7 @@
                 <input type="email" name="email" required class="w-full border px-4 py-2 rounded">
             </div>
             <div>
-                <label class="block font-semibold mb-1">件名</label>
-                <input type="text" name="subject" required class="w-full border px-4 py-2 rounded">
-            </div>
-            <div>
-                <label class="block font-semibold mb-1">本文</label>
+                <label class="block font-semibold mb-1">問い合わせ内容</label>
                 <textarea name="body" rows="6" required class="w-full border px-4 py-2 rounded"></textarea>
             </div>
             <div class="flex justify-center">
@@ -44,4 +54,5 @@
         }
     </script>
 </body>
+
 </html>
