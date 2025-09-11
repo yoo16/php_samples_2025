@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+$name  = isset($_SESSION['name']) ? $_SESSION['name'] : '';
+$email = isset($_SESSION['email']) ? $_SESSION['email'] : '';
+$body  = isset($_SESSION['body']) ? $_SESSION['body'] : '';
+$error = isset($_SESSION['error']) ? $_SESSION['error'] : '';
+unset($_SESSION['error']);
+?>
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -26,18 +35,23 @@
     <div class="max-w-xl mx-auto bg-white p-6 rounded shadow">
         <h1 class="text-2xl text-center font-bold mb-4">お問い合わせフォーム</h1>
 
+        <?php if ($error): ?>
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                <?= $error ?>
+            </div>
+        <?php endif ?>
         <form action="send.php" method="POST" class="space-y-4" onsubmit="handleSubmit(event)">
             <div>
                 <label class="block font-semibold mb-1">お名前</label>
-                <input type="text" name="name" required class="w-full border px-4 py-2 rounded">
+                <input type="text" name="name" value="<?= $name ?>" required class="w-full border px-4 py-2 rounded">
             </div>
             <div>
                 <label class="block font-semibold mb-1">メールアドレス</label>
-                <input type="email" name="email" required class="w-full border px-4 py-2 rounded">
+                <input type="email" name="email" value="<?= $email ?>" required class="w-full border px-4 py-2 rounded">
             </div>
             <div>
                 <label class="block font-semibold mb-1">問い合わせ内容</label>
-                <textarea name="body" rows="6" required class="w-full border px-4 py-2 rounded"></textarea>
+                <textarea name="body" rows="6" required class="w-full border px-4 py-2 rounded"><?= $body ?></textarea>
             </div>
             <div class="flex justify-center">
                 <button type="submit"

@@ -10,13 +10,32 @@ class Contact
     private $mailer;
     private $template = __DIR__ . "/templates/contact_mail.html";
 
+    // 環境変数をクラスメンバで保持
+    private string $from_address;
+    private string $from_name;
+    private string $host;
+    private string $username;
+    private string $password;
+    private string $encryption;
+    private int    $port;
+
+    private string $subject = '[お問い合わせ]ご確認のメール';
+
     public function __construct()
     {
         // .env 読み込み
         $dotenv = Dotenv::createImmutable(__DIR__);
         $dotenv->load();
 
-        $this->mailer = new PHPMailer(true);
+        // クラスメンバに代入
+        $this->from_address = $_ENV['MAIL_FROM_ADDRESS'];
+        $this->from_name    = $_ENV['MAIL_FROM_NAME'];
+        $this->host         = $_ENV['MAIL_HOST'];
+        $this->username     = $_ENV['MAIL_USERNAME'];
+        $this->password     = $_ENV['MAIL_PASSWORD'];
+        $this->encryption   = $_ENV['MAIL_ENCRYPTION'];
+        $this->port         = (int) $_ENV['MAIL_PORT'];
+
         $this->setupMailer();
     }
 
@@ -25,13 +44,14 @@ class Contact
      */
     private function setupMailer(): void
     {
+        $this->mailer = new PHPMailer(true);
         $this->mailer->isSMTP();
         $this->mailer->SMTPAuth   = true;
-        $this->mailer->Host       = $_ENV['MAIL_HOST'];
-        $this->mailer->Username   = $_ENV['MAIL_USERNAME'];
-        $this->mailer->Password   = $_ENV['MAIL_PASSWORD'];
-        $this->mailer->SMTPSecure = $_ENV['MAIL_ENCRYPTION'];
-        $this->mailer->Port       = (int) $_ENV['MAIL_PORT'];
+        $this->mailer->Host       = $this->host;
+        $this->mailer->Username   = $this->username;
+        $this->mailer->Password   = $this->password;
+        $this->mailer->SMTPSecure = $this->encryption;
+        $this->mailer->Port       = $this->port;
         $this->mailer->CharSet    = 'UTF-8';
         $this->mailer->Encoding   = 'base64';
     }
@@ -39,7 +59,7 @@ class Contact
     /**
      * 入力バリデーション
      */
-    public function validate(string $name, string $email, string $body)
+    public function validate($name, $email, $body)
     {
         if (empty($name) || empty($email) || empty($body)) {
             return "すべてのフィールドを入力してください。";
@@ -53,10 +73,10 @@ class Contact
     /**
      * テンプレートを読み込んで置換
      */
-    private function loadTemplate(array $vars = [])
+    private function loadTemplate($values)
     {
         $template = file_get_contents($this->template);
-        foreach ($vars as $key => $value) {
+        foreach ($values as $key => $value) {
             $template = str_replace("{{{$key}}}", $value, $template);
         }
         return $template;
@@ -65,20 +85,22 @@ class Contact
     /**
      * メール送信
      */
-    public function send(string $name, string $email, string $body)
+    public function send($name, $email, $body)
     {
         try {
-            $this->mailer->setFrom($_ENV['MAIL_FROM_ADDRESS'], $_ENV['MAIL_FROM_NAME']);
-            $this->mailer->addAddress($email, $name);
-            $this->mailer->addReplyTo($_ENV['MAIL_FROM_ADDRESS'], $_ENV['MAIL_FROM_NAME']);
-            $this->mailer->isHTML(true);
-
-            $this->mailer->Subject = "[お問い合わせ]ご確認のメール";
-            $this->mailer->Body = $this->loadTemplate([
-                "name"  => htmlspecialchars($name, ENT_QUOTES, 'UTF-8'),
-                "email" => htmlspecialchars($email, ENT_QUOTES, 'UTF-8'),
-                "body"  => nl2br(htmlspecialchars($body, ENT_QUOTES, 'UTF-8'))
+            // HTMLメール作成
+            $html = $this->loadTemplate([
+                "name"  => $name,
+                "email" => $email,
+                "body"  => nl2br($body),
             ]);
+
+            $this->mailer->setFrom($this->from_address, $this->from_name);
+            $this->mailer->addAddress($email, $name);
+            $this->mailer->addReplyTo($this->from_address, $this->from_name);
+            $this->mailer->isHTML(true);
+            $this->mailer->Subject = $this->subject;
+            $this->mailer->Body = $html;
 
             return $this->mailer->send();
         } catch (Exception $e) {

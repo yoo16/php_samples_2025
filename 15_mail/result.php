@@ -1,3 +1,11 @@
+<?php
+session_start();
+
+// セッションデータをクリア
+if (isset($_SESSION['name'])) unset($_SESSION['name']);
+if (isset($_SESSION['email'])) unset($_SESSION['email']);
+if (isset($_SESSION['body'])) unset($_SESSION['body']);
+?>
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -31,6 +39,5 @@
             フォームに戻る
         </a>
     </div>
-
 </body>
 </html>
