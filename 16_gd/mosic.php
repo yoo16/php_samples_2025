@@ -3,6 +3,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['image'])) {
     $file = $_FILES['image']['tmp_name'];
     $pixelSize = intval($_POST['pixel']) ?: 20;
     $mode = $_POST['mode'] ?? 'show';
+    $mode = "show";
 
     if (!file_exists($file)) {
         die('ファイルが見つかりません。');

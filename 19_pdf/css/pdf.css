@@ -1,0 +1,46 @@
+@page {
+    margin: 0;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.card {
+    width: 91mm;
+    height: 55mm;
+    background-color: #fff;
+    background-position: center;
+    background-size: cover;
+    /* 画像を枠いっぱいに広げる */
+    background-repeat: no-repeat;
+    box-sizing: border-box;
+    /* パディングをサイズに含める */
+    padding: 12mm 15mm;
+    /* テキストを内側に寄せる */
+    position: relative;
+    overflow: hidden;
+    line-height: 1.2;
+}
+
+.name {
+    font-size: 18pt;
+    font-weight: bold;
+    margin-bottom: 1mm;
+    color: #2d3436;
+}
+
+.title {
+    font-size: 8pt;
+    color: #d63031;
+    font-weight: bold;
+    margin-bottom: 6mm;
+    /* margin-topを消して調整 */
+}
+
+.info {
+    font-size: 7pt;
+    line-height: 1.5;
+    color: #636e72;
+}
