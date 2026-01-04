@@ -8,19 +8,16 @@ body {
 }
 
 .card {
+    position: relative;
+    overflow: hidden;
     width: 91mm;
     height: 55mm;
+    padding: 12mm 10mm;
     background-color: #fff;
     background-position: center;
     background-size: cover;
-    /* 画像を枠いっぱいに広げる */
     background-repeat: no-repeat;
     box-sizing: border-box;
-    /* パディングをサイズに含める */
-    padding: 12mm 15mm;
-    /* テキストを内側に寄せる */
-    position: relative;
-    overflow: hidden;
     line-height: 1.2;
 }
 
@@ -36,11 +33,10 @@ body {
     color: #d63031;
     font-weight: bold;
     margin-bottom: 6mm;
-    /* margin-topを消して調整 */
 }
 
 .info {
-    font-size: 7pt;
-    line-height: 1.5;
+    font-size: 8pt;
+    line-height: 1.8;
     color: #636e72;
 }

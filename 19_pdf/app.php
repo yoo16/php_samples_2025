@@ -2,11 +2,15 @@
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/src/Generator.php';
 
+// Generatorクラスの使用を宣言
+use App\Generator;
+
 // 設定ファイルの読み込み
 $config = require __DIR__ . '/config/pdf.php';
 
+// POSTリクエストの処理
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $gen = new App\Generator($config);
+    $gen = new Generator($config);
     $gen->generate($_POST);
     exit;
 }
