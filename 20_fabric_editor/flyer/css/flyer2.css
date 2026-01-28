@@ -1,0 +1,85 @@
+body {
+    background: linear-gradient(to bottom, #d63031, #e17055);
+    color: #ffffff;
+    padding: 40px 20px;
+    /* background-image: url('images/item1.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image-resize: 6; */
+}
+
+.card {
+    max-width: 600px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.header {
+    padding: 40px 30px 20px;
+    text-align: center;
+}
+
+.category {
+    font-size: 10pt;
+    letter-spacing: 0.2em;
+    color: #a29bfe;
+    font-weight: bold;
+}
+
+.title {
+    font-size: 30pt;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.image-wrapper {
+    width: 400px;
+    overflow: hidden;
+    background-color: #f9f9f9;
+    margin-left: 150px;
+    border-radius: 20px; 
+}
+
+.content {
+    padding: 40px 30px;
+}
+
+.date {
+    font-size: 24pt;
+    font-weight: bold;
+    text-align: center;
+}
+
+.headline {
+    font-size: 20pt;
+    padding-left: 15px;
+}
+
+.description {
+    font-size: 16pt;
+    line-height: 1.8;
+}
+
+.price-tag {
+    font-size: 30pt;
+    text-align: right;
+    padding-top: 20px;
+}
+
+.amount {
+    font-size: 26pt;
+    font-weight: bold;
+}
+
+.currency {
+    font-size: 20pt;
+    margin: 0 5px;
+}
+
+.suffix {
+    font-size: 16pt;
+    margin: 0 5px;
+}
