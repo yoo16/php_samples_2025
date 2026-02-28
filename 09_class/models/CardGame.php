@@ -81,10 +81,21 @@ class CardGame implements CardGameInterface
 
         // プレイヤーのターン
         $this->executePlayerTurn($action);
+        
         if ($this->isWin()) {
             $this->enemy->hp = 0;
             $this->gameOver = true;
             $this->addLog("敵を倒した！\nあなたの勝利です！");
+            
+            // 勝利後の経験値獲得とレベルアップチェック
+            $exp = rand(10, 20);
+            $this->player->gainExp($exp);
+            $this->addLog("{$exp} の経験値を獲得！");
+            
+            if ($this->player->isLevelUp()) {
+                $this->player->levelUp();
+                $this->addLog("LEVEL UP！ LV.{$this->player->level} に上がった！\n全ステータスが上昇し、HPが全回復した！");
+            }
         } else {
             // 敵のターン
             $this->executeEnemyTurn();
@@ -99,9 +110,6 @@ class CardGame implements CardGameInterface
 
     private function isWin(): bool
     {
-        // TODO: 敵のレベル & 相性に応じて上昇値を変更するようにする
-        $exp = rand(3, 8);
-        $this->player->gainExp($exp);
         return $this->enemy->hp <= 0;
     }
 
@@ -135,10 +143,8 @@ class CardGame implements CardGameInterface
         // 30%の確率でスキル発動
         $useSkill = ($this->enemy->mp > 0 && rand(0, 9) < 3);
         if ($useSkill) {
-            if ($this->enemy->mp > 0) {
-                $dmg = $this->enemy->specialSkill($this->player);
-                $this->addLog("敵のスキル！『{$this->enemy->specialSkill}』！\nあなたは {$dmg} のダメージを受けた！");
-            }
+            $dmg = $this->enemy->specialSkill($this->player);
+            $this->addLog("敵のスキル！『{$this->enemy->specialSkill}』！\nあなたは {$dmg} のダメージを受けた！");
         } else {
             $dmg = $this->enemy->attack($this->player);
             $this->addLog("敵の攻撃！\nあなたは {$dmg} のダメージを受けた！");

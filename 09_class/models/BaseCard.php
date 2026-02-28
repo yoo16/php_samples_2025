@@ -3,17 +3,19 @@ require_once __DIR__ . '/../interfaces/CardInterface.php';
 
 abstract class BaseCard implements CardInterface
 {
-    public int $level;
-    public string $name;
-    public int $attack;
-    public int $defense;
-    public int $hp;
-    public int $mp;
-    public int $exp;
-    public string $element;
-    public string $image;
-    public string $specialSkill;
-    public int $specialSkillPower;
+    public int $level = 1;
+    public string $name = '';
+    public int $attack = 0;
+    public int $defense = 0;
+    public int $hp = 0;
+    public int $maxHp = 0;
+    public int $mp = 0;
+    public int $maxMp = 0;
+    public int $exp = 0;
+    public string $element = '';
+    public string $image = '';
+    public string $specialSkill = '';
+    public int $specialSkillPower = 0;
     public array $levelUpThresholds = [20, 50, 90, 150, 220, 300, 400, 500, 700, 1000];
 
     /**
@@ -36,7 +38,9 @@ abstract class BaseCard implements CardInterface
         $this->attack = $attack;
         $this->defense = $defense;
         $this->hp = $hp;
+        $this->maxHp = $hp;
         $this->mp = $mp;
+        $this->maxMp = $mp;
         $this->element = $element;
 
         // 画像パスの処理: URLでなければ ./images/ フォルダを参照する
@@ -52,10 +56,18 @@ abstract class BaseCard implements CardInterface
 
     public function attack(BaseCard $target): int
     {
-        $dmg = $this->attack + rand(-3, 3);
-        $dmg -= $target->defense;
-        if ($dmg < 0) $dmg = 0;
+        // ダメージ計算: (攻撃力 * 1.5 - 相手の防御力) + 乱数
+        $baseDmg = ($this->attack * 1.5) - $target->defense;
+        $random = rand(-5, 5);
+        $dmg = (int)($baseDmg + $random);
+        
+        // 最低ダメージ保証 (攻撃力の 20%)
+        $minDmg = (int)($this->attack * 0.2);
+        if ($dmg < $minDmg) $dmg = $minDmg;
+        
         $target->hp -= $dmg;
+        if ($target->hp < 0) $target->hp = 0;
+        
         return $dmg;
     }
 
@@ -63,10 +75,16 @@ abstract class BaseCard implements CardInterface
     {
         if ($this->mp <= 0) return 0;
         $this->mp--;
-        $dmg = $this->specialSkillPower + rand(-5, 5);
-        $dmg -= $target->defense;
+        
+        // スキルダメージ: (スキル威力 * 1.2 - 相手の防御力 * 0.5)
+        $baseDmg = ($this->specialSkillPower * 1.2) - ($target->defense * 0.5);
+        $random = rand(-10, 10);
+        $dmg = (int)($baseDmg + $random);
+        
         if ($dmg < 0) $dmg = 0;
         $target->hp -= $dmg;
+        if ($target->hp < 0) $target->hp = 0;
+        
         return $dmg;
     }
 
@@ -77,21 +95,18 @@ abstract class BaseCard implements CardInterface
 
     public function isLevelUp(): bool
     {
-        foreach ($this->levelUpThresholds as $threshold) {
-            if ($this->level < 10 && $this->exp >= $threshold) {
-                return true;
-            }
-        }
-        return false;
+        if ($this->level >= 10) return false;
+        return $this->exp >= $this->levelUpThresholds[$this->level - 1];
     }
 
     public function levelUp(): void
     {
         $this->level++;
-        // TODO: レベルに応じて上昇値を変更するようにする
-        $this->attack += 2;
-        $this->defense += 1;
-        $this->hp += 5;
-        $this->mp += 1;
+        $this->attack += 5;
+        $this->defense += 2;
+        $this->maxHp += 20;
+        $this->hp = $this->maxHp; // レベルアップで全回復
+        $this->maxMp += 1;
+        $this->mp = $this->maxMp;
     }
 }
