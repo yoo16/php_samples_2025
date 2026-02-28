@@ -32,6 +32,7 @@ require_once 'components/sections.php';
         <!-- Grid Layout -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <?php foreach ($sections as $section): ?>
+                <?php if (!$section['public']) continue; ?>
                 <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-200 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <div class="flex items-center gap-4 mb-6">
                         <div class="w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center text-slate-400 font-bold font-outfit text-lg">

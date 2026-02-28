@@ -5,6 +5,7 @@ $sections = [
     [
         'id' => '01_hello',
         'label' => 'Hello World (基本)',
+        'public' => true,
         'files' => [
             [
                 'name' => 'demo.php',
@@ -16,6 +17,7 @@ $sections = [
     [
         'id' => '02_variable',
         'label' => '変数と演算',
+        'public' => true,
         'files' => [
             [
                 'name' => 'order.php',
@@ -32,6 +34,7 @@ $sections = [
     [
         'id' => '03_condition',
         'label' => '条件分岐 (if/match)',
+        'public' => true,
         'files' => [
             [
                 'name' => 'menu.php',
@@ -53,6 +56,7 @@ $sections = [
     [
         'id' => '04_loops',
         'label' => '繰り返し処理 (for/while)',
+        'public' => true,
         'files' => [
             [
                 'name' => 'bingo.php',
@@ -69,6 +73,7 @@ $sections = [
     [
         'id' => '05_array_object',
         'label' => '配列とオブジェクト',
+        'public' => true,
         'files' => [
             [
                 'name' => 'user/',
@@ -80,6 +85,7 @@ $sections = [
     [
         'id' => '06_function',
         'label' => '関数とクロージャ',
+        'public' => true,
         'files' => [
             [
                 'name' => 'data_check.php',
@@ -94,24 +100,48 @@ $sections = [
         ]
     ],
     [
-        'id' => '07_calendar',
-        'label' => '日付とカレンダー',
+        'id' => '07_form_session',
+        'label' => 'フォームとセッション',
+        'public' => true,
         'files' => [
-            ['name' => 'calendar.php', 'label' => '万年カレンダー'],
-            ['name' => 'datetime.php', 'label' => 'DateTimeクラスの使い方']
+            [
+                'name' => 'get_request.php',
+                'label' => 'GETリクエスト',
+                'explanation' => '07_form_session/explanation.php'
+            ],
+            [
+                'name' => 'post_request.php',
+                'label' => 'POSTリクエスト',
+                'explanation' => '07_form_session/explanation.php'
+            ],
         ]
     ],
     [
-        'id' => '08_form_session',
-        'label' => 'フォームとセッション',
+        'id' => '08_datetime',
+        'label' => '日付',
+        'public' => true,
         'files' => [
-            ['name' => 'counter.php', 'label' => 'アクセスカウンター'],
-            ['name' => 'post_test.php', 'label' => 'POST送信テスト']
+            [
+                'name' => 'date.php',
+                'label' => 'date()関数',
+                'explanation' => '08_datetime/explanation.php'
+            ],
+            [
+                'name' => 'datetime.php',
+                'label' => 'DateTimeクラスの使い方',
+                'explanation' => '08_datetime/explanation.php'
+            ],
+            [
+                'name' => 'calendar.php',
+                'label' => 'カレンダー表示',
+                'explanation' => '08_datetime/explanation.php'
+            ],
         ]
     ],
     [
         'id' => '09_class',
         'label' => 'オブジェクト指向 (クラス)',
+        'public' => true,
         'files' => [
             ['name' => 'animal_play.php', 'label' => '継承の基本'],
             ['name' => 'calculate_item.php', 'label' => 'インターフェースの実装'],
@@ -121,6 +151,7 @@ $sections = [
     [
         'id' => '10_signin',
         'label' => 'ユーザー認証',
+        'public' => true,
         'files' => [
             ['name' => 'index.php', 'label' => 'サインイン画面'],
             ['name' => 'app.php', 'label' => '認証後のメインアプリ']
@@ -129,6 +160,7 @@ $sections = [
     [
         'id' => '22_gemini',
         'label' => 'Gemini AI 連携',
+        'public' => false,
         'files' => [
             ['name' => 'chat.php', 'label' => 'AIチャットボット'],
             ['name' => 'translate.php', 'label' => 'AI多言語翻訳'],
