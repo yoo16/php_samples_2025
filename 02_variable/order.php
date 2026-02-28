@@ -1,5 +1,14 @@
 <?php
 // 変数
+$last_name = "Yamada";
+$first_name = "Taro";
+
+// 文字列連結
+// ドット演算子
+$full_name = $last_name . " " . $first_name;
+// テンプレートリテラル
+// $full_name = "{$last_name} {$first_name}";
+
 // drink1, drink2, drink3に商品名を代入
 $drink1 = "コーラ";
 $drink2 = "オレンジジュース";
@@ -69,27 +78,24 @@ $point = floor($totalWithDiscount * POINT_RATE);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>注文確認 | デジタルストア</title>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;600;800&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
-    <!-- TailwindCSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            font-family: 'Inter', 'Noto Sans JP', sans-serif;
-        }
-    </style>
 </head>
 
 <body class="antialiased min-h-screen bg-slate-50 text-slate-900 py-12 px-4">
     <main class="max-w-5xl mx-auto">
         <!-- Header -->
-        <header class="text-center mb-16">
-            <h1 class="font-['Outfit'] text-5xl font-extrabold mb-4 tracking-tight text-slate-900">
+        <header class="text-center mb-2">
+            <h1 class="text-2xl font-extrabold mb-4 tracking-tight text-slate-900">
                 注文内容の確認
             </h1>
         </header>
+
+        <div class="p-4 mb-2">
+            <p>
+                <span class="text-emerald-600 font-bold mr-2"><?= $full_name; ?></span>
+                <span class="text-slate-500 text-sm">さん、ようこそ</span>
+            </p>
+        </div>
 
         <!-- Product Grid -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -189,7 +195,7 @@ $point = floor($totalWithDiscount * POINT_RATE);
                     </div>
                     <div>
                         <p class="text-sm text-slate-500 uppercase tracking-widest font-bold">獲得ポイント</p>
-                        <p class="text-3xl font-black font-['Outfit'] text-slate-900 leading-none mt-1"><?= number_format($point); ?><span class="text-lg font-bold ml-1 text-slate-400">pt</span></p>
+                        <p class="text-3xl font-black text-slate-900 leading-none mt-1"><?= number_format($point); ?><span class="text-lg font-bold ml-1 text-slate-400">pt</span></p>
                         <p class="text-xs text-sky-600 mt-1">還元率: <?= POINT_RATE * 100 ?>% 適用中</p>
                     </div>
                 </div>

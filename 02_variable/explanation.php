@@ -53,11 +53,37 @@ $title = 'PHP基礎：変数と演算';
             </div>
         </section>
 
-        <!-- Section 2: Superglobals -->
+        <!-- Section 2: String Concatenation -->
         <section class="mb-16">
             <h3 class="text-2xl font-bold text-slate-900 mb-6 flex items-center">
                 <span
                     class="w-8 h-8 bg-sky-500 text-white rounded-lg flex items-center justify-center mr-3 text-sm">2</span>
+                文字列の連結と変数展開
+            </h3>
+            <p class="mb-4">複数の文字列を繋げたり、文字列の中に変数の値を埋め込んだりする方法を学びます。</p>
+
+            <h4 class="font-bold text-slate-900 mb-2">ドット演算子 <code>.</code> による連結</h4>
+            <p class="text-sm text-slate-600 mb-4">PHPでは <code>.</code> （ドット）を使って文字列を繋げます。JavaScriptの <code>+</code> にあたる役割です。</p>
+            <div class="code-block mb-6">
+                <pre><code><span class="hl-var">$full_name</span> = <span class="hl-var">$last_name</span> <span class="hl-op">.</span> <span class="hl-string">" "</span> <span class="hl-op">.</span> <span class="hl-var">$first_name</span>;</code></pre>
+            </div>
+
+            <h4 class="font-bold text-slate-900 mb-2">変数展開（ダブルクォート <code>" "</code>）</h4>
+            <p class="text-sm text-slate-600 mb-4">ダブルクォートで囲った文字列の中では、<code>{$変数名}</code> と書くことで直接変数の値を埋め込むことができます。</p>
+            <div class="code-block mb-6">
+                <pre><code><span class="hl-comment">// 変数を波括弧 {} で囲むのが安全で推奨される書き方です</span>
+<span class="hl-var">$full_name</span> = <span class="hl-string">"{</span><span class="hl-var">$last_name</span><span class="hl-string">} {</span><span class="hl-var">$first_name</span><span class="hl-string">}"</span>;</code></pre>
+            </div>
+            <div class="bg-amber-50 border-l-4 border-amber-400 p-4 text-sm text-amber-800 font-medium">
+                Note: シングルクォート <code>' '</code> の中では変数展開は行われず、そのままの文字として扱われます。
+            </div>
+        </section>
+
+        <!-- Section 3: Superglobals -->
+        <section class="mb-16">
+            <h3 class="text-2xl font-bold text-slate-900 mb-6 flex items-center">
+                <span
+                    class="w-8 h-8 bg-amber-500 text-white rounded-lg flex items-center justify-center mr-3 text-sm">3</span>
                 特別な変数「スーパーグローバル」
             </h3>
             <p class="mb-4">PHPには、プログラマが自分で作る変数のほかに、システムが最初から用意してくれている <strong>スーパーグローバル変数</strong> があります。これらはプログラムのどこからでもアクセスできる特別な連想配列です。</p>
@@ -86,11 +112,11 @@ $title = 'PHP基礎：変数と演算';
             </div>
         </section>
 
-        <!-- Section 3: Constants -->
+        <!-- Section 4: Constants -->
         <section class="mb-16">
             <h3 class="text-2xl font-bold text-slate-900 mb-6 flex items-center">
                 <span
-                    class="w-8 h-8 bg-sky-500 text-white rounded-lg flex items-center justify-center mr-3 text-sm">3</span>
+                    class="w-8 h-8 bg-sky-500 text-white rounded-lg flex items-center justify-center mr-3 text-sm">4</span>
                 定数の定義
             </h3>
             <p class="mb-4">一度決めたら値を変更したくないもの（消費税率や割引率など）には、<code>const</code> を使って定数を定義します。</p>
@@ -101,11 +127,11 @@ $title = 'PHP基礎：変数と演算';
             </div>
         </section>
 
-        <!-- Section 4: Operations -->
+        <!-- Section 5: Operations -->
         <section class="mb-16">
             <h3 class="text-2xl font-bold text-slate-900 mb-6 flex items-center">
                 <span
-                    class="w-8 h-8 bg-sky-500 text-white rounded-lg flex items-center justify-center mr-3 text-sm">4</span>
+                    class="w-8 h-8 bg-sky-500 text-white rounded-lg flex items-center justify-center mr-3 text-sm">5</span>
                 算術演算とインクリメント
             </h3>
             <p class="mb-4">四則演算（<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>）のほか、値を1増やす
@@ -123,11 +149,11 @@ $title = 'PHP基礎：変数と演算';
             </div>
         </section>
 
-        <!-- Section 5: Ternary Operator -->
+        <!-- Section 6: Ternary Operator -->
         <section class="mb-16">
             <h3 class="text-2xl font-bold text-slate-900 mb-6 flex items-center">
                 <span
-                    class="w-8 h-8 bg-sky-500 text-white rounded-lg flex items-center justify-center mr-3 text-sm">5</span>
+                    class="w-8 h-8 bg-sky-500 text-white rounded-lg flex items-center justify-center mr-3 text-sm">6</span>
                 三項演算子
             </h3>
             <p class="mb-4">簡単な条件分岐には、if文よりも短く書ける <strong>三項演算子</strong> <code>(条件) ? 真の場合 : 偽の場合</code> が便利です。</p>
@@ -140,11 +166,11 @@ $title = 'PHP基礎：変数と演算';
             </div>
         </section>
 
-        <!-- Section 6: HTML Output -->
+        <!-- Section 7: HTML Output -->
         <section class="mb-16">
             <h3 class="text-2xl font-bold text-slate-900 mb-6 flex items-center">
                 <span
-                    class="w-8 h-8 bg-sky-500 text-white rounded-lg flex items-center justify-center mr-3 text-sm">6</span>
+                    class="w-8 h-8 bg-sky-500 text-white rounded-lg flex items-center justify-center mr-3 text-sm">7</span>
                 HTMLへの出力
             </h3>
             <p class="mb-4">計算結果を画面に表示する際は、<code>&lt;?= ... ?&gt;</code>（ショートエコータグ）を使うとシンプルに記述できます。
