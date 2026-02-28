@@ -24,17 +24,23 @@ if ($pay_by_month <= $first_month_interest) {
 
         // 最終月の調整
         if ($loan + $interest < $pay_by_month) {
+            // 最終月は残高と利息の合計額を支払う
             $payment = $loan + $interest;
+            // ローン残高を0にする
             $loan = 0;
         } else {
+            // 通常月は月々の支払額を支払う
             $payment = $pay_by_month;
+            // ローン残高から支払額を引く
             $loan -= ($payment - $interest);
         }
 
+        // 利息合計を計算
         $total_interest += $interest;
 
         // 12ヶ月ごと、または最終月のみデータを保存（全データだと重くなるため）
         if ($month_count % 12 == 0 || $loan <= 0) {
+            // 12ヶ月ごと、または最終月のデータを配列に保存
             $values[] = [
                 'month' => $month_count,
                 'year' => ceil($month_count / 12),
@@ -45,8 +51,11 @@ if ($pay_by_month <= $first_month_interest) {
     }
 }
 
+// 総支払額を計算
 $total_payment = $start_loan + $total_interest;
+// 返済年数を計算
 $years = floor($month_count / 12);
+// 残りの月数を計算
 $remaining_months = $month_count % 12;
 ?>
 
@@ -182,7 +191,7 @@ $remaining_months = $month_count % 12;
                                 <tbody class="divide-y divide-slate-50">
                                     <?php foreach ($values as $value) : ?>
                                         <tr class="hover:bg-slate-50/50 transition-colors">
-                                            <td class="px-8 py-4 font-bold text-slate-400 italic"><?= $value['year'] ?> yr</td>
+                                            <td class="px-8 py-4 font-bold text-slate-400 italic"><?= $value['year'] ?> 年目</td>
                                             <td class="px-8 py-4 font-medium"><?= $value['month'] ?> 回目</td>
                                             <td class="px-8 py-4 text-right text-rose-400">&yen;<?= number_format($value['interest']) ?></td>
                                             <td class="px-8 py-4 text-right font-bold text-slate-900">&yen;<?= number_format($value['loan']) ?></td>

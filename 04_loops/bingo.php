@@ -86,6 +86,15 @@ $colors = [
             <p class="text-slate-500 text-sm font-bold">ランダムな数値配列の生成と繰り返し表示</p>
         </header>
 
+        <div class="mt-2 flex flex-col items-center gap-6">
+            <button onclick="window.location.reload()" class="group relative inline-flex items-center justify-center px-8 py-4 font-black text-white bg-sky-600 rounded-2xl">
+                新しいカードを引く
+                <svg class="w-5 h-5 ml-2 transform group-hover:rotate-180 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+            </button>
+        </div>
+
         <!-- Bingo Card Container -->
         <div class="bg-white rounded-[2rem] p-4 shadow-lg border-slate-300">
             <!-- Header Labels -->
@@ -125,13 +134,6 @@ $colors = [
 
         <!-- Controls -->
         <div class="mt-12 flex flex-col items-center gap-6">
-            <button onclick="window.location.reload()" class="group relative inline-flex items-center justify-center px-8 py-4 font-black text-white bg-sky-600 rounded-2xl">
-                新しいカードを引く
-                <svg class="w-5 h-5 ml-2 transform group-hover:rotate-180 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                </svg>
-            </button>
-
             <a href="../index.php" class="text-sm font-bold text-slate-500 flex items-center gap-2">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>

@@ -7,9 +7,9 @@ $sections = [
         'label' => 'Hello World (基本)',
         'files' => [
             [
-                'name' => 'demo.php', 
+                'name' => 'demo.php',
                 'label' => 'Hello World',
-                'explanation' => '01_hello/explanation.html'
+                'explanation' => '01_hello/explanation.php'
             ]
         ]
     ],
@@ -20,53 +20,61 @@ $sections = [
             [
                 'name' => 'order.php',
                 'label' => '注文確認',
-                'explanation' => '02_variable/order_explanation.html'
+                'explanation' => '02_variable/explanation.php'
+            ],
+            [
+                'name' => 'superglobals.php',
+                'label' => 'スーパーグローバル変数',
+                'explanation' => '02_variable/explanation.php'
             ]
         ]
     ],
     [
         'id' => '03_condition',
-        'label' => '条件分岐 (if/switch)',
+        'label' => '条件分岐 (if/match)',
         'files' => [
             [
                 'name' => 'menu.php',
                 'label' => 'メニュー',
-                'explanation' => '03_condition/explanation.html'
+                'explanation' => '03_condition/explanation.php'
             ],
             [
                 'name' => 'garbage.php',
                 'label' => 'ゴミ出しカレンダー',
-                'explanation' => '03_condition/explanation.html'
+                'explanation' => '03_condition/explanation.php'
             ],
             [
                 'name' => 'payment.php',
                 'label' => 'お支払い判定',
-                'explanation' => '03_condition/explanation.html'
+                'explanation' => '03_condition/explanation.php'
             ]
         ]
     ],
     [
-        'id' => '04_repeat',
+        'id' => '04_loops',
         'label' => '繰り返し処理 (for/while)',
         'files' => [
             [
                 'name' => 'bingo.php',
                 'label' => 'ビンゴカード生成',
-                'explanation' => '04_repeat/explanation.html'
+                'explanation' => '04_loops/explanation.php'
             ],
             [
                 'name' => 'calculate_loan.php',
                 'label' => 'ローン計算シミュレーター',
-                'explanation' => '04_repeat/explanation.html'
+                'explanation' => '04_loops/explanation.php'
             ]
         ]
     ],
     [
-        'id' => '05_array',
-        'label' => '配列の操作',
+        'id' => '05_array_object',
+        'label' => '配列とオブジェクト',
         'files' => [
-            ['name' => 'order.php', 'label' => '配列による注文管理'],
-            ['name' => 'user_list.php', 'label' => 'ユーザー名簿']
+            [
+                'name' => 'user/',
+                'label' => 'ユーザープロフィール',
+                'explanation' => '05_array_object/explanation.php'
+            ]
         ]
     ],
     [
@@ -133,21 +141,9 @@ $sections = [
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PHP サンプル ダッシュボード</title>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;600;800&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
     <!-- TailwindCSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            font-family: 'Inter', 'Noto Sans JP', sans-serif;
-        }
-
-        .font-outfit {
-            font-family: 'Outfit', sans-serif;
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body class="antialiased min-h-screen bg-slate-50 text-slate-900 py-12 px-4 sm:px-6 lg:px-8">

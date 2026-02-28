@@ -1,86 +1,30 @@
+<?php
+$title = 'PHP基礎：変数と演算';
+?>
 <!DOCTYPE html>
 <html lang="ja">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>解説：order.php | PHP Variables & Operations</title>
+    <title>解説：変数と演算 | PHP Variables & Operations</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code&display=swap"
         rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-
-        code {
-            font-family: 'Fira Code', monospace;
-        }
-
-        .code-block {
-            background-color: #1e293b;
-            color: #f8fafc;
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            overflow-x: auto;
-        }
-
-        .hl-var {
-            color: #7dd3fc;
-        }
-
-        /* sky-300 */
-        .hl-const {
-            color: #f472b6;
-        }
-
-        /* pink-400 */
-        .hl-op {
-            color: #fbbf24;
-        }
-
-        /* amber-400 */
-        .hl-comment {
-            color: #94a3b8;
-        }
-
-        /* slate-400 */
-        .hl-string {
-            color: #4ade80;
-        }
-
-        /* green-400 */
-        .hl-num {
-            color: #c084fc;
-        }
-
-        /* purple-400 */
-    </style>
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 
 <body class="bg-slate-50 text-slate-800 leading-relaxed antialiased">
 
-    <nav class="bg-white border-b border-slate-200 sticky top-0 z-10">
-        <div class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
-            <h1 class="text-xl font-bold tracking-tight text-slate-900">PHP基礎：変数と演算</h1>
-            <div class="flex gap-4">
-                <a href="../index.php" class="text-sm font-semibold text-sky-600 hover:text-sky-700 transition"
-                    target="_blank">一覧に戻る
-                </a>
-                <a href="./order.php" class="text-sm font-semibold text-sky-600 hover:text-sky-700 transition"
-                    target="_blank">実際のデモを見る
-                </a>
-            </div>
-        </div>
-    </nav>
+    <?php include('../components/nav.php'); ?>
 
     <main class="max-w-4xl mx-auto px-6 py-12">
         <header class="mb-12">
             <div
                 class="inline-block px-3 py-1 rounded-full bg-sky-100 text-sky-700 text-xs font-bold uppercase tracking-wider mb-4">
                 Lesson 02</div>
-            <h2 class="text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">order.php のコード解説</h2>
-            <p class="text-lg text-slate-600">このプログラムでは、商品の注文情報を変数で管理し、合計金額や割引、ポイントの計算を動的に行う方法を学びます。</p>
+            <h2 class="text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">変数と演算の基本</h2>
+            <p class="text-lg text-slate-600">情報を一時的に保存する「変数」や「定数」、そして計算を行う「演算」は、プログラミングの土台となる最も重要な要素です。</p>
         </header>
 
         <!-- Section 1: Variables -->
@@ -90,7 +34,7 @@
                     class="w-8 h-8 bg-sky-500 text-white rounded-lg flex items-center justify-center mr-3 text-sm">1</span>
                 変数の宣言と代入
             </h3>
-            <p class="mb-4">PHPでは <code class="text-red-600">$</code>
+            <p class="mb-4">PHPでは <code>$</code>
                 記号を使って変数を宣言します。文字列、数値、真偽値（boolean）など、様々なデータ型を格納できます。</p>
             <div class="code-block mb-6">
                 <pre><code><span class="hl-comment">// 文字列の代入</span>
@@ -109,14 +53,47 @@
             </div>
         </section>
 
-        <!-- Section 2: Constants -->
+        <!-- Section 2: Superglobals -->
         <section class="mb-16">
             <h3 class="text-2xl font-bold text-slate-900 mb-6 flex items-center">
                 <span
                     class="w-8 h-8 bg-sky-500 text-white rounded-lg flex items-center justify-center mr-3 text-sm">2</span>
+                特別な変数「スーパーグローバル」
+            </h3>
+            <p class="mb-4">PHPには、プログラマが自分で作る変数のほかに、システムが最初から用意してくれている <strong>スーパーグローバル変数</strong> があります。これらはプログラムのどこからでもアクセスできる特別な連想配列です。</p>
+
+            <div class="space-y-4 mb-6">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <h4 class="font-bold text-slate-900 mb-2"><code>$_GET</code></h4>
+                    <p class="text-sm text-slate-600">URLの末尾に付いた <code>?name=Taro</code> などの情報（URLパラメータ）を受け取ります。主に「検索」や「ページの切り替え」に使われます。</p>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <h4 class="font-bold text-slate-900 mb-2"><code>$_POST</code></h4>
+                    <p class="text-sm text-slate-600">お問い合わせフォームやログイン画面など、ユーザーが入力したデータを送信する際に使われます。</p>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <h4 class="font-bold text-slate-900 mb-2"><code>$_SERVER</code></h4>
+                    <p class="text-sm text-slate-600">サーバー自体の名前や、アクセスした人のIPアドレス、使用しているブラウザの種類などの情報が入っています。</p>
+                </div>
+            </div>
+
+            <div class="code-block">
+                <pre><code><span class="hl-comment">// URLパラメータ "?name=Yamada" がある場合、その値を取得できる</span>
+<span class="hl-var">$name</span> = <span class="hl-var">$_GET</span>[<span class="hl-string">'name'</span>] <span class="hl-op">??</span> <span class="hl-string">'ゲスト'</span>;
+
+<span class="hl-comment">// サーバーの名前を取得</span>
+<span class="hl-var">$host</span> = <span class="hl-var">$_SERVER</span>[<span class="hl-string">'SERVER_NAME'</span>];</code></pre>
+            </div>
+        </section>
+
+        <!-- Section 3: Constants -->
+        <section class="mb-16">
+            <h3 class="text-2xl font-bold text-slate-900 mb-6 flex items-center">
+                <span
+                    class="w-8 h-8 bg-sky-500 text-white rounded-lg flex items-center justify-center mr-3 text-sm">3</span>
                 定数の定義
             </h3>
-            <p class="mb-4">一度決めたら値を変更したくないもの（消費税率や割引率など）には、<code class="text-red-600">const</code> を使って定数を定義します。</p>
+            <p class="mb-4">一度決めたら値を変更したくないもの（消費税率や割引率など）には、<code>const</code> を使って定数を定義します。</p>
             <div class="code-block mb-6">
                 <pre><code><span class="hl-comment">// 定数は慣習として大文字で記述します</span>
 <span class="hl-const">const</span> <span class="hl-const">DISCOUNT_RATE</span> = <span class="hl-num">0.1</span>;
@@ -124,15 +101,15 @@
             </div>
         </section>
 
-        <!-- Section 3: Operations -->
+        <!-- Section 4: Operations -->
         <section class="mb-16">
             <h3 class="text-2xl font-bold text-slate-900 mb-6 flex items-center">
                 <span
-                    class="w-8 h-8 bg-sky-500 text-white rounded-lg flex items-center justify-center mr-3 text-sm">3</span>
+                    class="w-8 h-8 bg-sky-500 text-white rounded-lg flex items-center justify-center mr-3 text-sm">4</span>
                 算術演算とインクリメント
             </h3>
             <p class="mb-4">四則演算（<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>）のほか、値を1増やす
-                <code class="text-red-600">++</code>（インクリメント）や1減らす <code class="text-red-600">--</code>（デクリメント）もよく使われます。
+                <code>++</code>（インクリメント）や1減らす <code>--</code>（デクリメント）もよく使われます。
             </p>
             <div class="code-block mb-6">
                 <pre><code><span class="hl-comment">// インクリメント（数量を1増やす）</span>
@@ -146,11 +123,11 @@
             </div>
         </section>
 
-        <!-- Section 4: Ternary Operator -->
+        <!-- Section 5: Ternary Operator -->
         <section class="mb-16">
             <h3 class="text-2xl font-bold text-slate-900 mb-6 flex items-center">
                 <span
-                    class="w-8 h-8 bg-sky-500 text-white rounded-lg flex items-center justify-center mr-3 text-sm">4</span>
+                    class="w-8 h-8 bg-sky-500 text-white rounded-lg flex items-center justify-center mr-3 text-sm">5</span>
                 三項演算子
             </h3>
             <p class="mb-4">簡単な条件分岐には、if文よりも短く書ける <strong>三項演算子</strong> <code>(条件) ? 真の場合 : 偽の場合</code> が便利です。</p>
@@ -163,14 +140,14 @@
             </div>
         </section>
 
-        <!-- Section 5: HTML Output -->
+        <!-- Section 6: HTML Output -->
         <section class="mb-16">
             <h3 class="text-2xl font-bold text-slate-900 mb-6 flex items-center">
                 <span
-                    class="w-8 h-8 bg-sky-500 text-white rounded-lg flex items-center justify-center mr-3 text-sm">5</span>
+                    class="w-8 h-8 bg-sky-500 text-white rounded-lg flex items-center justify-center mr-3 text-sm">6</span>
                 HTMLへの出力
             </h3>
-            <p class="mb-4">計算結果を画面に表示する際は、<code class="text-red-600">&lt;?= ... ?&gt;</code>（ショートエコータグ）を使うとシンプルに記述できます。
+            <p class="mb-4">計算結果を画面に表示する際は、<code>&lt;?= ... ?&gt;</code>（ショートエコータグ）を使うとシンプルに記述できます。
             </p>
             <div class="code-block mb-6">
                 <pre><code><span class="hl-comment">&lt;!-- 数値をカンマ区切りで表示 --&gt;</span>
