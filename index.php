@@ -6,7 +6,11 @@ $sections = [
         'id' => '01_hello',
         'label' => 'Hello World (基本)',
         'files' => [
-            ['name' => 'demo.php', 'label' => 'Hello World']
+            [
+                'name' => 'demo.php', 
+                'label' => 'Hello World',
+                'explanation' => '01_hello/explanation.html'
+            ]
         ]
     ],
     [
@@ -24,17 +28,37 @@ $sections = [
         'id' => '03_condition',
         'label' => '条件分岐 (if/switch)',
         'files' => [
-            ['name' => 'menu.php', 'label' => 'メニュー'],
-            ['name' => 'garbage.php', 'label' => 'ゴミ出しカレンダー'],
-            ['name' => 'payment.php', 'label' => 'お支払い判定']
+            [
+                'name' => 'menu.php',
+                'label' => 'メニュー',
+                'explanation' => '03_condition/explanation.html'
+            ],
+            [
+                'name' => 'garbage.php',
+                'label' => 'ゴミ出しカレンダー',
+                'explanation' => '03_condition/explanation.html'
+            ],
+            [
+                'name' => 'payment.php',
+                'label' => 'お支払い判定',
+                'explanation' => '03_condition/explanation.html'
+            ]
         ]
     ],
     [
         'id' => '04_repeat',
         'label' => '繰り返し処理 (for/while)',
         'files' => [
-            ['name' => 'bingo.php', 'label' => 'ビンゴカード生成'],
-            ['name' => 'calculate_loan.php', 'label' => 'ローン計算シミュレーター']
+            [
+                'name' => 'bingo.php',
+                'label' => 'ビンゴカード生成',
+                'explanation' => '04_repeat/explanation.html'
+            ],
+            [
+                'name' => 'calculate_loan.php',
+                'label' => 'ローン計算シミュレーター',
+                'explanation' => '04_repeat/explanation.html'
+            ]
         ]
     ],
     [
@@ -137,7 +161,7 @@ $sections = [
                 PHP Samples <span class="text-indigo-600">v2</span>
             </h1>
             <p class="text-slate-500 max-w-2xl mx-auto text-lg leading-relaxed">
-                PHPの基本文法からAI連携まで、モダンな開発手法を学ぶための実践的なコード集です。
+                PHPの基本文法からモダンな開発手法を学ぶための実践的なコード集です。
             </p>
         </header>
 

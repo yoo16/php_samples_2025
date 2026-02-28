@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>解説：条件分岐 | PHP Control Structures</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        /* インラインコード（説明文中の単語）のスタイル */
+        p code, li code { font-family: 'Fira Code', monospace; color: #dc2626; font-weight: 600; background: #fee2e2; padding: 0.1rem 0.3rem; border-radius: 0.25rem; }
+
+        /* コードブロックのスタイル */
+        .code-block { background-color: #1e293b; color: #f8fafc; padding: 1.5rem; border-radius: 0.75rem; overflow-x: auto; font-family: 'Fira Code', monospace; }
+        .hl-keyword { color: #f472b6; } /* pink-400 */
+        .hl-var { color: #7dd3fc; } /* sky-300 */
+        .hl-op { color: #fbbf24; } /* amber-400 */
+        .hl-comment { color: #94a3b8; } /* slate-400 */
+        .hl-string { color: #4ade80; } /* green-400 */
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 leading-relaxed antialiased">
+
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-10">
+        <div class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold tracking-tight text-slate-900">PHP基礎：条件分岐</h1>
+            <a href="../index.php" class="text-sm font-semibold text-sky-600 hover:text-sky-700 transition">&larr; ダッシュボード</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <header class="mb-12">
+            <div class="inline-block px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-wider mb-4">Lesson 03</div>
+            <h2 class="text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">条件分岐（if / switch / match）</h2>
+            <p class="text-lg text-slate-600">プログラムの流れを「もし〜なら」という条件によって分岐させる、最も重要な制御構造について学びます。</p>
+        </header>
+
+        <!-- Section 1: if Statement -->
+        <section class="mb-16">
+            <h3 class="text-2xl font-bold text-slate-900 mb-6 flex items-center">
+                <span class="w-8 h-8 bg-indigo-500 text-white rounded-lg flex items-center justify-center mr-3 text-sm">1</span>
+                if 文の基本とコロン構文
+            </h3>
+            <p class="mb-4">最も一般的な分岐です。HTML内に記述する場合は、<code>{ }</code> の代わりに <code>:</code> と <code>endif;</code> を使う「コロン構文」がよく使われます。</p>
+            <div class="code-block mb-6">
+<pre><code><span class="hl-comment">// 通常の構文</span>
+<span class="hl-keyword">if</span> (<span class="hl-var">$isAuth</span>) {
+    <span class="hl-keyword">echo</span> <span class="hl-string">"ログイン中"</span>;
+} <span class="hl-keyword">else</span> {
+    <span class="hl-keyword">echo</span> <span class="hl-string">"ゲスト"</span>;
+}
+
+<span class="hl-comment">// HTML内でのコロン構文（menu.phpで使用）</span>
+<span class="hl-op">&lt;?php</span> <span class="hl-keyword">if</span> (<span class="hl-var">$isAuth</span>)<span class="hl-op">:</span> <span class="hl-op">?&gt;</span>
+    &lt;li&gt;マイページ&lt;/li&gt;
+<span class="hl-op">&lt;?php</span> <span class="hl-keyword">else</span><span class="hl-op">:</span> <span class="hl-op">?&gt;</span>
+    &lt;li&gt;サインイン&lt;/li&gt;
+<span class="hl-op">&lt;?php</span> <span class="hl-keyword">endif</span><span class="hl-op">;</span> <span class="hl-op">?&gt;</span></code></pre>
+            </div>
+        </section>
+
+        <!-- Section 2: Nested if -->
+        <section class="mb-16">
+            <h3 class="text-2xl font-bold text-slate-900 mb-6 flex items-center">
+                <span class="w-8 h-8 bg-indigo-500 text-white rounded-lg flex items-center justify-center mr-3 text-sm">2</span>
+                入れ子（ネスト）構造
+            </h3>
+            <p class="mb-4">if文の中にさらにif文を入れることで、複雑な条件を表現できます。<code>payment.php</code> では「メンテナンス中か？」を確認した後に「残高は足りているか？」を判定しています。</p>
+            <div class="code-block mb-6">
+<pre><code><span class="hl-keyword">if</span> (<span class="hl-var">$isMaintenance</span>) {
+    <span class="hl-var">$message</span> = <span class="hl-string">"休止中"</span>;
+} <span class="hl-keyword">else</span> {
+    <span class="hl-keyword">if</span> (<span class="hl-var">$charge</span> <span class="hl-op">&gt;=</span> <span class="hl-var">$payment</span>) {
+        <span class="hl-var">$message</span> = <span class="hl-string">"決済成功"</span>;
+    } <span class="hl-keyword">else</span> {
+        <span class="hl-var">$message</span> = <span class="hl-string">"残高不足"</span>;
+    }
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- Section 3: match Expression -->
+        <section class="mb-16">
+            <h3 class="text-2xl font-bold text-slate-900 mb-6 flex items-center">
+                <span class="w-8 h-8 bg-indigo-500 text-white rounded-lg flex items-center justify-center mr-3 text-sm">3</span>
+                PHP 8.0 新機能：match 式
+            </h3>
+            <p class="mb-4"><code>switch</code> 文の進化版です。値を返すことができるため、変数への代入が非常にスッキリ書けます。<code>garbage.php</code> で活用しています。</p>
+            <div class="code-block mb-6">
+<pre><code><span class="hl-comment">// 厳密な比較 (===) が行われ、breakも不要です</span>
+<span class="hl-var">$garbage</span> = <span class="hl-keyword">match</span> (<span class="hl-var">$weekIndex</span>) {
+    <span class="hl-num">1</span>, <span class="hl-num">3</span>   <span class="hl-op">=&gt;</span> <span class="hl-string">"燃えるゴミ"</span>,
+    <span class="hl-num">5</span>      <span class="hl-op">=&gt;</span> <span class="hl-string">"燃えないゴミ"</span>,
+    <span class="hl-keyword">default</span> <span class="hl-op">=&gt;</span> <span class="hl-string">"回収なし"</span>,
+};</code></pre>
+            </div>
+            <div class="bg-amber-50 border-l-4 border-amber-400 p-4 text-sm text-amber-800">
+                <strong>Tips:</strong> <code>switch</code> 文は「ゆるい比較(==)」、<code>match</code> 式は「厳密な比較(===)」という違いがあります。
+            </div>
+        </section>
+
+        <footer class="pt-12 border-t border-slate-200 text-center">
+            <p class="text-slate-500 text-sm italic">"条件分岐をマスターすれば、ユーザーの状態に合わせたパーソナライズが可能になります。"</p>
+        </footer>
+    </main>
+
+</body>
+</html>
