@@ -143,9 +143,10 @@ $sections = [
         'label' => 'オブジェクト指向 (クラス)',
         'public' => true,
         'files' => [
-            ['name' => 'animal_play.php', 'label' => '継承の基本'],
-            ['name' => 'calculate_item.php', 'label' => 'インターフェースの実装'],
-            ['name' => 'game_play.php', 'label' => '抽象クラスの活用']
+            ['name' => 'animal_play.php', 'label' => '継承の基本', 'explanation' => '09_class/explanation.php'],
+            ['name' => 'calculate_item.php', 'label' => 'インターフェースの実装', 'explanation' => '09_class/explanation.php'],
+            ['name' => 'game_play.php', 'label' => '抽象クラスの活用', 'explanation' => '09_class/explanation.php'],
+            ['name' => 'card_battle.php', 'label' => 'カードバトル（OOP応用）', 'explanation' => '09_class/explanation.php']
         ]
     ],
     [
