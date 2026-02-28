@@ -9,6 +9,8 @@ class KnightCard extends BaseCard
             '炎の騎士',
             25,
             15,
+            100,
+            2,
             '火',
             'KnightCard.png',
             'ブレイズソード',

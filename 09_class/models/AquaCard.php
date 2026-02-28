@@ -9,6 +9,8 @@ class AquaCard extends BaseCard
             '水の精霊',
             18,
             25,
+            100,
+            3,
             '水',
             'AquaCard.png',
             'ハイドロポンプ',

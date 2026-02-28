@@ -1,15 +1,20 @@
 <?php
-require_once 'CardInterface.php';
+require_once __DIR__ . '/../interfaces/CardInterface.php';
 
 abstract class BaseCard implements CardInterface
 {
-    protected string $name;
-    protected int $attack;
-    protected int $defense;
-    protected string $element;
-    protected string $image;
-    protected string $specialSkill;
-    protected int $specialSkillPower;
+    public int $level;
+    public string $name;
+    public int $attack;
+    public int $defense;
+    public int $hp;
+    public int $mp;
+    public int $exp;
+    public string $element;
+    public string $image;
+    public string $specialSkill;
+    public int $specialSkillPower;
+    public array $levelUpThresholds = [20, 50, 90, 150, 220, 300, 400, 500, 700, 1000];
 
     /**
      * 子クラスから送られてきた値でプロパティを初期化する
@@ -18,14 +23,20 @@ abstract class BaseCard implements CardInterface
         string $name,
         int $attack,
         int $defense,
+        int $hp,
+        int $mp,
         string $element,
         string $image,
         string $specialSkill,
         int $specialSkillPower
     ) {
+        $this->level = 1;
+        $this->exp = 0;
         $this->name = $name;
         $this->attack = $attack;
         $this->defense = $defense;
+        $this->hp = $hp;
+        $this->mp = $mp;
         $this->element = $element;
 
         // 画像パスの処理: URLでなければ ./images/ フォルダを参照する
@@ -39,32 +50,48 @@ abstract class BaseCard implements CardInterface
         $this->specialSkillPower = $specialSkillPower;
     }
 
-    public function getName(): string
+    public function attack(BaseCard $target): int
     {
-        return $this->name;
+        $dmg = $this->attack + rand(-3, 3);
+        $dmg -= $target->defense;
+        if ($dmg < 0) $dmg = 0;
+        $target->hp -= $dmg;
+        return $dmg;
     }
-    public function getAttackPower(): int
+
+    public function specialSkill(BaseCard $target): int
     {
-        return $this->attack;
+        if ($this->mp <= 0) return 0;
+        $this->mp--;
+        $dmg = $this->specialSkillPower + rand(-5, 5);
+        $dmg -= $target->defense;
+        if ($dmg < 0) $dmg = 0;
+        $target->hp -= $dmg;
+        return $dmg;
     }
-    public function getDefensePower(): int
+
+    public function gainExp(int $exp): void
     {
-        return $this->defense;
+        $this->exp += $exp;
     }
-    public function getElement(): string
+
+    public function isLevelUp(): bool
     {
-        return $this->element;
+        foreach ($this->levelUpThresholds as $threshold) {
+            if ($this->level < 10 && $this->exp >= $threshold) {
+                return true;
+            }
+        }
+        return false;
     }
-    public function getImage(): string
+
+    public function levelUp(): void
     {
-        return $this->image;
-    }
-    public function getSpecialSkill(): string
-    {
-        return $this->specialSkill;
-    }
-    public function useSpecialSkill(): int
-    {
-        return $this->specialSkillPower;
+        $this->level++;
+        // TODO: レベルに応じて上昇値を変更するようにする
+        $this->attack += 2;
+        $this->defense += 1;
+        $this->hp += 5;
+        $this->mp += 1;
     }
 }

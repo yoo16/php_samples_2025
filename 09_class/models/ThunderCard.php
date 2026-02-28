@@ -9,6 +9,8 @@ class ThunderCard extends BaseCard
             '雷の召喚獣',
             30,
             10,
+            100,
+            1,
             '雷',
             'ThunderCard.png',
             'ボルテッカー',

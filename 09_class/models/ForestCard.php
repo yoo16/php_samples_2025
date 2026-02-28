@@ -9,6 +9,8 @@ class ForestCard extends BaseCard
             '森の守護者',
             22,
             20,
+            100,
+            2,
             '風',
             'ForestCard.png',
             'リーフストーム',
