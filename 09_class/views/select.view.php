@@ -13,7 +13,7 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
                 <?php foreach ($availableCards as $id => $card): ?>
-                    <form action="action.php" method="post" class="group">
+                    <form action="action/" method="post" class="group">
                         <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
                         <input type="hidden" name="card_id" value="<?= $id ?>">
                         <button type="submit" name="start" value="1" class="w-full text-left tcg-card rounded-2xl p-4 hover:-translate-y-4 hover:scale-105 active:scale-95 duration-500 shadow-2xl shadow-black/50">

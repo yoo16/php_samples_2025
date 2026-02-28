@@ -1,5 +1,5 @@
 <?php
-require_once 'app.php';
+require_once '../app.php';
 
 $game = new GameController();
 $game->select();

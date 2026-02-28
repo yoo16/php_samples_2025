@@ -10,7 +10,7 @@ class GameController extends Controller
         if (isset($_SESSION['game_data'])) {
             unset($_SESSION['game_data']);
         }
-        header('Location: select.php');
+        header('Location: ./select/');
         exit;
     }
 
@@ -20,7 +20,7 @@ class GameController extends Controller
 
         // すでにバトル中ならバトル画面へ
         if (isset($_SESSION['game_data'])) {
-            header('Location: battle.php');
+            header('Location: ../battle/');
             exit;
         }
         $csrf_token = $game->getCsrfToken();
@@ -35,7 +35,7 @@ class GameController extends Controller
     {
         // バトル中でなければ選択画面へ
         if (!isset($_SESSION['game_data'])) {
-            header('Location: select.php');
+            header('Location: ../select/');
             exit;
         }
 
@@ -66,18 +66,18 @@ class GameController extends Controller
         }
 
         // リダイレクト先
-        $redirectTarget = 'battle.php';
+        $redirectTarget = '../battle/';
 
         // アクションに応じた処理の実行
         if (isset($_POST['start'])) {
             $game->init($_POST['card_id']);
-            $redirectTarget = 'battle.php';
+            $redirectTarget = '../battle/';
         } elseif (isset($_POST['reset'])) {
             unset($_SESSION['game_data']);
-            $redirectTarget = 'select.php';
+            $redirectTarget = '../select/';
         } elseif (isset($_POST['action'])) {
             $game->processAction($_POST['action']);
-            $redirectTarget = 'battle.php';
+            $redirectTarget = '../battle/';
         }
 
         header('Location: ' . $redirectTarget);

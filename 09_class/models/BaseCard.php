@@ -47,7 +47,7 @@ abstract class BaseCard implements CardInterface
         if (str_starts_with($image, 'http')) {
             $this->image = $image;
         } else {
-            $this->image = './images/' . $image;
+            $this->image = 'images/' . $image;
         }
 
         $this->specialSkill = $specialSkill;
@@ -60,14 +60,14 @@ abstract class BaseCard implements CardInterface
         $baseDmg = ($this->attack * 1.5) - $target->defense;
         $random = rand(-5, 5);
         $dmg = (int)($baseDmg + $random);
-        
+
         // 最低ダメージ保証 (攻撃力の 20%)
         $minDmg = (int)($this->attack * 0.2);
         if ($dmg < $minDmg) $dmg = $minDmg;
-        
+
         $target->hp -= $dmg;
         if ($target->hp < 0) $target->hp = 0;
-        
+
         return $dmg;
     }
 
@@ -75,16 +75,16 @@ abstract class BaseCard implements CardInterface
     {
         if ($this->mp <= 0) return 0;
         $this->mp--;
-        
+
         // スキルダメージ: (スキル威力 * 1.2 - 相手の防御力 * 0.5)
         $baseDmg = ($this->specialSkillPower * 1.2) - ($target->defense * 0.5);
         $random = rand(-10, 10);
         $dmg = (int)($baseDmg + $random);
-        
+
         if ($dmg < 0) $dmg = 0;
         $target->hp -= $dmg;
         if ($target->hp < 0) $target->hp = 0;
-        
+
         return $dmg;
     }
 

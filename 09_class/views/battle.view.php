@@ -1,13 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= SITE_TITLE ?></title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="css/game.css">
-</head>
+<?php include __DIR__ . '/components/head.view.php'; ?>
 
 <body class="bg-slate-950 text-slate-100 min-h-screen">
     <main class="max-w-5xl mx-auto px-4 py-12">
@@ -85,7 +79,7 @@
                 <!-- Actions -->
                 <div class="mb-6">
                     <?php if (!$isGameOver): ?>
-                        <form action="action.php" method="post" class="mt-2 grid grid-cols-2 gap-4">
+                        <form action="action/" method="post" class="mt-2 grid grid-cols-2 gap-4">
                             <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
                             <button type="submit" name="action" value="attack" class="bg-slate-800 hover:bg-slate-700 py-4 rounded-xl font-game font-bold transition-all border border-slate-700 flex flex-col items-center group active:scale-95">
                                 <span class="text-xl mb-1 group-hover:scale-110 transition-transform">⚔️</span>
@@ -97,7 +91,7 @@
                             </button>
                         </form>
                     <?php else: ?>
-                        <form action="action.php" method="post" class="mt-4">
+                        <form action="action/" method="post" class="mt-4">
                             <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
                             <button type="submit" name="reset" value="1" class="w-full bg-slate-100 hover:bg-white text-slate-950 py-5 rounded-xl font-game font-black transition-all flex items-center justify-center gap-3 shadow-xl active:scale-95">
                                 <span class="text-xl">🔄</span> RE-INITIALIZE SYSTEM

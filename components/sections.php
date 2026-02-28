@@ -143,7 +143,7 @@ $sections = [
         'label' => 'オブジェクト指向 (クラス)',
         'public' => true,
         'files' => [
-            ['name' => 'select.php', 'label' => 'カードバトル（OOP応用）', 'explanation' => '09_class/explanation.php']
+            ['name' => 'index.php', 'label' => 'カードバトル（OOP応用）', 'explanation' => '09_class/explanation.php']
         ]
     ],
     [
