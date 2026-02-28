@@ -1,29 +1,29 @@
 <?php
-// 曜日
-$week_index = 1;
-// 今日の曜日のインデックス
-// $week_index = date("w");
-// 曜日データ
-// $week = ["日", "月", "火", "水", "木", "金", "土"];
-$week_day = "";
+// 日付オブジェクトの生成（パラメータがあればその日、なければ今日）
+$targetDate = isset($_GET['date']) ? new DateTime($_GET['date']) : new DateTime();
 
-// 回収
-$garbage = "";
-// 曜日判別
-switch ($week_index) {
-    case 1:
-    case 3:
-        $garbage = "燃えるゴミ";
-        break;
-    case 5:
-        $garbage = "燃えないゴミ";
-        break;
+// 曜日インデックス（0:日 〜 6:土）
+$weekIndex = (int)$targetDate->format('w');
 
-    default:
-        $garbage = "回収なし";
-        break;
-}
+// 日本語の曜日名を取得 (IntlDateFormatterを使用)
+$formatter = new IntlDateFormatter('ja_JP', IntlDateFormatter::NONE, IntlDateFormatter::NONE, null, null, 'E');
+$weekDay = $formatter->format($targetDate);
 
+// ゴミ出しの判定 (PHP 8.0+ match式)
+$garbage = match ($weekIndex) {
+    1, 3 => "燃えるゴミ",
+    5    => "燃えないゴミ",
+    default => "回収なし"
+};
+
+// レイアウト用の色設定
+$statusColor = match ($garbage) {
+    "燃えるゴミ" => "bg-rose-500",
+    "燃えないゴミ" => "bg-amber-500",
+    default => "bg-slate-400"
+};
+
+$message = ($garbage === "回収なし") ? "今日はゆっくり過ごしましょう。" : "朝8時までに集積所へ！";
 ?>
 
 <!DOCTYPE html>
@@ -32,31 +32,82 @@ switch ($week_index) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Condition</title>
+    <title>ゴミ出しカレンダー | PHP Condition</title>
     <!-- TailwindCSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+        }
+
+        .font-outfit {
+            font-family: 'Outfit', sans-serif;
+        }
+    </style>
 </head>
 
-<body>
-    <main class="container w-1/2 mx-auto p-4">
-        <h1 class="text-2xl text-center font-bold p-3">ゴミ回収</h1>
-        <div class="mx-auto mt-4 border border-gray-200 p-4 rounded">
-            <div class="py-5">
-                <div class="py-2">
-                    <span class="text-sm mr-2">曜日</span>
-                    <span class="font-bold text-lg"><?= $week_day; ?></span>
-                </div>
-                <div class="py-2">
-                    <span class="text-sm mr-2">曜日インデックス</span>
-                    <span class="font-bold text-lg"><?= $week_index; ?></span>
-                </div>
-                <div class="py-2">
-                    <span class="text-sm mr-2">ゴミ回収</span>
-                    <span class="font-bold text-lg"><?= $garbage; ?></span>
+<body class="antialiased min-h-screen bg-slate-50 text-slate-900 py-12 px-4">
+    <main class="max-w-md mx-auto">
+        <!-- Header -->
+        <header class="text-center mb-10">
+            <h1 class="font-outfit text-4xl font-extrabold mb-2 tracking-tight text-slate-900">
+                Garbage Check
+            </h1>
+            <p class="text-slate-500 text-sm">条件分岐を利用したスケジュール判定</p>
+        </header>
+
+        <!-- Main Card -->
+        <div class="bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/60 overflow-hidden border border-slate-100">
+            <!-- Date Banner -->
+            <div class="p-8 text-center border-b border-slate-50">
+                <p class="text-slate-400 text-xs font-bold uppercase tracking-[0.2em] mb-2">Target Date</p>
+                <div class="flex items-center justify-center gap-3">
+                    <span class="text-3xl font-black font-outfit"><?= $targetDate->format('Y.m.d') ?></span>
+                    <span class="px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-sm font-bold"><?= $weekDay ?>曜日</span>
                 </div>
             </div>
-            <button class="bg-sky-500 p-3 w-full text-white rounded-lg">決済</button>
+
+            <!-- Status Content -->
+            <div class="p-10 text-center">
+                <div class="mb-6 inline-flex items-center justify-center w-20 h-20 rounded-3xl <?= $statusColor ?> text-white shadow-lg shadow-inner">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                    </svg>
+                </div>
+
+                <h2 class="text-slate-400 text-sm font-bold uppercase tracking-widest mb-2">本日の回収内容</h2>
+                <div class="text-4xl font-black text-slate-900 tracking-tight mb-2">
+                    <?= $garbage ?>
+                </div>
+                <p class="text-slate-400 text-sm italic">
+                    <?= $message ?>
+                </p>
+            </div>
+
+            <!-- Links for Testing -->
+            <div class="bg-slate-50 p-6 flex flex-wrap justify-center gap-2">
+                <a href="?date=2026-03-02" class="text-[10px] font-bold px-3 py-1.5 rounded-full bg-white border border-slate-200 text-slate-500 hover:border-indigo-300 hover:text-indigo-600 transition-all">月曜(燃える)</a>
+                <a href="?date=2026-03-03" class="text-[10px] font-bold px-3 py-1.5 rounded-full bg-white border border-slate-200 text-slate-500 hover:border-indigo-300 hover:text-indigo-600 transition-all">火曜(なし)</a>
+                <a href="?date=2026-03-06" class="text-[10px] font-bold px-3 py-1.5 rounded-full bg-white border border-slate-200 text-slate-500 hover:border-indigo-300 hover:text-indigo-600 transition-all">金曜(不燃)</a>
+            </div>
         </div>
+
+        <!-- Meta Info -->
+        <div class="mt-8 bg-slate-100/50 rounded-2xl p-4 border border-slate-200/50">
+            <div class="flex justify-between items-center text-[10px] font-mono text-slate-500">
+                <span>Week Index: <?= $weekIndex ?></span>
+                <span>PHP 8.x Match Expression</span>
+            </div>
+        </div>
+
+        <footer class="mt-12 text-center">
+            <a href="../index.php" class="text-sm font-bold text-slate-400 hover:text-indigo-600 transition-colors inline-flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                ダッシュボードに戻る
+            </a>
+        </footer>
     </main>
 </body>
 
