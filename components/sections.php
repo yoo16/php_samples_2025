@@ -28,6 +28,11 @@ $sections = [
                 'name' => 'superglobals.php',
                 'label' => 'スーパーグローバル変数',
                 'explanation' => '02_variable/explanation.php'
+            ],
+            [
+                'name' => 'include_demo.php',
+                'label' => 'require / include ファイル分離',
+                'explanation' => '02_variable/explanation_include.php'
             ]
         ]
     ],
