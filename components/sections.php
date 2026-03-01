@@ -147,7 +147,18 @@ $sections = [
         ]
     ],
     [
-        'id' => '10_signin',
+        'id' => '10_mysql',
+        'label' => 'MySQL & PDO',
+        'public' => true,
+        'files' => [
+            ['name' => 'index.php', 'label' => 'MySQL サンプルメニュー', 'explanation' => '10_mysql/explanation.php'],
+            ['name' => 'select_users.php', 'label' => 'ユーザ一覧取得', 'explanation' => '10_mysql/explanation.php'],
+            ['name' => 'insert_user.php', 'label' => '新規ユーザ登録', 'explanation' => '10_mysql/explanation.php'],
+            ['name' => 'find_user.php', 'label' => 'ユーザ詳細検索', 'explanation' => '10_mysql/explanation.php']
+        ]
+    ],
+    [
+        'id' => '11_signin',
         'label' => 'ユーザー認証',
         'public' => true,
         'files' => [
