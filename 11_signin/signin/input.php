@@ -4,17 +4,10 @@ require_once "../app.php";
 
 // 入力フォーム
 $form = $_SESSION['signin'] ?? null;
-if (isset($_SESSION['signin'])) {
-    $form = $_SESSION['signin'];
-    unset($_SESSION['signin']);
-}
 
-// エラーメッセージ
-$error = "";
-if (isset($_SESSION['error'])) {
-    $error = $_SESSION['error'];
-    unset($_SESSION['error']);
-}
+// フラッシュメッセージ
+$error = $_SESSION['error'] ?? null;
+unset($_SESSION['error']);
 ?>
 
 <!DOCTYPE html>
@@ -22,65 +15,85 @@ if (isset($_SESSION['error'])) {
 
 <?php include COMPONENT_DIR . 'head.php' ?>
 
-<body>
+<body class="bg-sky-50 min-h-screen">
     <?php include COMPONENT_DIR . 'nav.php'; ?>
 
-    <main class="flex flex-col justify-center items-center p-6">
-        <div class="w-1/2 mt-3 p-5">
-            <h2 class="text-2xl mb-3 font-bold text-orange-500 text-center">Sign in</h2>
+    <main class="flex flex-col justify-center items-center min-h-[calc(100vh-64px)] px-4">
+        <div class="w-full max-w-md bg-white rounded-2xl shadow-md p-8">
+
+            <!-- ロゴ・タイトル -->
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-sky-100 mb-4">
+                    <svg class="w-7 h-7 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                </div>
+                <h2 class="text-2xl font-bold text-sky-600 tracking-wide">Sign in</h2>
+                <p class="text-sm text-gray-400 mt-1">アカウントにログインしてください</p>
+            </div>
 
             <!-- エラーメッセージ -->
             <?php include COMPONENT_DIR . 'error_message.php'; ?>
 
-            <form action="signin/auth.php" method="post">
-                <div class="relative mb-4">
-                    <div class="relative mb-4">
-                        <input type="text" name="email" id="email"
-                            class="block px-2.5 pb-2.5 pt-6 mb-3 w-full rounded-lg
-                                    text-sm text-gray-900 ring-1 ring-gray-300 peer"
-                            value="<?= $form['email'] ?? '' ?>"
-                            placeholder=" " required>
-                        <label for="email" class="absolute 
-                        text-sm text-gray-400 
-                        duration-300 
-                        transform -translate-y-4 scale-75 
-                        top-4">
-                            メールアドレス
-                        </label>
-                    </div>
-                    <div class="relative mb-4">
-                        <input type="password" name="password"
-                            id="password" 
-                            class="block px-2.5 pb-2.5 pt-6 mb-3 w-full rounded-lg
-                                    text-sm text-gray-900 ring-1 ring-gray-300 peer"
-                            placeholder=" " required>
-                        <label for="password" class="absolute 
-                        text-sm text-gray-400 
-                        duration-300 
-                        transform -translate-y-4 scale-75 
-                        top-4">
-                            パスワード
-                        </label>
-                    </div>
+            <form action="signin/auth.php" method="post" class="space-y-5">
 
-                    <div>
-                        <button id="submit_button" class="w-full
-                        mb-2 py-2 px-4 bg-orange-500 
-                        hover:bg-orange-700 
-                        text-white 
-                        rounded-lg
-                        disabled:bg-blue-300">
-                            Sign in
-                        </button>
-                    </div>
+                <!-- メールアドレス -->
+                <div class="relative">
+                    <input type="text" name="email" id="email"
+                        class="block w-full px-4 pb-2.5 pt-6 text-sm text-gray-800
+                               bg-white border border-sky-200 rounded-xl
+                               focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent
+                               peer transition"
+                        value="<?= $form['email'] ?? '' ?>"
+                        placeholder=" " required>
+                    <label for="email"
+                        class="absolute left-4 top-4 text-sm text-gray-400
+                               transition-all duration-200
+                               peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm
+                               peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-sky-500
+                               peer-[:not(:placeholder-shown)]:top-1.5 peer-[:not(:placeholder-shown)]:text-xs">
+                        メールアドレス
+                    </label>
                 </div>
+
+                <!-- パスワード -->
+                <div class="relative">
+                    <input type="password" name="password" id="password"
+                        class="block w-full px-4 pb-2.5 pt-6 text-sm text-gray-800
+                               bg-white border border-sky-200 rounded-xl
+                               focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent
+                               peer transition"
+                        placeholder=" " required>
+                    <label for="password"
+                        class="absolute left-4 top-4 text-sm text-gray-400
+                               transition-all duration-200
+                               peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm
+                               peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-sky-500
+                               peer-[:not(:placeholder-shown)]:top-1.5 peer-[:not(:placeholder-shown)]:text-xs">
+                        パスワード
+                    </label>
+                </div>
+
+                <!-- ログインボタン -->
+                <button id="submit_button"
+                    class="w-full py-3 px-4 bg-sky-500 hover:bg-sky-600 active:bg-sky-700
+                           text-white font-semibold rounded-xl
+                           transition duration-200
+                           disabled:bg-sky-200 disabled:cursor-not-allowed
+                           shadow-sm">
+                    Sign in
+                </button>
             </form>
 
-            <div>
-                <p class="text-sm text-center">
-                    <button onclick="inputTestLoginUser()" class="p-3 text-gray-600 hover:underline">Test Input</button>
-                </p>
+            <!-- テスト入力 -->
+            <div class="mt-5 text-center">
+                <button onclick="inputTestLoginUser()"
+                    class="text-sm text-sky-400 hover:text-sky-600 hover:underline transition">
+                    Test Input
+                </button>
             </div>
+
         </div>
     </main>
 </body>

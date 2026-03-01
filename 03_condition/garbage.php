@@ -35,22 +35,13 @@ $message = ($garbage === "回収なし") ? "今日はゆっくり過ごしまし
     <title>ゴミ出しカレンダー | PHP Condition</title>
     <!-- TailwindCSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            font-family: 'Inter', 'Noto Sans JP', sans-serif;
-        }
-
-        .font-outfit {
-            font-family: 'Outfit', sans-serif;
-        }
-    </style>
 </head>
 
 <body class="antialiased min-h-screen bg-slate-50 text-slate-900 py-12 px-4">
     <main class="max-w-md mx-auto">
         <!-- Header -->
         <header class="text-center mb-10">
-            <h1 class="font-outfit text-4xl font-extrabold mb-2 tracking-tight text-slate-900">
+            <h1 class="text-4xl font-extrabold mb-2 tracking-tight text-slate-900">
                 Garbage Check
             </h1>
             <p class="text-slate-500 text-sm">条件分岐を利用したスケジュール判定</p>

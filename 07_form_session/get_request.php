@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 07_form_session/get_test.php
+ * 07_form_session/get_request.php
  * GETリクエストの送受信テスト
  */
 

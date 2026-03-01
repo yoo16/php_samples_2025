@@ -18,18 +18,28 @@ if (empty($auth_user)) {
 <!-- コンポーネント: components/head.php -->
 <?php include COMPONENT_DIR . 'head.php'; ?>
 
-<body>
+<body class="bg-sky-50 min-h-screen">
     <?php include COMPONENT_DIR . 'nav.php'; ?>
 
-    <main class="container mx-auto">
-        <div class="mb-6 text-center">
-            <h2 class="text-2xl font-semibold text-orange-500 p-4">My Page</h2>
-            <div class="flex justify-center cursor-pointer">
-                <img id="user-image" src="<?= $auth_user['image'] ?>" class="w-32 h-32 object-cover rounded-full">
+    <main class="flex flex-col items-center min-h-[calc(100vh-64px)] px-4 pt-16">
+        <div class="w-full max-w-sm bg-white rounded-2xl shadow-md p-8 text-center">
+
+            <div class="mb-2">
+                <img id="user-image" src="<?= $auth_user['image'] ?>"
+                    class="w-28 h-28 object-cover rounded-full mx-auto ring-4 ring-sky-100">
             </div>
-            <div class="text-gray-600 font-bold p-4">
-                <?= $auth_user['name'] ?>
+
+            <h2 class="text-xl font-bold text-gray-800 mt-4">
+                <?= htmlspecialchars($auth_user['name']) ?>
+            </h2>
+            <p class="text-sm text-gray-400 mt-1"><?= htmlspecialchars($auth_user['email']) ?></p>
+
+            <div class="mt-6 pt-6 border-t border-sky-50">
+                <span class="inline-block px-3 py-1 text-xs font-semibold text-sky-600 bg-sky-50 rounded-full">
+                    ログイン中
+                </span>
             </div>
+
         </div>
     </main>
 

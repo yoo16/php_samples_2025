@@ -7,6 +7,10 @@ $version = phpversion(); // PHPのバージョンを取得
 
 // 3. 文末: 命令の終わりには必ず ; (セミコロン) をつけます
 
+/**
+ * コメント
+ * 複数行のコメント
+ */
 ?>
 <!DOCTYPE html>
 <html lang="ja">

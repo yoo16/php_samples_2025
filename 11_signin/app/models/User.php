@@ -1,81 +1,49 @@
 <?php
-class User
+class User extends Model
 {
-    // CSVファイルからユーザデータを取得
-    private static $file = '../data/users.csv';
-
     /**
-     * ユーザ情報を取得
+     * 全ユーザを取得
      *
-     * @return array ユーザデータの連想配列
+     * @return array
      */
     public function get()
     {
-        // CSVファイルからユーザデータを取得
-        $file = self::$file;
-
-        // CSVファイルが存在しない場合は例外をスロー
-        if (!file_exists($file)) {
-            throw new Exception("CSVファイルが見つかりません: $file");
-        }
-
-        $users = [];
-        // CSVファイルを開く
-        if (($handle = fopen($file, 'r')) !== false) {
-            // 1行目をヘッダーとして取得
-            $headers = fgetcsv($handle); // 1行目：ヘッダー
-            // 2行目以降をデータとして取得
-            while (($data = fgetcsv($handle)) !== false) {
-                // ヘッダーとデータを組み合わせて連想配列を作成
-                $users[] = array_combine($headers, $data);
-            }
-            fclose($handle);
-        }
-        return $users;
+        $stmt = self::pdo()->query(
+            'SELECT id, display_name AS name, email, profile_image AS image FROM users'
+        );
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
-     * ユーザ情報をメールアドレスで取得
+     * メールアドレスでユーザを取得
      *
-     * @param string $email ユーザのメールアドレス
-     * @return array|null ユーザデータの連想配列、見つからなければnull
+     * @param string $email
+     * @return array|null
      */
     public function findByEmail($email)
     {
-        $users = $this->get();
-        $index = array_search($email, array_column($users, 'email'));
-        $user = $users[$index] ?? null;
-        return $user;
+        $stmt = self::pdo()->prepare(
+            'SELECT id, display_name AS name, email, profile_image AS image, password
+             FROM users WHERE email = ? LIMIT 1'
+        );
+        $stmt->execute([$email]);
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
     /**
-     * ユーザ認証
+     * メールアドレスとパスワードで認証
      *
-     * @param string $email ユーザのメールアドレス
-     * @param string $password 入力されたパスワード
-     * @return mixed 認証成功時はユーザデータの連想配列、失敗時はnull
+     * @param string $email
+     * @param string $password
+     * @return array|null
      */
     public function auth($email, $password)
     {
-        // ユーザ情報をメールアドレスで取得
         $user = $this->findByEmail($email);
-        // password_verify()関数を使用して、パスワードとハッシュを比較
         if ($user && password_verify($password, $user['password'])) {
+            unset($user['password']);
             return $user;
         }
-    }
-
-    public function getAuth()
-    {
-        // セッションからユーザ情報を取得
-        if (isset($_SESSION['auth_user'])) {
-            return $_SESSION['auth_user'];
-        }
-    }
-
-    public function setAuth($user)
-    {
-        // セッションにユーザ情報を保存
-        $_SESSION['auth_user'] = $user;
+        return null;
     }
 }

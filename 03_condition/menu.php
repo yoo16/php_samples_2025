@@ -1,16 +1,10 @@
 <?php
-// 認証フラグ（URLパラメータ ?auth=1 でログイン状態をシミュレート）
-$isAuth = isset($_GET['auth']) && $_GET['auth'] === '1';
-
 // テスト用ユーザーデータ
 $testUser = [
     'name' => '田中 太郎',
     'role' => 'プレミアム会員',
     'avatar' => 'images/user-icon.svg'
 ];
-
-// ユーザーデータ（ログイン時のみ使用）
-$user = $isAuth ? $testUser : null;
 
 // ナビゲーション項目
 $navItems = [
@@ -19,6 +13,12 @@ $navItems = [
     ['label' => 'お知らせ', 'path' => '#'],
     ['label' => 'お問い合わせ', 'path' => '#'],
 ];
+
+// 認証フラグ（URLパラメータ ?auth=1 でログイン状態をシミュレート）
+$isAuth = isset($_GET['auth']) && $_GET['auth'] === '1';
+
+// ユーザーデータ（ログイン時のみ使用）
+$user = $isAuth ? $testUser : null;
 ?>
 
 <!DOCTYPE html>
@@ -28,22 +28,8 @@ $navItems = [
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ナビゲーション制御 | PHP Condition</title>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
     <!-- TailwindCSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            font-family: 'Inter', 'Noto Sans JP', sans-serif;
-        }
-
-        .nav-blur {
-            backdrop-filter: blur(12px);
-            background-color: rgba(255, 255, 255, 0.8);
-        }
-    </style>
 </head>
 
 <body class="antialiased bg-slate-50 text-slate-900">

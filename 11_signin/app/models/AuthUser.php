@@ -1,7 +1,7 @@
 <?php
 class AuthUser extends User
 {
-    private static $key = 'auth_user';
+    private static $key = SESSION_SECRET;
 
     public static function check()
     {
