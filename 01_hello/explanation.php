@@ -11,6 +11,8 @@ $lesson_number = 1;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>解説：PHPの基本 | PHP Basics</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Prism.js for code highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../css/style.css">
 </head>
 
@@ -93,11 +95,9 @@ $lesson_number = 1;
                 開始タグと終了タグ
             </h3>
             <p class="mb-4">PHPのコードは、必ず <code>&lt;?php</code> で書き始めます。これが「ここからPHPが始まります」という合図になります。</p>
-            <div class="code-block mb-6">
-                <pre><code><span class="hl-op">&lt;?php</span>
-<span class="hl-keyword">echo</span> <span class="hl-string">"こんにちは！"</span>;
-<span class="hl-comment">// PHPのみのファイルの場合、終了タグ ?&gt; は省略するのが一般的です</span></code></pre>
-            </div>
+            <pre class="language-php mb-6"><code class="language-php">&lt;?php
+echo "こんにちは！";
+// PHPのみのファイルの場合、終了タグ ?&gt; は省略するのが一般的です</code></pre>
             <p class="mb-4 text-sm">HTMLの中に埋め込む場合は、<code>?&gt;</code> で閉じることで「ここでPHPを終わります」と伝え、そこから先は普通のHTMLとして扱われます。
             </p>
         </section>
@@ -110,10 +110,9 @@ $lesson_number = 1;
                 変数の目印 <code>$</code>
             </h3>
             <p class="mb-4">PHPで「変数（データを入れる箱）」を扱うときは、必ず名前の前に <code>$</code> をつけます。</p>
-            <div class="code-block mb-6">
-                <pre><code><span class="hl-var">$name</span> = <span class="hl-string">"太郎"</span>;
-<span class="hl-keyword">echo</span> <span class="hl-var">$name</span>; <span class="hl-comment">// $を忘れるとエラーになります</span></code></pre>
-            </div>
+            <pre class="language-php mb-6"><code>&lt;?php
+$name = "太郎";
+echo $name; // $を忘れるとエラーになります</code></pre>
         </section>
 
         <!-- Section 3: Semicolon ; -->
@@ -125,10 +124,9 @@ $lesson_number = 1;
             </h3>
             <p class="mb-4">一つの命令が終わるごとに、必ず <code>;</code>
                 （セミコロン）をつけます。日本語で言う「。」（句点）のような役割です。これを忘れると、PHPはどこまでが命令なのか分からず止まってしまいます。</p>
-            <div class="code-block mb-6">
-                <pre><code><span class="hl-keyword">echo</span> <span class="hl-string">"おはよう"</span><span class="hl-op">;</span>
-<span class="hl-keyword">echo</span> <span class="hl-string">"おやすみ"</span><span class="hl-op">;</span></code></pre>
-            </div>
+            <pre class="language-php mb-6"><code>&lt;?php
+echo "おはよう";
+echo "おやすみ";</code></pre>
         </section>
 
         <!-- Section 4: Comments -->
@@ -139,26 +137,25 @@ $lesson_number = 1;
                 コメント
             </h3>
             <p class="mb-4">コメントはプログラムとして実行されない「メモ書き」です。コードの意図を説明したり、一時的に処理を無効化するときに使います。</p>
-            <div class="code-block mb-6">
-                <pre><code><span class="hl-comment">// 一行コメント：行末まで無視されます</span>
+            <pre class="language-php mb-6"><code>&lt;?php
+// 一行コメント：行末まで無視されます
 
-<span class="hl-comment">/*
+/*
  * 複数行コメント
  * 長い説明を書くときに使います
- */</span>
+ */
 
-<span class="hl-comment">/**
+/**
  * DocBlockコメント（PHPDoc）
  * 関数やクラスの直前に書く公式なドキュメントコメントです
  * IDEがこの情報を読み取って補完に活用します
  *
  * @param string $name 名前
  * @return string 挨拶文
- */</span>
-<span class="hl-keyword">function</span> <span class="hl-num">greet</span>(<span class="hl-var">$name</span>) {
-    <span class="hl-keyword">return</span> <span class="hl-string">"こんにちは、"</span> . <span class="hl-var">$name</span> . <span class="hl-string">"さん！"</span>;
+ */
+function greet($name) {
+    return "こんにちは、" . $name . "さん！";
 }</code></pre>
-            </div>
             <p class="text-sm">HTMLの中でもPHPのコメントは使えますが、<code>&lt;!-- --&gt;</code>（HTMLコメント）とは異なり、PHPコメントはブラウザに送信されません。ソースコードを「表示」しても見えないため、より安全です。</p>
         </section>
 
@@ -170,16 +167,14 @@ $lesson_number = 1;
                 HTMLとの親和性
             </h3>
             <p class="mb-4">PHPの大きな特徴は、<strong>HTMLファイルの中にそのまま書ける</strong>ことです。<code>&lt;?php ... ?&gt;</code> で囲んだ部分だけPHPとして実行され、それ以外は普通のHTMLとして出力されます。</p>
-            <div class="code-block mb-6">
-                <pre><code><span class="hl-op">&lt;?php</span> <span class="hl-var">$name</span> = <span class="hl-string">"太郎"</span>; <span class="hl-op">?&gt;</span>
+            <pre class="language-php mb-6"><code>&lt;?php $name = "太郎"; ?&gt;
 
-<span class="hl-comment">&lt;!-- ここからHTML。PHPの変数を埋め込めます --&gt;</span>
-&lt;h1&gt;こんにちは、<span class="hl-op">&lt;?=</span> <span class="hl-var">$name</span> <span class="hl-op">?&gt;</span> さん！&lt;/h1&gt;
+&lt;!-- ここからHTML。PHPの変数を埋め込めます --&gt;
+&lt;h1&gt;こんにちは、&lt;?= $name ?&gt; さん！&lt;/h1&gt;
 
-<span class="hl-op">&lt;?php</span> <span class="hl-keyword">if</span> (<span class="hl-var">$name</span> === <span class="hl-string">"太郎"</span>): <span class="hl-op">?&gt;</span>
+&lt;?php if ($name === "太郎"): ?&gt;
     &lt;p&gt;管理者としてログイン中です。&lt;/p&gt;
-<span class="hl-op">&lt;?php</span> <span class="hl-keyword">endif</span>; <span class="hl-op">?&gt;</span></code></pre>
-            </div>
+&lt;?php endif; ?&gt;</code></pre>
             <p class="mb-4 text-sm"><code>&lt;?= $変数 ?&gt;</code> は <code>&lt;?php echo $変数; ?&gt;</code> の短縮形です。HTMLへの値の埋め込みによく使われます。</p>
             <div class="bg-amber-50 border-l-4 border-amber-400 p-4 text-sm text-amber-800">
                 <strong>仕組み：</strong> ブラウザがHTMLを受け取る前に、サーバー上でPHPが実行されます。ブラウザに届くのは完成済みのHTMLだけです。これが「サーバーサイド言語」と呼ばれる理由です。
@@ -196,13 +191,12 @@ $lesson_number = 1;
             <p class="mb-4"><code>cli_demo.php</code> では、コマンドライン（黒い画面）特有の書き方を使っています。特に、キーボードからの入力を受け取る
                 <code>STDIN</code> がポイントです。
             </p>
-            <div class="code-block mb-6">
-                <pre><code><span class="hl-comment">// 標準入力（キーボード）から1行読み込む</span>
-<span class="hl-var">$input</span> = <span class="hl-num">fgets</span>(<span class="hl-num">STDIN</span>);
+            <pre class="language-php mb-6"><code>&lt;?php
+// 標準入力（キーボード）から1行読み込む
+$input = fgets(STDIN);
 
-<span class="hl-comment">// OSごとの改行コードを表す定数（ターミナルでの改行に便利）</span>
-<span class="hl-keyword">echo</span> <span class="hl-string">"結果を表示します"</span> . <span class="hl-num">PHP_EOL</span>;</code></pre>
-            </div>
+// OSごとの改行コードを表す定数（ターミナルでの改行に便利）
+echo "結果を表示します" . PHP_EOL;</code></pre>
             <p class="text-sm">Webサーバー経由では <code>$_GET</code> や <code>$_POST</code> を使いますが、CLIツールを作る場合は
                 <code>STDIN</code> や <code>$argv</code> を使います。
             </p>
@@ -216,10 +210,8 @@ $lesson_number = 1;
                 環境の確認 <code>phpinfo()</code>
             </h3>
             <p class="mb-4">PHPの設定やバージョンを詳しく知りたいときは <code>phpinfo();</code> という命令を使います。</p>
-            <div class="code-block mb-6">
-                <pre><code><span class="hl-op">&lt;?php</span>
-<span class="hl-num">phpinfo</span>(); <span class="hl-comment">// これだけで設定が一覧表示されます</span></code></pre>
-            </div>
+            <pre class="language-php mb-6"><code>&lt;?php
+phpinfo(); // これだけで設定が一覧表示されます</code></pre>
             <div class="bg-blue-50 border-l-4 border-blue-400 p-4 text-sm text-blue-800">
                 <strong>Warning:</strong> <code>phpinfo()</code>
                 はサーバーの内部情報をすべて表示します。制作が終わったら、セキュリティのために必ずファイルを削除するか、外部から見えないようにしましょう。
@@ -231,6 +223,10 @@ $lesson_number = 1;
         </footer>
     </main>
 
+    <!-- Prism.js Script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup-templating.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-php.min.js"></script>
 </body>
 
 </html>

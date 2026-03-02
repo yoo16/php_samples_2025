@@ -4,3 +4,5 @@ env.php
 */vendor/*
 composer.*
 .env
+.agent
+docs/
