@@ -3,41 +3,65 @@
 // 各セクションとファイルの定義（データ化）
 $sections = [
     [
-        'id' => '01_hello',
+        'id' => '04_hello',
         'label' => 'Hello World (基本)',
         'public' => true,
         'files' => [
             [
                 'name' => 'demo.php',
                 'label' => 'Hello World',
-                'explanation' => '01_hello/explanation.php'
+                'explanation' => '04_hello/explanation.php'
             ]
         ]
     ],
     [
-        'id' => '02_variable',
-        'label' => '変数と演算',
+        'id' => '05_variable',
+        'label' => '変数とデータ型',
         'public' => true,
         'files' => [
             [
-                'name' => 'order.php',
-                'label' => '変数と演算の基本',
-                'explanation' => '02_variable/explanation.php'
+                'name' => 'player.php',
+                'label' => '変数の基本',
+                'explanation' => '05_variable/explanation.php'
             ],
             [
                 'name' => 'superglobals.php',
                 'label' => 'スーパーグローバル変数',
-                'explanation' => '02_variable/explanation.php'
+                'explanation' => '05_variable/explanation.php'
             ],
             [
-                'name' => 'include_demo.php',
-                'label' => 'require / include ファイル分離',
-                'explanation' => '02_variable/explanation_include.php'
+                'name' => 'check.php',
+                'label' => 'データ型チェック',
+                'explanation' => '05_variable/explanation.php'
             ]
         ]
     ],
     [
-        'id' => '03_condition',
+        'id' => '06_calculate',
+        'label' => '演算',
+        'public' => true,
+        'files' => [
+            [
+                'name' => 'order.php',
+                'label' => '演算の基本',
+                'explanation' => '06_calculate/explanation.php'
+            ],
+        ]
+    ],
+    [
+        'id' => '07_includes',
+        'label' => '外部ファイルの読み込み',
+        'public' => true,
+        'files' => [
+            [
+                'name' => 'index.php',
+                'label' => 'ファイル分離の基本',
+                'explanation' => '07_includes/explanation.php'
+            ],
+        ]
+    ],
+    [
+        'id' => '08_condition',
         'label' => '条件分岐 (if/match)',
         'public' => true,
         'files' => [
