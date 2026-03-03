@@ -1,5 +1,7 @@
 <?php
-class BaseCard
+require_once __DIR__ . '/../interfaces/CardInterface.php';
+
+class BaseCard implements CardInterface
 {
     public int $level = 1;
     public string $name = '';
@@ -50,23 +52,6 @@ class BaseCard
 
         $this->specialSkill = $specialSkill;
         $this->specialSkillPower = $specialSkillPower;
-    }
-
-    public function showStatus(): string
-    {
-        $message = "";
-        $message .= "名前: " . $this->name . "\n";
-        $message .= "レベル: " . $this->level . "\n";
-        $message .= "攻撃力: " . $this->attack . "\n";
-        $message .= "防御力: " . $this->defense . "\n";
-        $message .= "HP: " . $this->hp . " / " . $this->maxHp . "\n";
-        $message .= "MP: " . $this->mp . " / " . $this->maxMp . "\n";
-        $message .= "経験値: " . $this->exp . "\n";
-        $message .= "属性: " . $this->element . "\n";
-        $message .= "画像: " . $this->image . "\n";
-        $message .= "必殺技: " . $this->specialSkill . "\n";
-        $message .= "必殺技威力: " . $this->specialSkillPower . "\n";
-        return $message;
     }
 
     public function attack(BaseCard $target): int

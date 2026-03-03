@@ -15,6 +15,8 @@ $cards = [
     'forest' => $forestCard,
     'thunder' => $thunderCard,
 ];
+
+$_SESSION['csrf_token'] = $csrf_token = bin2hex(random_bytes(32));
 ?>
 
 <!DOCTYPE html>
@@ -38,10 +40,10 @@ $cards = [
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
                 <!-- ポリモーフィズム で繰り返し -->
                 <?php foreach ($cards as $id => $card): ?>
-                    <form action="" class="group">
+                    <form action="battle.php" class="group">
                         <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
                         <input type="hidden" name="card_id" value="<?= $id ?>">
-                        <button type="submit" name="start" value="1" class="w-full text-left tcg-card rounded-2xl p-4 hover:-translate-y-4 hover:scale-105 active:scale-95 duration-500 shadow-2xl shadow-black/50">
+                        <button type="submit" name="start" value="1" class="w-full text-left tcg-card rounded-2xl hover:-translate-y-4 hover:scale-105 active:scale-95 duration-500 shadow-2xl shadow-black/50">
                             <?php include 'views/card.php'; ?>
                         </button>
                     </form>

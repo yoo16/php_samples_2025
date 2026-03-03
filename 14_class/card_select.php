@@ -1,17 +1,50 @@
 <?php
-require_once 'models/BaseCard.php';
+require_once 'models/AquaCard.php';
+require_once 'models/ForestCard.php';
+require_once 'models/KnightCard.php';
+require_once 'models/ThunderCard.php';
 
-$card = new BaseCard(
-    '水の精霊',
-    18,
-    25,
-    100,
-    3,
-    '水',
-    'AquaCard.png',
-    'ハイドロポンプ',
-    35
-);
+// セッションの開始
+session_start();
+
+// カードクラスのインスタンスを生成
+$aquaCard = new AquaCard();
+$forestCard = new ForestCard();
+$knightCard = new KnightCard();
+$thunderCard = new ThunderCard();
+
+// カードの配列
+$cards = [
+    'aqua' => $aquaCard,
+    'forest' => $forestCard,
+    'knight' => $knightCard,
+    'thunder' => $thunderCard,
+];
+
+// カードIDの取得
+$card_id = $_GET['card_id'] ?? '';
+if (!$card_id) {
+    header('Location: card_list.php');
+    exit;
+}
+// リセット
+$is_reset = $_GET['reset'] ?? false;
+if ($is_reset) {
+    unset($_SESSION['cards'][$card_id]);
+}
+
+// セッションからカードインスタンスを生成
+$card = $_SESSION['cards'][$card_id] ?? null;
+// セッションにカードインスタンスがない場合は、カードクラスからインスタンスを生成
+if (!$card) $card = $cards[$card_id];
+
+// 経験値の獲得
+if (isset($_GET['exp'])) {
+    $card->gainExp($_GET['exp']);
+    if ($card->isLevelUp()) $card->levelUp();
+    // セッションに保存
+    $_SESSION['cards'][$card_id] = $card;
+}
 ?>
 
 <!DOCTYPE html>
@@ -38,7 +71,11 @@ $card = new BaseCard(
                 <div class="tcg-card rounded-2xl p-2 shadow-2xl">
                     <?php include 'views/card.php'; ?>
                 </div>
-                <p class="text-center mt-4 font-game text-xs text-slate-400 uppercase tracking-widest">Visual Preview</p>
+                <div class="mt-4 flex flex-col gap-2">
+                    <a href="?card_id=<?= $card_id ?>&exp=10" class="bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-md">経験値獲得</a>
+                    <a href="?card_id=<?= $card_id ?>&reset=1" class="bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-md">リセット</a>
+                    <a href="card_list.php" class="bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-md">カード一覧に戻る</a>
+                </div>
             </div>
 
             <!-- 右側：詳細ステータス -->
@@ -76,9 +113,6 @@ $card = new BaseCard(
             </div>
         </div>
 
-        <div class="mt-12 text-center">
-            <a href="./" class="text-slate-300 hover:text-sky-400 transition-colors underline decoration-sky-800">戻る</a>
-        </div>
     </main>
 </body>
 
