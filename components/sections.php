@@ -83,111 +83,131 @@ $sections = [
         ]
     ],
     [
-        'id' => '04_loops',
+        'id' => '09_loops',
         'label' => '繰り返し処理 (for/while)',
         'public' => true,
         'files' => [
             [
                 'name' => 'bingo.php',
                 'label' => 'ビンゴカード生成',
-                'explanation' => '04_loops/explanation.php'
+                'explanation' => '09_loops/explanation.php'
             ],
             [
                 'name' => 'calculate_loan.php',
                 'label' => 'ローン計算シミュレーター',
-                'explanation' => '04_loops/explanation.php'
+                'explanation' => '09_loops/explanation.php'
             ]
         ]
     ],
     [
-        'id' => '05_array_object',
+        'id' => '10_array_object',
         'label' => '配列とオブジェクト',
         'public' => true,
         'files' => [
             [
                 'name' => 'user/',
                 'label' => 'ユーザープロフィール',
-                'explanation' => '05_array_object/explanation.php'
+                'explanation' => '10_array_object/explanation.php'
             ]
         ]
     ],
     [
-        'id' => '06_function',
+        'id' => '11_function',
         'label' => '関数とクロージャ',
         'public' => true,
         'files' => [
             [
                 'name' => 'data_check.php',
                 'label' => 'ビルトイン関数',
-                'explanation' => '06_function/explanation.php'
+                'explanation' => '11_function/explanation.php'
             ],
             [
                 'name' => 'order.php',
                 'label' => 'ユーザ定義関数',
-                'explanation' => '06_function/explanation.php'
+                'explanation' => '11_function/explanation.php'
             ],
         ]
     ],
     [
-        'id' => '07_form_session',
+        'id' => '12_form_session',
         'label' => 'フォームとセッション',
         'public' => true,
         'files' => [
             [
                 'name' => 'get_request.php',
                 'label' => 'GETリクエスト',
-                'explanation' => '07_form_session/explanation.php'
+                'explanation' => '12_form_session/explanation.php'
             ],
             [
                 'name' => 'post_request.php',
                 'label' => 'POSTリクエスト',
-                'explanation' => '07_form_session/explanation.php'
+                'explanation' => '12_form_session/explanation.php'
             ],
         ]
     ],
     [
-        'id' => '08_datetime',
+        'id' => '13_datetime',
         'label' => '日付',
         'public' => true,
         'files' => [
             [
                 'name' => 'date.php',
                 'label' => 'date()関数',
-                'explanation' => '08_datetime/explanation.php'
+                'explanation' => '13_datetime/explanation.php'
             ],
             [
                 'name' => 'datetime.php',
                 'label' => 'DateTimeクラスの使い方',
-                'explanation' => '08_datetime/explanation.php'
+                'explanation' => '13_datetime/explanation.php'
             ],
             [
                 'name' => 'calendar.php',
                 'label' => 'カレンダー表示',
-                'explanation' => '08_datetime/explanation.php'
+                'explanation' => '13_datetime/explanation.php'
             ],
         ]
     ],
     [
-        'id' => '09_class',
+        'id' => '14_class',
         'label' => 'オブジェクト指向 (クラス)',
         'public' => true,
         'files' => [
-            ['name' => 'index.php', 'label' => 'カードバトル（OOP応用）', 'explanation' => '09_class/explanation.php']
+            [
+                'name' => 'index.php',
+                'label' => 'カードバトル（OOP応用）',
+                'explanation' => '14_class/explanation.php'
+            ]
         ]
     ],
     [
-        'id' => '10_mysql',
+        'id' => '15_mysql',
         'label' => 'MySQL & PDO',
         'public' => true,
         'files' => [
-            ['name' => 'index.php', 'label' => 'MySQL サンプルメニュー', 'explanation' => '10_mysql/explanation.php'],
-            ['name' => 'select_users.php', 'label' => 'ユーザ一覧取得', 'explanation' => '10_mysql/explanation.php'],
-            ['name' => 'insert_user.php', 'label' => '新規ユーザ登録', 'explanation' => '10_mysql/explanation.php'],
-            ['name' => 'find_user.php', 'label' => 'ユーザ詳細検索', 'explanation' => '10_mysql/explanation.php']
+            [
+                'name' => 'index.php',
+                'label' => 'MySQL サンプルメニュー',
+                'explanation' => '15_mysql/explanation.php'
+            ],
+            [
+                'name' => 'select_users.php',
+                'label' => 'ユーザ一覧取得',
+                'explanation' => '15_mysql/explanation.php'
+            ],
+            [
+                'name' => 'insert_user.php',
+                'label' => '新規ユーザ登録',
+                'explanation' => '15_mysql/explanation.php'
+            ],
+            [
+                'name' => 'find_user.php',
+                'label' => 'ユーザ詳細検索',
+                'explanation' => '15_mysql/explanation.php'
+            ]
         ]
     ],
     [
-        'id' => '11_signin',
+        'id' => '16_signin',
         'label' => 'ユーザー認証',
         'public' => true,
         'files' => [
@@ -195,14 +215,4 @@ $sections = [
             ['name' => 'app.php', 'label' => '認証後のメインアプリ']
         ]
     ],
-    [
-        'id' => '22_gemini',
-        'label' => 'Gemini AI 連携',
-        'public' => false,
-        'files' => [
-            ['name' => 'chat.php', 'label' => 'AIチャットボット'],
-            ['name' => 'translate.php', 'label' => 'AI多言語翻訳'],
-            ['name' => 'whats_photo.php', 'label' => '画像解析（Vision）']
-        ]
-    ]
 ];

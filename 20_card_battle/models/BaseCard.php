@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../interfaces/CardInterface.php';
 
-class BaseCard implements CardInterface
+abstract class BaseCard implements CardInterface
 {
     public int $level = 1;
     public string $name = '';

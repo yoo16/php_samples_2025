@@ -1,14 +1,15 @@
 <?php
-date_default_timezone_set('Asia/Tokyo');
-
 // タイトルなどのメタ情報
 $title = 'PHP基礎：DateTime クラス';
-$lesson_number = 8;
-$description = 'オブジェクト指向的な日付操作を行う DateTime クラスの使い方を学びます。日付の設定、加算・減算、日付同士の比較などを直感的に行えます。';
 
-// 基本的な使い方
+// タイムゾーンの設定
+date_default_timezone_set('Asia/Tokyo');
+
+// DateTimeクラスのインスタンス化
 $date = new DateTime();
+// 日付と時刻の設定
 $date->setDate(2022, 3, 10)->setTime(10, 30, 45);
+// 日付と時刻のフォーマット
 $date_string = $date->format('Y-m-d H:i:s');
 
 // 比較用データ
@@ -23,7 +24,9 @@ $date_string2 = $date2->format('Y-m-d H:i:s');
 
 // 比較実行
 $is_match = ($date1 < $date2);
-$comparison_text = $is_match ? '日付1 は 日付2 より前の日時です（True）' : '日付1 は 日付2 以降の日時です（False）';
+
+// 比較結果のテキスト
+$comparison_text = $is_match ? "{$date_string1} は {$date_string2} より前の日時です（True）" : "{$date_string1} は {$date_string2} 以降の日時です（False）";
 ?>
 
 <!DOCTYPE html>
@@ -42,7 +45,6 @@ $comparison_text = $is_match ? '日付1 は 日付2 より前の日時です（T
     <?php include('../components/nav.php'); ?>
 
     <main class="max-w-4xl mx-auto px-6 py-12">
-        <?php include('../components/header.php'); ?>
 
         <!-- Section 1: Basic Usage -->
         <section class="mb-12">
@@ -84,15 +86,15 @@ $comparison_text = $is_match ? '日付1 は 日付2 より前の日時です（T
                 </div>
             </div>
 
-            <div class="bg-slate-900 text-white p-6 rounded-2xl shadow-lg">
+            <div class="bg-white p-6 rounded-2xl shadow-lg">
                 <div class="flex items-center gap-3 mb-2">
-                    <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
-                    <h4 class="text-sm font-bold text-slate-400 uppercase tracking-widest">比較結果 ($date1 < $date2)</h4>
+                    <div class="w-2 h-2 rounded-full animate-pulse"></div>
+                    <h4 class="text-sm font-bold uppercase tracking-widest">比較結果 ($date1 < $date2)</h4>
                 </div>
-                <p class="text-xl font-bold text-emerald-400"><?= $comparison_text ?></p>
-                <div class="mt-4 pt-4 border-t border-slate-800">
+                <p class="text-xl font-bold"><?= $comparison_text ?></p>
+                <div class="mt-4 pt-4 border-t border-slate-200">
                     <p class="text-sm text-slate-400">
-                        DateTimeオブジェクト同士は、<code><</code> や <code>></code> などの比較演算子でそのまま比較できます。
+                        DateTimeオブジェクト同士は、比較演算子でそのまま比較できます。
                     </p>
                 </div>
             </div>

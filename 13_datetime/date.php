@@ -1,11 +1,12 @@
 <?php
-date_default_timezone_set("Asia/Tokyo");
-$now_time = time();
-
 // タイトルなどのメタ情報
-$title = 'PHP基礎：日付操作 (DateTime)';
-$lesson_number = 8;
-$description = 'PHPでの日付や時刻の扱い方を学びます。タイムスタンプ、フォーマット変換、相対的な日付計算（「明日」「来週」など）の基本をマスターしましょう。';
+$title = 'PHP基礎：日付操作 date() 関数';
+
+// タイムゾーンの設定
+date_default_timezone_set("Asia/Tokyo");
+
+// 現在のタイムスタンプj
+$now_time = time();
 
 // x日後のタイムスタンプ
 $day = 7;
@@ -58,7 +59,6 @@ $next_week = date('Y/m/d H:i:s', $next_week_time);
     <?php include('../components/nav.php'); ?>
 
     <main class="max-w-4xl mx-auto px-6 py-12">
-        <?php include('../components/header.php'); ?>
 
         <!-- Section 1: Timestamp -->
         <section class="mb-12">
