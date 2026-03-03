@@ -14,7 +14,7 @@ if ($cardId = $_GET['card_id'] ?? '') {
 
 // カードがなければ、選択画面へ
 if (!$game->player) {
-    header('Location: select_card.php');
+    header('Location: card_list.php');
     exit;
 }
 
@@ -109,7 +109,7 @@ $message = $game->message;
 
 
         <div class="mt-10 text-center">
-            <a href="select_card.php" class="text-slate-300 hover:text-sky-400 transition-colors underline decoration-sky-800">カード選択に戻る</a>
+            <a href="card_list.php" class="text-slate-300 hover:text-sky-400 transition-colors underline decoration-sky-800">カード選択に戻る</a>
         </div>
     </main>
 </body>

@@ -38,7 +38,9 @@ $card = new BaseCard(
                 <div class="tcg-card rounded-2xl p-2 shadow-2xl">
                     <?php include 'views/card.php'; ?>
                 </div>
-                <p class="text-center mt-4 font-game text-xs text-slate-400 uppercase tracking-widest">Visual Preview</p>
+                <div class="mt-4 flex flex-col gap-2">
+                    <a href="./" class="bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-md">戻る</a>
+                </div>
             </div>
 
             <!-- 右側：詳細ステータス -->
@@ -74,10 +76,6 @@ $card = new BaseCard(
                     <?php endforeach; ?>
                 </div>
             </div>
-        </div>
-
-        <div class="mt-12 text-center">
-            <a href="./" class="text-slate-300 hover:text-sky-400 transition-colors underline decoration-sky-800">戻る</a>
         </div>
     </main>
 </body>
