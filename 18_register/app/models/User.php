@@ -4,10 +4,11 @@ namespace App\Models;
 
 use PDO;
 use PDOException;
-use Database;
-use File;
+use Lib\Database;
+use Lib\File;
+use Lib\Model;
 
-class User
+class User extends Model
 {
     /**
      * コンストラクタ
@@ -28,7 +29,7 @@ class User
     public function find(int $id)
     {
         try {
-            $pdo = Database::getInstance();
+            $pdo = self::pdo();
             $sql = "SELECT * FROM users WHERE id = :id";
             $stmt = $pdo->prepare($sql);
             $stmt->execute(['id' => $id]);
@@ -52,7 +53,7 @@ class User
             $account_name = $posts['account_name'];
             $email = $posts['email'];
 
-            $pdo = Database::getInstance();
+            $pdo = self::pdo();
             $sql = "SELECT * FROM users WHERE account_name = :account_name OR email = :email";
             $stmt = $pdo->prepare($sql);
             $stmt->execute(['account_name' => $account_name, 'email' => $email]);
@@ -130,7 +131,7 @@ class User
     public function auth($account_name, $password)
     {
         // DB接続
-        $pdo = Database::getInstance();
+        $pdo = self::pdo();
         // SQL作成: アカウント名でユーザを検索
         $sql = "SELECT * FROM users WHERE account_name = :account_name";
         try {

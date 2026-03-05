@@ -1,7 +1,10 @@
 <?php
+
+namespace App\Models;
+
 class AuthUser extends User
 {
-    private static $key = SESSION_SECRET;
+    private static $key = APP_KEY;
 
     public static function check()
     {

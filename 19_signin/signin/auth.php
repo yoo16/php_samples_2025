@@ -2,6 +2,9 @@
 // 共通ファイル app.php を読み込み
 require_once '../app.php';
 
+use App\Models\AuthUser;
+use App\Models\User;
+
 // POSTリクエストでなければ何も表示しない
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
@@ -11,16 +14,16 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $_SESSION['signin'] = $_POST;
 
 // TODO: 入力されたアカウント名とパスワードを取得
-$email = $_POST['email'];
+$account_name = $_POST['account_name'];
 $password = $_POST['password'];
 
 // TODO: ユーザ認証: new User() で auth() を実行
 $user = new User();
-$auth_user = $user->auth($email, $password);
+$auth_user = $user->auth($account_name, $password);
 
 if (empty($auth_user['id'])) {
     // エラーセッション
-    $_SESSION['error'] = 'メールアドレスまたはパスワードが間違っています。';
+    $_SESSION['error'] = 'アカウント名またはパスワードが間違っています。';
     // ログイン失敗時はログイン入力画面にリダイレクト
     header('Location: input.php');
     exit;

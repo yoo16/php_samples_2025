@@ -40,20 +40,20 @@ unset($_SESSION['error']);
 
                 <!-- メールアドレス -->
                 <div class="relative">
-                    <input type="text" name="email" id="email"
+                    <input type="text" name="account_name" id="account_name"
                         class="block w-full px-4 pb-2.5 pt-6 text-sm text-gray-800
                                bg-white border border-sky-200 rounded-xl
                                focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent
                                peer transition"
-                        value="<?= $form['email'] ?? '' ?>"
+                        value="<?= $form['account_name'] ?? '' ?>"
                         placeholder=" " required>
-                    <label for="email"
+                    <label for="account_name"
                         class="absolute left-4 top-4 text-sm text-gray-400
                                transition-all duration-200
                                peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm
                                peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-sky-500
                                peer-[:not(:placeholder-shown)]:top-1.5 peer-[:not(:placeholder-shown)]:text-xs">
-                        メールアドレス
+                        アカウント名
                     </label>
                 </div>
 

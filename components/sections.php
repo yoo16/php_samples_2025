@@ -231,12 +231,19 @@ $sections = [
         ]
     ],
     [
-        'id' => '18_signin',
+        'id' => '18_register',
+        'label' => 'ユーザー登録',
+        'public' => true,
+        'files' => [
+            ['name' => 'regist/', 'label' => '登録画面'],
+        ]
+    ],
+    [
+        'id' => '19_signin',
         'label' => 'ユーザー認証',
         'public' => true,
         'files' => [
-            ['name' => 'index.php', 'label' => 'サインイン画面'],
-            ['name' => 'app.php', 'label' => '認証後のメインアプリ']
+            ['name' => '/', 'label' => 'サインイン画面'],
         ]
     ],
 ];

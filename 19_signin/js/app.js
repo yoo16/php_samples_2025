@@ -17,6 +17,6 @@ document.addEventListener('click', () => {
 });
 
 function inputTestLoginUser() {
-    document.getElementById('email').value = 'user1@test.com';
+    document.getElementById('account_name').value = 'user1';
     document.getElementById('password').value = '1111';
 }

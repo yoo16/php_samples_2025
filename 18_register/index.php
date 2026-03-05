@@ -30,13 +30,13 @@ $auth_user = AuthUser::check();
                 Welcome to PHP Form!
             </h1>
             <p class="text-gray-500 mb-8">
-                PHPによるサインイン・認証サンプルアプリケーション
+                PHPによる会員登録サンプルアプリケーション
             </p>
 
             <div class="flex gap-3 justify-center">
-                <a href="signin/"
+                <a href="regist/"
                     class="px-6 py-3 text-sm font-semibold text-white bg-sky-500 rounded-xl shadow-sm hover:bg-sky-600 transition">
-                    ログイン
+                    アカウント登録
                 </a>
             </div>
         </div>
