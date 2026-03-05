@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $auth_user = AuthUser::checkLogin();
 // TODO: ユーザがいなかったらログイン画面にリダイレクト
 if (empty($auth_user['id'])) {
-    header('Location: ../login/');
+    header('Location: ../signin/');
     exit;
 }
 
@@ -23,7 +23,7 @@ $posts = sanitize($_POST);
 
 // ログインユーザのIDと投稿のユーザIDが一致しない場合はログイン画面にリダイレクト
 if ((int) $auth_user['id'] !== (int) $posts['user_id']) {
-    header('Location: ../login/');
+    header('Location: ../signin/');
     exit;
 }
 

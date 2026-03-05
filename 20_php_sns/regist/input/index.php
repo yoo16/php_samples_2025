@@ -150,7 +150,7 @@ if (isset($_SESSION[APP_KEY]['errors'])) {
             <div class="mt-6 space-y-2 text-center">
                 <p class="text-sm text-gray-500">
                     すでにアカウントをお持ちですか？
-                    <a href="login/" class="text-sky-500 font-semibold hover:text-sky-700 hover:underline transition">
+                    <a href="signin/" class="text-sky-500 font-semibold hover:text-sky-700 hover:underline transition">
                         Sign In
                     </a>
                 </p>

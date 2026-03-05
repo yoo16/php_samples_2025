@@ -28,6 +28,7 @@ const PROFILE_DIR = __DIR__ . PROFILE_BASE;
 require_once LIB_DIR . 'Database.php';
 require_once LIB_DIR . 'Sanitize.php';
 require_once LIB_DIR . 'File.php';
+require_once LIB_DIR . 'Request.php';
 
 // モデルクラスの読み込み
 require_once APP_DIR . 'models/User.php';

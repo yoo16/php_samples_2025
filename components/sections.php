@@ -246,4 +246,12 @@ $sections = [
             ['name' => '/', 'label' => 'サインイン画面'],
         ]
     ],
+    [
+        'id' => '20_php_sns',
+        'label' => 'PHP SNS',
+        'public' => true,
+        'files' => [
+            ['name' => 'home/', 'label' => 'SNSアプリ'],
+        ]
+    ],
 ];
