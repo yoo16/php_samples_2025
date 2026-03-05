@@ -169,45 +169,69 @@ $sections = [
     ],
     [
         'id' => '14_class',
-        'label' => 'オブジェクト指向 (クラス)',
+        'label' => 'オブジェクト指向とクラス',
         'public' => true,
         'files' => [
             [
-                'name' => 'index.php',
-                'label' => 'カードバトル（OOP応用）',
+                'name' => 'instance.php',
+                'label' => 'OOPとクラス',
                 'explanation' => '14_class/explanation.php'
-            ]
+            ],
+            [
+                'name' => 'card_list.php',
+                'label' => 'カードリスト',
+                'explanation' => '14_class/explanation.php'
+            ],
         ]
     ],
     [
-        'id' => '15_mysql',
+        'id' => '15_card_game',
+        'label' => 'クラスの応用',
+        'public' => true,
+        'files' => [
+            [
+                'name' => 'card_list.php',
+                'label' => 'ポリモーフィズム',
+                'explanation' => '15_card_game/explanation.php'
+            ],
+        ]
+    ],
+    [
+        'id' => '16_mysql',
         'label' => 'MySQL & PDO',
         'public' => true,
         'files' => [
             [
-                'name' => 'index.php',
-                'label' => 'MySQL サンプルメニュー',
-                'explanation' => '15_mysql/explanation.php'
+                'name' => 'create_database.php',
+                'label' => 'DB作成',
+                'explanation' => '16_mysql/explanation.php'
             ],
             [
-                'name' => 'select_users.php',
-                'label' => 'ユーザ一覧取得',
-                'explanation' => '15_mysql/explanation.php'
+                'name' => 'connect_test.php',
+                'label' => 'DB接続テスト',
+                'explanation' => '16_mysql/explanation.php'
             ],
             [
-                'name' => 'insert_user.php',
-                'label' => '新規ユーザ登録',
-                'explanation' => '15_mysql/explanation.php'
+                'name' => 'connect_test_for_module.php',
+                'label' => 'DB接続テスト（モジュール化）',
+                'explanation' => '16_mysql/explanation.php'
             ],
-            [
-                'name' => 'find_user.php',
-                'label' => 'ユーザ詳細検索',
-                'explanation' => '15_mysql/explanation.php'
-            ]
         ]
     ],
     [
-        'id' => '16_signin',
+        'id' => '17_mysql_crud',
+        'label' => 'CRUD操作',
+        'public' => true,
+        'files' => [
+            [
+                'name' => 'index.php',
+                'label' => 'CRUD操作',
+                'explanation' => '17_mysql_crud/explanation.php'
+            ],
+        ]
+    ],
+    [
+        'id' => '18_signin',
         'label' => 'ユーザー認証',
         'public' => true,
         'files' => [

@@ -20,25 +20,27 @@ $tweets = $tweet->get();
 <!-- TODO: コンポーネント: components/head.php -->
 <?php include COMPONENT_DIR . 'head.php' ?>
 
-<body>
+<body class="bg-white text-slate-900 antialiased">
 
-    <div class="flex mx-auto container">
+    <div class="flex max-w-4xl mx-auto min-h-screen">
 
-        <header class="w-1/5 p-3 border-r min-h-screen">
-            <!-- TODO: components/nav.php 読み込み -->
+        <!-- サイドナビ -->
+        <header class="w-56 shrink-0 sticky top-0 self-start h-screen border-r border-slate-100">
             <?php include COMPONENT_DIR . 'nav.php' ?>
         </header>
 
-        <main class="w-4/5 pt-3">
+        <!-- メインコンテンツ -->
+        <main class="flex-1 border-r border-slate-100 min-h-screen">
+            <!-- 検索バー（sticky） -->
             <?php include COMPONENT_DIR . 'search_form.php' ?>
 
-            <div class="row">
-                <!-- TODO: components/tweet_form.php 読み込み -->
-                <?php include COMPONENT_DIR . 'tweet_form.php' ?>
-            </div>
+            <!-- ツイート投稿フォーム -->
+            <?php include COMPONENT_DIR . 'tweet_form.php' ?>
 
+            <!-- ツイート一覧 -->
             <?php include COMPONENT_DIR . 'tweet_list.php' ?>
         </main>
+
     </div>
 
 </body>

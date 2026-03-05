@@ -92,7 +92,7 @@ class GameService
     {
         unset($_SESSION['player_card']);
         unset($_SESSION['enemy_card']);
-        header("Location: select_card.php");
+        header("Location: card_list.php");
         exit;
     }
 }
