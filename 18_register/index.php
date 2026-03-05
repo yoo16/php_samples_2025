@@ -14,6 +14,7 @@ $auth_user = AuthUser::check();
 <?php include COMPONENT_DIR . 'head.php'; ?>
 
 <body class="bg-sky-50 min-h-screen">
+
     <?php include COMPONENT_DIR . 'nav.php'; ?>
 
     <main class="flex flex-col justify-center items-center min-h-[calc(100vh-64px)] px-4 text-center">

@@ -1,6 +1,11 @@
 <?php
 // 共通ファイル app.php を読み込み
 require_once '../app.php';
+
+// 認証ユーザーを取得
+use App\Models\AuthUser;
+
+$auth_user = AuthUser::check();
 ?>
 
 <!DOCTYPE html>

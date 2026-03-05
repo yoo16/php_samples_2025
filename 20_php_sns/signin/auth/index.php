@@ -1,6 +1,6 @@
 <?php
 // 共通ファイル app.php を読み込み
-require_once '../app.php';
+require_once '../../app.php';
 
 use App\Models\AuthUser;
 use App\Models\User;
@@ -25,13 +25,13 @@ if (empty($auth_user['id'])) {
     // エラーセッション
     $_SESSION['error'] = 'アカウント名またはパスワードが間違っています。';
     // ログイン失敗時はログイン入力画面にリダイレクト
-    header('Location: input.php');
+    header('Location: ../input/');
     exit;
 } else {
     // TODO: 認証成功時はセッションにユーザデータを保存
     AuthUser::set($auth_user);
 
     // TODO: トップページにリダイレクト
-    header('Location: ../home/');
+    header('Location: ../../home/');
     exit;
 }

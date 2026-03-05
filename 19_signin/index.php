@@ -34,9 +34,9 @@ $auth_user = AuthUser::check();
             </p>
 
             <div class="flex gap-3 justify-center">
-                <a href="signin/"
+                <a href="signin/input/"
                     class="px-6 py-3 text-sm font-semibold text-white bg-sky-500 rounded-xl shadow-sm hover:bg-sky-600 transition">
-                    ログイン
+                    Sign In
                 </a>
             </div>
         </div>

@@ -4,8 +4,8 @@ namespace App\Models;
 
 use PDO;
 use PDOException;
-use Database;
-use File;
+use Lib\Database;
+use Lib\File;
 
 class Tweet
 {

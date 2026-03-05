@@ -1,4 +1,7 @@
 <?php
+
+namespace Lib;
+
 class File
 {
     public static function localDir($path)

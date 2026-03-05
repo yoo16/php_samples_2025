@@ -25,7 +25,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="signout/" class="px-4 py-2 text-sm text-white bg-sky-500 hover:bg-sky-600 rounded-lg transition">
+                        <a href="signout/" class="px-4 py-2 text-sm text-gray-600 hover:text-sky-600 hover:bg-sky-50 rounded-lg transition">
                             Sign Out
                         </a>
                     </li>

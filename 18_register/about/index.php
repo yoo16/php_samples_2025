@@ -2,6 +2,10 @@
 // 共通ファイル app.php を読み込み
 require_once '../app.php';
 
+// 認証ユーザーを取得
+use App\Models\AuthUser;
+
+$auth_user = AuthUser::check();
 ?>
 
 <!DOCTYPE html>
@@ -10,6 +14,7 @@ require_once '../app.php';
 <?php include COMPONENT_DIR . 'head.php'; ?>
 
 <body class="bg-sky-50 min-h-screen">
+
     <?php include COMPONENT_DIR . 'nav.php'; ?>
 
     <main class="max-w-5xl mx-auto px-6 py-10">

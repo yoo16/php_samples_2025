@@ -2,7 +2,7 @@
 // 共通ファイル app.php を読み込み
 require_once '../../app.php';
 
-// Userモデルをインポート
+use App\Models\AuthUser;
 use App\Models\User;
 
 // POSTリクエストでなければ何も表示しない
@@ -11,9 +11,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 // TODO: セッションにPOSTデータを登録
-$_SESSION[APP_KEY]['login'] = $_POST;
+$_SESSION['signin'] = $_POST;
 
-// 入力されたアカウント名とパスワードを取得
+// TODO: 入力されたアカウント名とパスワードを取得
 $account_name = $_POST['account_name'];
 $password = $_POST['password'];
 
@@ -22,12 +22,15 @@ $user = new User();
 $auth_user = $user->auth($account_name, $password);
 
 if (empty($auth_user['id'])) {
+    // エラーセッション
+    $_SESSION['error'] = 'アカウント名またはパスワードが間違っています。';
     // ログイン失敗時はログイン入力画面にリダイレクト
     header('Location: ../input/');
     exit;
 } else {
     // TODO: 認証成功時はセッションにユーザデータを保存
-    $_SESSION[APP_KEY]['auth_user'] = $auth_user;
+    AuthUser::set($auth_user);
+
     // TODO: トップページにリダイレクト
     header('Location: ../../home/');
     exit;

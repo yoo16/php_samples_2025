@@ -1,6 +1,6 @@
 <?php
 // 共通アプリファイル読み込み
-require_once "../app.php";
+require_once "../../app.php";
 
 // 入力フォーム
 $form = $_SESSION['signin'] ?? null;
@@ -36,7 +36,7 @@ unset($_SESSION['error']);
             <!-- エラーメッセージ -->
             <?php include COMPONENT_DIR . 'error_message.php'; ?>
 
-            <form action="signin/auth.php" method="post" class="space-y-5">
+            <form action="signin/auth/" method="post" class="space-y-5">
 
                 <!-- メールアドレス -->
                 <div class="relative">

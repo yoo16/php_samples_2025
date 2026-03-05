@@ -3,6 +3,7 @@ require_once '../../app.php';
 
 use App\Models\AuthUser;
 use App\Models\Tweet;
+use Lib\File;
 
 // TODO: ログインユーザチェック
 $auth_user = AuthUser::checkLogin();
