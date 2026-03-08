@@ -18,24 +18,11 @@
                         About
                     </a>
                 </li>
-                <?php if (!empty($auth_user)): ?>
-                    <li>
-                        <a href="home/" class="px-4 py-2 text-sm text-gray-600 hover:text-sky-600 hover:bg-sky-50 rounded-lg transition">
-                            My Page
-                        </a>
-                    </li>
-                    <li>
-                        <a href="signout/" class="px-4 py-2 text-sm text-gray-600 hover:text-sky-600 hover:bg-sky-50 rounded-lg transition">
-                            Sign Out
-                        </a>
-                    </li>
-                <?php else: ?>
-                    <li>
-                        <a href="signin/" class="px-4 py-2 text-sm text-white bg-sky-500 hover:bg-sky-600 rounded-lg transition">
-                            Sign In
-                        </a>
-                    </li>
-                <?php endif ?>
+                <li>
+                    <a href="regist/" class="px-4 py-2 text-sm text-white bg-sky-500 hover:bg-sky-600 rounded-lg transition">
+                        Register
+                    </a>
+                </li>
             </ul>
 
         </div>

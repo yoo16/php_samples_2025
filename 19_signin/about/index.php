@@ -41,12 +41,13 @@ $auth_user = AuthUser::check();
                     <tbody class="text-gray-600 divide-y divide-gray-50">
                         <?php
                         $pages = [
-                            ['トップページ',     '/',                 'index.php',            'GET',  ''],
-                            ['About',           'about/',            'about/index.php',      'GET',  ''],
-                            ['ログイン入力',     'signin/',           'signin/input.php',     'GET',  'フラッシュ入力・エラー取得'],
-                            ['ログイン認証',     'signin/auth.php',   'signin/auth.php',      'POST', 'email + password で認証、セッション登録'],
-                            ['ログアウト',       'signout/',          'signout/index.php',    'GET',  'auth_user セッション削除'],
-                            ['マイページ',       'home/',             'home/index.php',       'GET',  'auth_user セッション検証、未認証はリダイレクト'],
+                            ['トップページ',       '/',                   'index.php',                  'GET',  'auth_user セッション確認'],
+                            ['About',             'about/',              'about/index.php',            'GET',  ''],
+                            ['ログイン（リセット）', 'signin/',             'signin/index.php',           'GET',  'signin セッション削除 → input にリダイレクト'],
+                            ['ログイン入力',       'signin/input/',       'signin/input/index.php',     'GET',  'フラッシュ入力値・エラー取得'],
+                            ['ログイン認証',       'signin/auth/',        'signin/auth/index.php',      'POST', 'email + password で認証、セッション登録'],
+                            ['ログアウト',         'signout/',            'signout/index.php',          'GET',  'auth_user セッション削除'],
+                            ['マイページ',         'home/',               'home/index.php',             'GET',  'auth_user セッション検証、未認証はリダイレクト'],
                         ];
                         foreach ($pages as [$label, $endpoint, $file, $method, $note]):
                             $badge = $method === 'GET'

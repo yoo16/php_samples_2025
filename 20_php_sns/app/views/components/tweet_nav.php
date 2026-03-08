@@ -22,7 +22,7 @@
                 <span class="text-gray-600 text-xs">0</span>
             </div>
         </li>
-        <?php if ($auth_user['id'] == $value['user_id']): ?>
+        <?php if (isset($auth_user['id']) && $auth_user['id'] === $value['user_id']): ?>
             <li class="cursor-pointer">
                 <form action="home/delete/" method="post" class="inline-flex items-center space-x-2">
                     <div onclick="deleteTweet(this)" class="inline-flex items-center space-x-2">

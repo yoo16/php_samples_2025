@@ -10,11 +10,21 @@ session_regenerate_id(true);
 const BASE_DIR = __DIR__;
 // app/ ディレクトリパス
 const APP_DIR = __DIR__ . "/app/";
+
+// app/models/ ディレクトリパス
+const MODEL_DIR = APP_DIR . "models/";
+// app/controllers/ ディレクトリパス
+const CONTROLLER_DIR = APP_DIR . "controllers/";
+// app/views/ ディレクトリパス
+const VIEW_DIR = APP_DIR . "views/";
+// app/views/components/ ディレクトリパス
+const COMPONENT_DIR = VIEW_DIR . "/components/";
+
 // lib/ ディレクトリパス
 const LIB_DIR = __DIR__ . "/lib/";
-// components/ ディレクトリパス
-const COMPONENT_DIR = __DIR__ . "/components/";
 
+// image base path
+const IMAGE_BASE = "images/";
 // upload image base path
 const UPLOADS_BASE = "images/uploads/";
 // profile image base path
@@ -36,8 +46,13 @@ require_once APP_DIR . 'models/Tweet.php';
 require_once APP_DIR . 'models/Like.php';
 require_once APP_DIR . 'models/AuthUser.php';
 
-if (!defined('BASE_URL')) define('BASE_URL', getBaseUrl());
+// コントローラークラスの読み込み
+require_once APP_DIR . 'controllers/HomeController.php';
+require_once APP_DIR . 'controllers/UserController.php';
 
+
+// ベースURLの定義
+if (!defined('BASE_URL')) define('BASE_URL', getBaseUrl());
 
 // BASE_URL を定義（常にルートからの相対パス）
 function getBaseUrl()

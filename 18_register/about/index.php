@@ -42,12 +42,12 @@ $auth_user = AuthUser::check();
                     <tbody class="text-gray-600 divide-y divide-gray-50">
                         <?php
                         $pages = [
-                            ['トップページ',     '/',                 'index.php',            'GET',  ''],
-                            ['About',           'about/',            'about/index.php',      'GET',  ''],
-                            ['ログイン入力',     'signin/',           'signin/input.php',     'GET',  'フラッシュ入力・エラー取得'],
-                            ['ログイン認証',     'signin/auth.php',   'signin/auth.php',      'POST', 'email + password で認証、セッション登録'],
-                            ['ログアウト',       'signout/',          'signout/index.php',    'GET',  'auth_user セッション削除'],
-                            ['マイページ',       'home/',             'home/index.php',       'GET',  'auth_user セッション検証、未認証はリダイレクト'],
+                            ['トップページ',       '/',                    'index.php',                 'GET',  'auth_user セッション確認'],
+                            ['About',             'about/',               'about/index.php',           'GET',  ''],
+                            ['会員登録（リセット）', 'regist/',              'regist/index.php',          'GET',  'regist セッション削除 → input にリダイレクト'],
+                            ['会員登録入力',       'regist/input/',        'regist/input/index.php',    'GET',  'フラッシュ入力値・エラー取得'],
+                            ['会員登録処理',       'regist/add/',          'regist/add/index.php',      'POST', '重複チェック・DB 登録・auth_user セッション保存'],
+                            ['登録完了',           'regist/result/',       'regist/result/index.php',   'GET',  'regist セッション削除・完了表示'],
                         ];
                         foreach ($pages as [$label, $endpoint, $file, $method, $note]):
                             $badge = $method === 'GET'
@@ -82,7 +82,7 @@ $auth_user = AuthUser::check();
                     <ul class="divide-y divide-gray-50 text-xs text-gray-600">
                         <li class="px-4 py-3">
                             <p class="font-mono text-gray-800">app.php</p>
-                            <p class="text-gray-400 mt-0.5">パス定数・セッション・モデル読み込み</p>
+                            <p class="text-gray-400 mt-0.5">パス定数・セッション・ライブラリ・モデル読み込み</p>
                         </li>
                         <li class="px-4 py-3">
                             <p class="font-mono text-gray-800">env.php</p>
@@ -91,6 +91,18 @@ $auth_user = AuthUser::check();
                         <li class="px-4 py-3">
                             <p class="font-mono text-gray-800">lib/Database.php</p>
                             <p class="text-gray-400 mt-0.5">PDO シングルトン</p>
+                        </li>
+                        <li class="px-4 py-3">
+                            <p class="font-mono text-gray-800">lib/Model.php</p>
+                            <p class="text-gray-400 mt-0.5">モデル基底クラス（PDO 取得）</p>
+                        </li>
+                        <li class="px-4 py-3">
+                            <p class="font-mono text-gray-800">lib/Sanitize.php</p>
+                            <p class="text-gray-400 mt-0.5">h() / sanitize() サニタイズ関数</p>
+                        </li>
+                        <li class="px-4 py-3">
+                            <p class="font-mono text-gray-800">lib/File.php</p>
+                            <p class="text-gray-400 mt-0.5">ファイルアップロード処理</p>
                         </li>
                     </ul>
                 </div>
@@ -102,15 +114,15 @@ $auth_user = AuthUser::check();
                     </div>
                     <ul class="divide-y divide-gray-50 text-xs text-gray-600">
                         <li class="px-4 py-3">
-                            <p class="font-mono text-gray-800">components/head.php</p>
+                            <p class="font-mono text-gray-800">app/components/head.php</p>
                             <p class="text-gray-400 mt-0.5">HTML &lt;head&gt;（Tailwind CDN など）</p>
                         </li>
                         <li class="px-4 py-3">
-                            <p class="font-mono text-gray-800">components/nav.php</p>
+                            <p class="font-mono text-gray-800">app/components/nav.php</p>
                             <p class="text-gray-400 mt-0.5">ナビゲーション（$auth_user で切り替え）</p>
                         </li>
                         <li class="px-4 py-3">
-                            <p class="font-mono text-gray-800">components/error_message.php</p>
+                            <p class="font-mono text-gray-800">app/components/error_message.php</p>
                             <p class="text-gray-400 mt-0.5">セッションエラー表示</p>
                         </li>
                     </ul>
@@ -149,35 +161,13 @@ $auth_user = AuthUser::check();
                         ['id',            'bigint',       'PK / AUTO_INCREMENT',       'ユーザ ID'],
                         ['account_name',  'varchar(255)', 'UNIQUE / NOT NULL',          'アカウント名'],
                         ['email',         'varchar(255)', 'UNIQUE / NOT NULL',          'メールアドレス'],
-                        ['display_name',  'varchar(255)', 'NOT NULL',                   '表示名（AS name でエイリアス）'],
+                        ['display_name',  'varchar(255)', 'NOT NULL',                   '表示名'],
                         ['password',      'varchar(255)', 'NOT NULL',                   'パスワードハッシュ'],
                         ['profile',       'text',         'DEFAULT NULL',               'プロフィール文'],
-                        ['profile_image', 'text',         'DEFAULT NULL',               'プロフィール画像パス（AS image でエイリアス）'],
+                        ['profile_image', 'text',         'DEFAULT NULL',               'プロフィール画像パス'],
                         ['created_at',    'datetime',     'NOT NULL / DEFAULT NOW()',   '作成日時'],
                         ['updated_at',    'datetime',     'NOT NULL / ON UPDATE NOW()', '更新日時'],
                     ],
-                ],
-                [
-                    'name'    => 'tweets',
-                    'columns' => [
-                        ['id',         'bigint',    'PK / AUTO_INCREMENT',       'ツイート ID'],
-                        ['message',    'text',      'NOT NULL',                   '投稿テキスト'],
-                        ['user_id',    'bigint',    'NOT NULL / FK → users.id',  '投稿者 ID'],
-                        ['image_path', 'text',      'DEFAULT NULL',               '添付画像パス'],
-                        ['created_at', 'timestamp', 'NOT NULL / DEFAULT NOW()',   '作成日時'],
-                        ['updated_at', 'timestamp', 'NOT NULL / ON UPDATE NOW()', '更新日時'],
-                    ],
-                ],
-                [
-                    'name'    => 'likes',
-                    'columns' => [
-                        ['id',         'bigint',    'PK / AUTO_INCREMENT',                  'いいね ID'],
-                        ['user_id',    'bigint',    'NOT NULL / FK → users.id',             'いいねしたユーザ ID'],
-                        ['tweet_id',   'bigint',    'NOT NULL / FK → tweets.id',            '対象ツイート ID'],
-                        ['created_at', 'timestamp', 'NOT NULL / DEFAULT NOW()',              '作成日時'],
-                        ['updated_at', 'timestamp', 'NOT NULL / ON UPDATE NOW()',            '更新日時'],
-                    ],
-                    'unique' => 'UNIQUE (user_id, tweet_id)',
                 ],
             ];
             foreach ($tables as $table):

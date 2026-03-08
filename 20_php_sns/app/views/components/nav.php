@@ -1,6 +1,8 @@
 <?php
 
-use App\Models\User;
+use App\Models\AuthUser;
+
+$auth_user = AuthUser::get();
 ?>
 
 <?php if (isset($auth_user)): ?>
@@ -19,7 +21,7 @@ use App\Models\User;
         <!-- ユーザーメニュー（下部） -->
         <div class="mt-auto pt-4 border-t border-slate-100 relative">
             <button id="user-menu" class="flex items-center gap-3 w-full px-3 py-2 rounded-xl hover:bg-sky-50 transition text-left">
-                <img src="<?= User::profileImage($auth_user['profile_image']) ?>"
+                <img src="<?= AuthUser::profileImage($auth_user['profile_image']) ?>"
                     class="w-10 h-10 rounded-full object-cover shrink-0" id="user-icon">
                 <div class="min-w-0">
                     <p class="text-sm font-bold text-slate-800 truncate"><?= htmlspecialchars($auth_user['display_name']) ?></p>

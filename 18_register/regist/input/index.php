@@ -148,12 +148,6 @@ if (isset($_SESSION[APP_KEY]['errors'])) {
 
             <!-- フッターリンク -->
             <div class="mt-6 space-y-2 text-center">
-                <p class="text-sm text-gray-500">
-                    すでにアカウントをお持ちですか？
-                    <a href="login/" class="text-sky-500 font-semibold hover:text-sky-700 hover:underline transition">
-                        Sign In
-                    </a>
-                </p>
                 <button onclick="inputTestRegistUser()"
                     class="text-sm text-sky-400 hover:text-sky-600 hover:underline transition">
                     Test Input
