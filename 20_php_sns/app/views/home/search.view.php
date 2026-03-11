@@ -11,18 +11,8 @@
 
         <?php include COMPONENT_DIR . 'tweet_form.php' ?>
 
-        <?php if ($tweets !== null): ?>
-            <p class="px-4 py-2 font-bold">
-                検索キーワード: <span><?= h($keyword) ?></span>
-            </p>
-            <p class="px-4 py-2 font-bold">
-                <?= count($tweets) ?> 件の投稿が検索されました
-            </p>
-        <?php endif; ?>
-
-        <?php foreach ($tweets as $value): ?>
-            <?php include COMPONENT_DIR . 'tweet.php' ?>
-        <?php endforeach ?>
+        <!-- 検索結果（CSR） -->
+        <div id="search-result" data-auth-user-id="<?= $auth_user['id'] ?>"></div>
     </main>
 
 </div>

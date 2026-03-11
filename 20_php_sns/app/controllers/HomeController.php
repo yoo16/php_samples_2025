@@ -17,12 +17,8 @@ class HomeController
 
     public function index()
     {
-        // Tweet投稿一覧を取得: app/models/Tweet.php
-        $tweet = new Tweet();
-        $tweets = $tweet->get();
-
-        // Viewをレンダリング: app/views/home/index.view.php
-        Request::render('home/index', ['tweets' => $tweets]);
+        // ツイート一覧は api/tweet/get/ から CSR で取得
+        Request::render('home/index', []);
     }
 
     public function detail()
@@ -33,18 +29,8 @@ class HomeController
             exit;
         }
 
-        $tweet = new Tweet();
-        $value = $tweet->findWithUser($id);
-        if (!$value) {
-            header('Location: ' . BASE_URL . 'home/');
-            exit;
-        }
-
-        $like = new Like();
-        $value['like_count'] = $like->count($id);
-
-        // Viewをレンダリング: app/views/home/detail.view.php
-        Request::render('home/detail', ['value' => $value]);
+        // ツイートデータは api/tweet/fetch/ から CSR で取得
+        Request::render('home/detail', ['tweet_id' => (int) $id]);
     }
 
     public function user_tweets()
@@ -92,11 +78,8 @@ class HomeController
     {
         $keyword = h($_GET['keyword'] ?? '');
 
-        $tweet = new Tweet();
-        $tweets = $tweet->search($keyword);
-
-        // Viewをレンダリング: app/views/home/search.view.php
-        Request::render('home/search', ['keyword' => $keyword, 'tweets' => $tweets]);
+        // ツイート検索結果は api/tweet/search/ から CSR で取得
+        Request::render('home/search', ['keyword' => $keyword]);
     }
 
     public function like()

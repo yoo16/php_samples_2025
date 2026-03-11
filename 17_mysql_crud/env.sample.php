@@ -1,8 +1,12 @@
 <?php
-// 環境に合わせて設定
+// Database
 const DB_CONNECTION = 'mysql';
-const DB_HOST = 'localhost';
-const DB_PORT = '3306';
+const DB_HOST = '127.0.0.1';
+const DB_PORT = 3306;
+const DB_DATABASE = 'php_sns';
 const DB_USERNAME = 'root';
 const DB_PASSWORD = '';
-const DB_DATABASE = 'php_sns';
+const DB_CHARSET = 'utf8mb4';
+
+// アプリキー（セッションキー兼用）
+const APP_KEY = "mysecret";

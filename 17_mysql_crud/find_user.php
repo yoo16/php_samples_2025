@@ -2,6 +2,9 @@
 require_once './env.php';
 require_once './lib/Database.php';
 
+// lib/Database を利用
+use Lib\Database;
+
 $user_id = $_GET['id'] ?? null;
 $user = null;
 

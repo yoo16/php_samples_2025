@@ -47,7 +47,7 @@ class AuthUser extends User
         $auth_user = self::get();
         // 認証ユーザ情報が存在しない場合はログイン画面にリダイレクト
         if (empty($auth_user)) {
-            header('Location: ' . BASE_URL . 'signin/');
+            header('Location: ' . BASE_URL . 'login/');
             exit;
         }
     }
@@ -57,7 +57,7 @@ class AuthUser extends User
      *
      * @param string $path ログイン画面へのパス
      */
-    public static function logout($path = '../signin/')
+    public static function logout($path = '../login/')
     {
         // セッションから認証ユーザ情報を削除
         unset($_SESSION[APP_KEY]['auth_user']);

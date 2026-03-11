@@ -185,6 +185,6 @@ class User
         if ($profile_image && file_exists($localPath)) {
             return $profile_image . "?" . filemtime($localPath);
         }
-        return "images/me.png";
+        return "images/avater.png";
     }
 }

@@ -2,6 +2,9 @@
 require_once './env.php';
 require_once './lib/Database.php';
 
+// lib/Database を利用
+use Lib\Database;
+
 // POSTリクエスト以外、またはIDがない場合は一覧へ戻す
 if ($_SERVER['REQUEST_METHOD'] !== 'POST' || empty($_POST['id'])) {
     header('Location: select_users.php');

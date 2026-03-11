@@ -5,7 +5,8 @@ use App\Models\AuthUser;
 use App\Models\User;
 
 // 認証チェック
-$auth_user = AuthUser::checkLogin();
+AuthUser::checkLogin();
+$auth_user = AuthUser::get();
 
 $user = new User();
 // 画像アップロード

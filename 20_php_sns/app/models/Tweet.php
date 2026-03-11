@@ -14,9 +14,9 @@ class Tweet
      *
      * @return array|null 投稿データの連想配列、もしくは該当する投稿がなければ null
      */
-    public function get($limit = 50)
+    public function get($limit = 10, $offset = 0)
     {
-        return $this->fetchTweets('', [], $limit);
+        return $this->fetchTweets('', [], $limit, $offset);
     }
 
     public function getByUserID($user_id, $limit = 50)
@@ -31,10 +31,20 @@ class Tweet
      */
     public function search($keyword, $limit = 50)
     {
-        return $this->fetchTweets('tweets.message LIKE :keyword', ['keyword' => "%{$keyword}%"], $limit);
+        // # 直後のスペース有無を正規化して両方にマッチさせる
+        // 例: "#anime" → "%#anime%" と "%# anime%" の両方を検索
+        $normalized = preg_replace('/#\s+/', '#', $keyword);   // "# anime" → "#anime"
+        $spaced     = preg_replace('/#(?=\S)/', '# ', $normalized); // "#anime" → "# anime"
+
+        $where  = '(tweets.message LIKE :keyword OR tweets.message LIKE :keyword_spaced)';
+        $params = [
+            'keyword'        => "%{$normalized}%",
+            'keyword_spaced' => "%{$spaced}%",
+        ];
+        return $this->fetchTweets($where, $params, $limit);
     }
 
-    private function fetchTweets(string $where, array $params, int $limit): ?array
+    private function fetchTweets(string $where, array $params, int $limit, int $offset = 0): ?array
     {
         try {
             $pdo = Database::getInstance();
@@ -64,8 +74,9 @@ class Tweet
                     users.display_name,
                     users.profile_image
                 ORDER BY tweets.created_at DESC
-                LIMIT :limit";
-            $params['limit'] = $limit;
+                LIMIT :limit OFFSET :offset";
+            $params['limit']  = $limit;
+            $params['offset'] = $offset;
             $stmt = $pdo->prepare($sql);
             $stmt->execute($params);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);

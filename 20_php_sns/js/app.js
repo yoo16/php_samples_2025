@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".tweet-message").forEach(el => {
         const text = el.innerHTML;
         // ハッシュタグ検出（日本語 + アルファベット + 数字 + _ に対応）
-        const linked = text.replace(/#([一-龯ぁ-んァ-ンー\w]+)/gu, function (match, tag) {
+        const linked = text.replace(/#\s*([一-龯ぁ-んァ-ンー\w]+)/gu, function (match, tag) {
             const url = `home/search/?keyword=%23${encodeURIComponent(tag)}`;
             return `<a href="${url}" class="text-blue-500 hover:underline">${match}</a>`;
         });

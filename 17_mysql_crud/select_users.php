@@ -4,6 +4,9 @@ require_once './env.php';
 // Database.php ファイルの読み込み
 require_once './lib/Database.php';
 
+// lib/Database を利用
+use Lib\Database;
+
 $users = get();
 
 /**

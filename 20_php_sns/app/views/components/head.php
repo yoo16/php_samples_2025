@@ -6,4 +6,5 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="js/app.js" defer></script>
     <script src="js/image.js" defer></script>
+    <script src="js/tweet.js" defer></script>
 </head>

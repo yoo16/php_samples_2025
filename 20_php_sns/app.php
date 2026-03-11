@@ -47,6 +47,7 @@ require_once APP_DIR . 'models/Like.php';
 require_once APP_DIR . 'models/AuthUser.php';
 
 // コントローラークラスの読み込み
+require_once APP_DIR . 'controllers/LoginController.php';
 require_once APP_DIR . 'controllers/HomeController.php';
 require_once APP_DIR . 'controllers/UserController.php';
 
