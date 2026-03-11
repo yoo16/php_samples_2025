@@ -2,7 +2,7 @@
 use App\Models\User;
 ?>
 <div class="px-4 py-4 border-b border-slate-100">
-    <form action="home/add/" method="post" enctype="multipart/form-data">
+    <form id="tweet-form" enctype="multipart/form-data">
         <div class="flex gap-3">
 
             <!-- プロフィール画像 -->

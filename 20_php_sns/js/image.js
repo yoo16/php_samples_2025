@@ -34,6 +34,7 @@ if (fileInput) {
 
                 // 削除ボタンの生成（画像の右上に配置）
                 const deleteBtn = document.createElement('button');
+                deleteBtn.type = 'button';
                 deleteBtn.innerHTML = '&times;';
                 deleteBtn.classList.add(
                     'absolute',
@@ -101,6 +102,7 @@ function applyFilter(filterValue) {
 
         // 削除ボタン（画像の右上）
         const deleteBtn = document.createElement('button');
+        deleteBtn.type = 'button';
         deleteBtn.innerHTML = '&times;';
         deleteBtn.classList.add(
             'absolute',

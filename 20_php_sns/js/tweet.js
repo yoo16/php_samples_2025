@@ -60,9 +60,11 @@ function heartSvg(filled) {
  * @returns 
  */
 function renderTweetNav(tweet, authUserId) {
+    // いいね済みかどうか
     const liked = !!tweet.liked;
     const heartColor = liked ? 'text-rose-500' : 'text-slate-400';
 
+    // 削除ボタン
     const deleteBtn = (authUserId && authUserId === tweet.user_id) ? `
         <form action="home/delete/" method="post" class="ml-auto">
             <div onclick="deleteTweet(this)" class="inline-flex items-center gap-1.5 text-slate-400 hover:text-red-500 transition cursor-pointer">
@@ -72,6 +74,7 @@ function renderTweetNav(tweet, authUserId) {
             <input type="hidden" name="user_id" value="${authUserId}">
         </form>` : '';
 
+    // いいね、コメント、リポスト、削除ボタンのレンダリング
     return `
         <div class="flex items-center gap-5 mt-3">
             <div class="inline-flex items-center gap-1.5 text-slate-400 hover:text-sky-500 transition cursor-pointer">
@@ -107,6 +110,7 @@ function renderTweet(tweet, authUserId) {
 
     const message = linkHashtag(nl2br(tweet.message));
 
+    // ツイートHTMLのレンダリング
     return `
         <div class="px-4 py-4 border-b border-slate-100 hover:bg-slate-50 transition">
             <div class="flex gap-3">
@@ -155,15 +159,20 @@ function initLikeButtons(container) {
         btn.addEventListener('click', async () => {
             const tweetId = Number(btn.dataset.tweetId);
             try {
-                const res = await fetch('api/like/update/', {
+                // データPOST送信
+                const uri = 'api/like/update/';
+                const res = await fetch(uri, {
                     method: 'POST',
                     credentials: 'include',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ tweet_id: tweetId }),
                 });
+                // エラー時
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                // JSONパース
                 const { like_count, liked } = await res.json();
 
+                // いいねボタン更新
                 btn.dataset.liked = String(liked);
                 btn.querySelector('.like-count').textContent = like_count;
 
@@ -332,9 +341,79 @@ async function loadSearchResults() {
 }
 
 /**
+ * ツイート投稿フォームの初期化
+ */
+function initTweetForm() {
+    const form = document.getElementById('tweet-form');
+    if (!form) return;
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const textarea = form.querySelector('textarea[name="message"]');
+        const submitBtn = form.querySelector('button[type="submit"]');
+
+        submitBtn.disabled = true;
+
+        const body = new FormData(form);
+        try {
+            const uri = 'api/tweet/add/';
+            const res = await fetch(uri, {
+                method: 'POST',
+                credentials: 'include',
+                body: body,
+            });
+
+            // 認証エラー
+            if (res.status === 401) {
+                window.location.href = 'login/';
+                return;
+            }
+            // その他のエラー
+            if (!res.ok) {
+                const { error } = await res.json();
+                alert(error ?? '投稿に失敗しました');
+                return;
+            }
+
+            // JSONをパース
+            const tweet = await res.json();
+
+            // フォームをリセット
+            textarea.value = '';
+            document.getElementById('imagePreviewContainer').innerHTML = '';
+
+            // ファイル入力をリセット
+            const fileInput = document.getElementById('fileInput');
+            if (fileInput) fileInput.value = '';
+
+            // ツイートをリストの先頭に追加
+            const container = document.getElementById('tweet-list');
+            if (container) {
+                const authUserId = container.dataset.authUserId ? Number(container.dataset.authUserId) : null;
+
+                // 新しいツイートを一時要素でレンダリング・初期化してからDOMに追加
+                const temp = document.createElement('div');
+                temp.innerHTML = renderTweet(tweet, authUserId);
+                initTweetMessages(temp);
+                initLikeButtons(temp);
+                // DOMに追加
+                container.insertBefore(temp.firstElementChild, container.firstChild);
+            }
+        } catch (e) {
+            console.error('post error:', e);
+            alert('投稿に失敗しました');
+        } finally {
+            submitBtn.disabled = false;
+        }
+    });
+}
+
+/**
  * 初期ロード
  */
 document.addEventListener('DOMContentLoaded', () => {
+    initTweetForm();
     loadTweets();
     loadSearchResults();
 });

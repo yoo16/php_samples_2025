@@ -17,8 +17,9 @@ class HomeController
 
     public function index()
     {
+        $auth_user = AuthUser::get();
         // ツイート一覧は api/tweet/get/ から CSR で取得
-        Request::render('home/index', []);
+        Request::render('home/index', ['auth_user' => $auth_user]);
     }
 
     public function detail()
