@@ -4,6 +4,8 @@ require_once './env.php';
 // Database.php ファイルの読み込み
 require_once './lib/Database.php';
 
+use Lib\Database;
+
 // PDOインスタンスを取得
 try {
     $pdo = Database::getInstance();
@@ -29,20 +31,15 @@ $description = '自作の Database クラス（シングルトンパターン）
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title ?> | PHP Samples</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/app.css">
 </head>
 
 <body class="bg-slate-50 text-slate-800 leading-relaxed antialiased">
 
-    <nav class="bg-white border-b border-slate-200 sticky top-0 z-10">
-        <div class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
-            <h1 class="text-xl font-bold tracking-tight text-slate-900"><?= $title ?></h1>
-            <a href="index.php" class="text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition">&larr; CRUDメニュー</a>
-        </div>
-    </nav>
+    <?php include 'components/nav.php'; ?>
 
     <main class="max-w-4xl mx-auto px-6 py-12">
-        
+
         <header class="mb-12">
             <div class="inline-block px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-wider mb-4">
                 Lesson <?= $lesson_number ?>
@@ -57,9 +54,13 @@ $description = '自作の Database クラス（シングルトンパターン）
                 <div class="p-8 flex flex-col md:flex-row items-center gap-6">
                     <div class="w-20 h-20 rounded-full bg-<?= $status_color ?>-100 flex items-center justify-center flex-shrink-0">
                         <?php if ($is_connected): ?>
-                            <svg class="w-10 h-10 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <svg class="w-10 h-10 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
                         <?php else: ?>
-                            <svg class="w-10 h-10 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            <svg class="w-10 h-10 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
                         <?php endif; ?>
                     </div>
                     <div class="text-center md:text-left">
@@ -82,7 +83,9 @@ $description = '自作の Database クラス（シングルトンパターン）
         <!-- Connection Details -->
         <section class="mb-12">
             <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center">
-                <svg class="w-5 h-5 mr-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                <svg class="w-5 h-5 mr-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                </svg>
                 構成情報 (env.php 定数)
             </h3>
             <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
@@ -117,7 +120,9 @@ $description = '自作の Database クラス（シングルトンパターン）
         <!-- PDO Object Info -->
         <section class="mb-12">
             <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center">
-                <svg class="w-5 h-5 mr-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                <svg class="w-5 h-5 mr-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                </svg>
                 PDO オブジェクト詳細 (Database::getInstance)
             </h3>
             <div class="bg-slate-900 rounded-2xl p-6 shadow-lg overflow-x-auto">

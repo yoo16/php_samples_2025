@@ -94,34 +94,37 @@ use App\Models\User;
                 </div>
             </form>
             <script>
-            document.getElementById('profile-form').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const btn = document.getElementById('submit_button');
-                const msg = document.getElementById('form-message');
-                btn.disabled = true;
-                msg.className = 'hidden mb-3 text-sm text-center';
+                document.getElementById('profile-form').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const btn = document.getElementById('submit_button');
+                    const msg = document.getElementById('form-message');
+                    btn.disabled = true;
+                    msg.className = 'hidden mb-3 text-sm text-center';
 
-                try {
-                    const res = await fetch('<?= BASE_URL ?>api/user/update/', {
-                        method: 'POST',
-                        credentials: 'include',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            display_name: document.getElementById('display_name').value,
-                            profile: document.getElementById('profile').value,
-                        }),
-                    });
-                    const data = await res.json();
-                    if (!res.ok) throw new Error(data.error || '更新に失敗しました');
-                    msg.textContent = '保存しました';
-                    msg.className = 'mb-3 text-sm text-center text-green-600';
-                } catch (err) {
-                    msg.textContent = err.message;
-                    msg.className = 'mb-3 text-sm text-center text-red-500';
-                } finally {
-                    btn.disabled = false;
-                }
-            });
+                    try {
+                        const uri = 'api/user/update/';
+                        const res = await fetch(uri, {
+                            method: 'POST',
+                            credentials: 'include',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                display_name: document.getElementById('display_name').value,
+                                profile: document.getElementById('profile').value,
+                            }),
+                        });
+                        const data = await res.json();
+                        if (!res.ok) throw new Error(data.error || '更新に失敗しました');
+                        msg.textContent = '保存しました';
+                        msg.className = 'mb-3 text-sm text-center text-green-600';
+                    } catch (err) {
+                        msg.textContent = err.message;
+                        msg.className = 'mb-3 text-sm text-center text-red-500';
+                    } finally {
+                        btn.disabled = false;
+                    }
+                });
             </script>
         </div>
     </main>

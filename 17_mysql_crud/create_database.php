@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $title = 'データベース初期化';
 $lesson_number = 10;
-$description = 'MySQL データベースの作成、テーブルの定義（スキーマ）、および初期データの投入を一括で行います。実行前に適用される SQL を確認できます。';
+$description = 'MySQL データベースの作成、テーブルの定義（スキーマ）、および初期データの投入を一括で行います。';
 ?>
 
 <!DOCTYPE html>
@@ -63,37 +63,12 @@ $description = 'MySQL データベースの作成、テーブルの定義（ス�
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title ?> | PHP Samples</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="../css/style.css">
-    <style>
-        .sql-preview {
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        /* スクロールバーのカスタマイズ */
-        .sql-preview::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .sql-preview::-webkit-scrollbar-track {
-            background: #1e293b;
-        }
-
-        .sql-preview::-webkit-scrollbar-thumb {
-            background: #475569;
-            border-radius: 4px;
-        }
-    </style>
+    <link rel="stylesheet" href="css/app.css">
 </head>
 
 <body class="bg-slate-50 text-slate-800 leading-relaxed antialiased">
 
-    <nav class="bg-white border-b border-slate-200 sticky top-0 z-10">
-        <div class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
-            <h1 class="text-xl font-bold tracking-tight text-slate-900"><?= $title ?></h1>
-            <a href="index.php" class="text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition">&larr; データベースメニュー</a>
-        </div>
-    </nav>
+    <?php include 'components/nav.php'; ?>
 
     <main class="max-w-4xl mx-auto px-6 py-12">
 
@@ -140,11 +115,11 @@ $description = 'MySQL データベースの作成、テーブルの定義（ス�
             <div class="lg:col-span-2 space-y-6">
                 <section class="bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-800">
                     <div class="px-6 py-4 bg-slate-800 flex items-center justify-between">
-                        <h3 class="text-slate-300 text-xs font-bold uppercase tracking-widest flex items-center gap-2">
+                        <h3 class="text-slate-300 text-xs font-bold tracking-widest flex items-center gap-2">
                             <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2 1.5 3 3.5 3H18c1 0 2-1 2-2V7c0-2-1.5-3-3.5-3H7c-2 0-3 1-3 3z"></path>
                             </svg>
-                            Schema Preview (docs/schema.sql)
+                            スキーマ SQL (docs/schema.sql)
                         </h3>
                     </div>
                     <div class="p-6 sql-preview font-mono text-[11px] text-indigo-300 leading-relaxed bg-slate-950">
@@ -154,11 +129,11 @@ $description = 'MySQL データベースの作成、テーブルの定義（ス�
 
                 <section class="bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-800">
                     <div class="px-6 py-4 bg-slate-800 flex items-center justify-between">
-                        <h3 class="text-slate-300 text-xs font-bold uppercase tracking-widest flex items-center gap-2">
+                        <h3 class="text-slate-300 text-xs font-bold tracking-widest flex items-center gap-2">
                             <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                             </svg>
-                            Initial Data Preview (docs/insert_data.sql)
+                            データ SQL (docs/insert_data.sql)
                         </h3>
                     </div>
                     <div class="p-6 sql-preview font-mono text-[11px] text-emerald-300 leading-relaxed bg-slate-950">
@@ -178,7 +153,7 @@ $description = 'MySQL データベースの作成、テーブルの定義（ス�
                             実行前の注意
                         </h3>
                         <p class="text-amber-800 text-[11px] leading-relaxed">
-                            この操作を実行すると、DB <strong><?= DB_DATABASE ?></strong> が初期化されます。現在のデータは全て削除されます。
+                            この操作を実行すると、データベース <strong><?= DB_DATABASE ?></strong> が初期化されます。現在のデータは全て削除されます。
                         </p>
                     </div>
 
@@ -190,15 +165,15 @@ $description = 'MySQL データベースの作成、テーブルの定義（ス�
                             <div class="space-y-3">
                                 <div class="flex items-center gap-3 text-xs text-slate-600">
                                     <div class="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center font-bold text-[10px]">1</div>
-                                    <span>Create Database</span>
+                                    <span>データベース作成</span>
                                 </div>
                                 <div class="flex items-center gap-3 text-xs text-slate-600">
                                     <div class="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center font-bold text-[10px]">2</div>
-                                    <span>Apply Table Schema</span>
+                                    <span>テーブル作成</span>
                                 </div>
                                 <div class="flex items-center gap-3 text-xs text-slate-600">
                                     <div class="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center font-bold text-[10px]">3</div>
-                                    <span>Insert Seed Data</span>
+                                    <span>テストデータ挿入</span>
                                 </div>
                             </div>
                         </div>

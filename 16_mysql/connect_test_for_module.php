@@ -4,6 +4,8 @@ require_once './env.php';
 // Database.php ファイルの読み込み
 require_once './lib/Database.php';
 
+use Lib\Database;
+
 // PDOインスタンスを取得
 try {
     $pdo = Database::getInstance();
@@ -29,7 +31,7 @@ $description = '自作の Database クラス（シングルトンパターン）
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title ?> | PHP Samples</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/app.css">
 </head>
 
 <body class="bg-slate-50 text-slate-800 leading-relaxed antialiased">
