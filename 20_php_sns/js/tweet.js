@@ -77,10 +77,12 @@ function renderTweetNav(tweet, authUserId) {
     // いいね、コメント、リポスト、削除ボタンのレンダリング
     return `
         <div class="flex items-center gap-5 mt-3">
-            <div class="inline-flex items-center gap-1.5 text-slate-400 hover:text-sky-500 transition cursor-pointer">
+            <button type="button"
+                class="reply-btn inline-flex items-center gap-1.5 text-slate-400 hover:text-sky-500 transition"
+                data-tweet-id="${tweet.id}">
                 <img src="svg/bubble.svg" class="w-4 h-4" alt="コメント">
-                <span class="text-xs">0</span>
-            </div>
+                <span class="reply-count text-xs">${tweet.reply_count ?? 0}</span>
+            </button>
             <button type="button"
                 class="like-btn inline-flex items-center gap-1.5 ${heartColor} hover:text-rose-500 transition"
                 data-tweet-id="${tweet.id}"
@@ -132,6 +134,19 @@ function renderTweet(tweet, authUserId) {
                     ${imageHtml}
                     ${renderTweetNav(tweet, authUserId)}
                 </div>
+            </div>
+        </div>
+        <div class="reply-form-area hidden px-4 pb-3 border-b border-slate-100" data-tweet-id="${tweet.id}">
+            <div class="flex gap-2 mt-2">
+                <textarea
+                    class="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:border-sky-400"
+                    rows="2"
+                    placeholder="返信を入力..."></textarea>
+                <button type="button"
+                    class="reply-submit-btn px-4 py-2 bg-sky-500 text-white text-sm rounded-full hover:bg-sky-600 transition self-end"
+                    data-tweet-id="${tweet.id}">
+                    返信
+                </button>
             </div>
         </div>`;
 }
@@ -194,6 +209,60 @@ function initLikeButtons(container) {
 }
 
 /**
+ * 返信フォームのイベントを初期化
+ * @param {Element} container - ツイートが含まれるコンテナ要素
+ */
+function initReplyForms(container) {
+    // 返信ボタン → フォームのトグル
+    container.querySelectorAll('.reply-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tweetId = btn.dataset.tweetId;
+            const area = container.querySelector(`.reply-form-area[data-tweet-id="${tweetId}"]`);
+            if (area) area.classList.toggle('hidden');
+        });
+    });
+
+    // 返信送信ボタン
+    container.querySelectorAll('.reply-submit-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const tweetId = Number(btn.dataset.tweetId);
+            const area = btn.closest('.reply-form-area');
+            const textarea = area.querySelector('textarea');
+            const message = textarea.value.trim();
+            if (!message) return;
+
+            btn.disabled = true;
+            try {
+                const res = await fetch('api/reply/add/', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tweet_id: tweetId, message }),
+                });
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const reply = await res.json();
+
+                // 入力欄をリセット・閉じる
+                textarea.value = '';
+                area.classList.add('hidden');
+
+                // 返信数を更新
+                const replyBtn = container.querySelector(`.reply-btn[data-tweet-id="${tweetId}"]`);
+                if (replyBtn) {
+                    const countEl = replyBtn.querySelector('.reply-count');
+                    if (countEl) countEl.textContent = reply.reply_count;
+                }
+            } catch (e) {
+                console.error('reply error:', e);
+                alert('返信に失敗しました');
+            } finally {
+                btn.disabled = false;
+            }
+        });
+    });
+}
+
+/**
  * 投稿の取得
  * インフィニティスクロールに対応
  * 
@@ -229,9 +298,10 @@ async function fetchMoreTweets(container, authUserId, spinner, sentinel, observe
         // 新しいツイートを一時要素でレンダリング・初期化してからDOMに追加
         const temp = document.createElement('div');
         temp.innerHTML = tweets.map(t => renderTweet(t, authUserId)).join('');
-        // ツイートメッセージといいねボタンを初期化
+        // ツイートメッセージ・いいね・返信フォームを初期化
         initTweetMessages(temp);
         initLikeButtons(temp);
+        initReplyForms(temp);
         // DOMに追加
         container.insertBefore(temp, sentinel);
 
@@ -330,10 +400,10 @@ async function loadSearchResults() {
         }
         // 検索結果を表示
         container.innerHTML = header + tweets.map(t => renderTweet(t, authUserId)).join('');
-        // ツイートメッセージの初期化
+        // ツイートメッセージ・いいね・返信フォームを初期化
         initTweetMessages(container);
-        // いいねボタンの初期化
         initLikeButtons(container);
+        initReplyForms(container);
     } catch (e) {
         container.innerHTML = '<p class="p-8 text-center text-red-400 text-sm">読み込みに失敗しました</p>';
         console.error(e);
@@ -397,6 +467,7 @@ function initTweetForm() {
                 temp.innerHTML = renderTweet(tweet, authUserId);
                 initTweetMessages(temp);
                 initLikeButtons(temp);
+                initReplyForms(temp);
                 // DOMに追加
                 container.insertBefore(temp.firstElementChild, container.firstChild);
             }
@@ -410,10 +481,44 @@ function initTweetForm() {
 }
 
 /**
+ * ユーザーのツイートを読み込む
+ */
+async function loadUserTweets() {
+    const container = document.getElementById('user-tweet-list');
+    if (!container) return;
+
+    const userId     = container.dataset.userId     ? Number(container.dataset.userId)     : null;
+    const authUserId = container.dataset.authUserId ? Number(container.dataset.authUserId) : null;
+    const loading    = document.getElementById('user-tweet-list-loading');
+
+    try {
+        const res = await fetch(`api/tweet/user/?user_id=${userId}`, { credentials: 'include' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const tweets = await res.json();
+
+        if (!tweets.length) {
+            loading.outerHTML = '<p class="p-8 text-center text-slate-400 text-sm">投稿がありません</p>';
+            return;
+        }
+
+        const temp = document.createElement('div');
+        temp.innerHTML = tweets.map(t => renderTweet(t, authUserId)).join('');
+        initTweetMessages(temp);
+        initLikeButtons(temp);
+        initReplyForms(temp);
+        loading.replaceWith(...temp.childNodes);
+    } catch (e) {
+        if (loading) loading.outerHTML = '<p class="p-8 text-center text-red-400 text-sm">読み込みに失敗しました</p>';
+        console.error(e);
+    }
+}
+
+/**
  * 初期ロード
  */
 document.addEventListener('DOMContentLoaded', () => {
     initTweetForm();
     loadTweets();
     loadSearchResults();
+    loadUserTweets();
 });

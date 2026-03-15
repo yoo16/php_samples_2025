@@ -7,4 +7,5 @@
     <script src="js/app.js" defer></script>
     <script src="js/image.js" defer></script>
     <script src="js/tweet.js" defer></script>
+    <script src="js/reply.js" defer></script>
 </head>

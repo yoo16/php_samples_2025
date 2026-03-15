@@ -58,10 +58,12 @@ class Tweet
                     users.account_name,
                     users.display_name,
                     users.profile_image,
-                    COUNT(likes.id) AS like_count
+                    COUNT(DISTINCT likes.id) AS like_count,
+                    COUNT(DISTINCT replies.id) AS reply_count
                 FROM tweets
                 JOIN users ON tweets.user_id = users.id
-                LEFT JOIN likes ON tweets.id = likes.tweet_id"
+                LEFT JOIN likes ON tweets.id = likes.tweet_id
+                LEFT JOIN replies ON tweets.id = replies.tweet_id"
                 . ($where ? " WHERE {$where}" : "")
                 . " GROUP BY
                     tweets.id,

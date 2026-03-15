@@ -46,7 +46,6 @@ class Follow
             return $stmt->execute(['follower_id' => $follower_id, 'followee_id' => $followee_id]);
         } catch (PDOException $e) {
             error_log($e->getMessage());
-            throw $e;
         }
     }
 

@@ -98,8 +98,7 @@ class UserController
         }
 
         $tweet = new Tweet();
-        $tweets = $tweet->getByUserID($user_data['id']);
-        $tweet_count = count($tweets);
+        $tweet_count = $tweet->countByUserID($user_data['id']);
 
         $follow = new Follow();
         $follow_count    = $follow->countFollowing($user_data['id']);
@@ -110,7 +109,6 @@ class UserController
         Request::render('user/index', [
             'auth_user'      => $auth_user,
             'user_data'      => $user_data,
-            'tweets'         => $tweets,
             'tweet_count'    => $tweet_count,
             'follow_count'   => $follow_count,
             'follower_count' => $follower_count,

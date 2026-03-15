@@ -45,6 +45,7 @@ require_once APP_DIR . 'models/User.php';
 require_once APP_DIR . 'models/Tweet.php';
 require_once APP_DIR . 'models/Like.php';
 require_once APP_DIR . 'models/Follow.php';
+require_once APP_DIR . 'models/Reply.php';
 require_once APP_DIR . 'models/AuthUser.php';
 
 // コントローラークラスの読み込み
