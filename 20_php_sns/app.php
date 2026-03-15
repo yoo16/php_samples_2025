@@ -39,6 +39,7 @@ require_once LIB_DIR . 'Database.php';
 require_once LIB_DIR . 'Sanitize.php';
 require_once LIB_DIR . 'File.php';
 require_once LIB_DIR . 'Request.php';
+require_once LIB_DIR . 'Csrf.php';
 
 // モデルクラスの読み込み
 require_once APP_DIR . 'models/User.php';
@@ -52,6 +53,7 @@ require_once APP_DIR . 'models/AuthUser.php';
 require_once APP_DIR . 'controllers/LoginController.php';
 require_once APP_DIR . 'controllers/HomeController.php';
 require_once APP_DIR . 'controllers/UserController.php';
+require_once APP_DIR . 'controllers/RegisterController.php';
 
 
 // ベースURLの定義

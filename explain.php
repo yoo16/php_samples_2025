@@ -30,7 +30,7 @@ $content = $parsedown->text($markdown);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lesson <?= htmlspecialchars($n) ?></title>
+    <title>PHP Study <?= htmlspecialchars($n) ?></title>
     <script src="https://cdn.tailwindcss.com"></script>
 
     <link rel="stylesheet" href="css/style.css">
@@ -56,6 +56,7 @@ $content = $parsedown->text($markdown);
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup-templating.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-php.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
 </body>
 

@@ -1,0 +1,40 @@
+<svg width="600" height="200" viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Styles -->
+  <style>
+    .box { fill: white; stroke: #cbd5e1; stroke-width: 2; }
+    .box-active { fill: #0ea5e9; stroke: #0284c7; stroke-width: 2; }
+    .text { font-family: sans-serif; font-size: 14px; fill: #1e293b; text-anchor: middle; }
+    .text-white { font-family: sans-serif; font-size: 14px; fill: white; text-anchor: middle; font-weight: bold; }
+    .arrow { fill: #38bdf8; }
+    .label { font-size: 10px; fill: #94a3b8; text-anchor: middle; }
+  </style>
+
+  <!-- Browser -->
+  <rect x="20" y="60" width="100" height="60" rx="8" class="box" />
+  <text x="70" y="85" class="text">ブラウザ</text>
+  <text x="70" y="105" class="label">URL入力</text>
+
+  <!-- Arrow 1 -->
+  <path d="M130 90 L160 90 L160 85 L170 90 L160 95 L160 90" class="arrow" />
+
+  <!-- Web Server -->
+  <rect x="180" y="60" width="100" height="60" rx="8" class="box" />
+  <text x="230" y="85" class="text">Webサーバ</text>
+  <text x="230" y="105" class="label">PHP実行</text>
+
+  <!-- Arrow 2 -->
+  <path d="M290 90 L320 90 L320 85 L330 90 L320 95 L320 90" class="arrow" />
+
+  <!-- Database -->
+  <rect x="340" y="60" width="100" height="60" rx="8" class="box" />
+  <text x="390" y="85" class="text">データベース</text>
+  <text x="390" y="105" class="label">データ取得</text>
+
+  <!-- Arrow 3 -->
+  <path d="M450 90 L480 90 L480 85 L490 90 L480 95 L480 90" class="arrow" />
+
+  <!-- HTML Generation -->
+  <rect x="500" y="60" width="80" height="60" rx="8" class="box-active" />
+  <text x="540" y="85" class="text-white">HTML生成</text>
+  <text x="540" y="105" class="text-white" style="font-size: 10px;">送信</text>
+</svg>

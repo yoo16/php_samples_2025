@@ -1,0 +1,55 @@
+<svg viewBox="0 0 500 220" xmlns="http://www.w3.org/2000/svg" font-family="monospace" font-size="12">
+  <rect x="10" y="20" width="160" height="120" rx="6" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+  <rect x="10" y="20" width="160" height="30" rx="6" fill="#3b82f6"/>
+  <rect x="10" y="38" width="160" height="12" fill="#3b82f6"/>
+  <text x="90" y="40" text-anchor="middle" fill="white" font-weight="bold">users</text>
+
+  <text x="20" y="65" fill="#1e3a5f">id = 1</text>
+  <text x="20" y="83" fill="#1e3a5f">display_name = "John"</text>
+  <line x1="10" y1="92" x2="170" y2="92" stroke="#3b82f6" stroke-width="1.0"/>
+
+  <text x="20" y="107" fill="#1e3a5f">id = 2</text>
+  <text x="20" y="125" fill="#1e3a5f">display_name = "Jane"</text>
+  <line x1="10" y1="132" x2="170" y2="132" stroke="#3b82f6" stroke-width="1.0"/>
+
+  <text x="195" y="80" text-anchor="middle" fill="#64748b" font-weight="bold">JOIN</text>
+  <text x="195" y="96" text-anchor="middle" fill="#94a3b8" font-size="10">user_id</text>
+  <line x1="170" y1="86" x2="230" y2="86" stroke="#64748b" stroke-width="1.5"/>
+
+  <rect x="220" y="20" width="140" height="180" rx="6" fill="#f0fdf4" stroke="#22c55e" stroke-width="1.5"/>
+  <rect x="220" y="20" width="140" height="30" rx="6" fill="#22c55e"/>
+  <rect x="220" y="38" width="140" height="12" fill="#22c55e"/>
+  <text x="300" y="40" text-anchor="middle" fill="white" font-weight="bold">tweets</text>
+
+  <text x="230" y="65" fill="#14532d">user_id = 1</text>
+  <text x="230" y="83" fill="#14532d">message = "hello"</text>
+  <line x1="220" y1="92" x2="360" y2="92" stroke="#22c55e" stroke-width="1.0"/>
+
+  <text x="230" y="107" fill="#14532d">user_id = 2</text>
+  <text x="230" y="125" fill="#14532d">message = "bye"</text>
+  <line x1="220" y1="132" x2="360" y2="132" stroke="#22c55e" stroke-width="1.0"/>
+
+  <text x="230" y="147" fill="#14532d">user_id = 1</text>
+  <text x="230" y="165" fill="#14532d">message = "fine"</text>
+  <line x1="220" y1="172" x2="360" y2="172" stroke="#22c55e" stroke-width="1.0"/>
+
+  <rect x="390" y="20" width="100" height="120" rx="6" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.5"/>
+  <rect x="390" y="20" width="100" height="30" rx="6" fill="#ca8a04"/>
+  <rect x="390" y="38" width="100" height="12" fill="#ca8a04"/>
+  <text x="440" y="40" text-anchor="middle" fill="white" font-weight="bold" font-size="11">結果</text>
+
+  <text x="400" y="68" fill="#713f12" font-size="10">John</text>
+  <text x="400" y="84" fill="#713f12" font-size="10">tweet1</text>
+  <line x1="390" y1="92" x2="490" y2="92" stroke="#ca8a04" stroke-width="1.0"/>
+
+  <text x="400" y="105" fill="#713f12" font-size="10">John</text>
+  <text x="400" y="121" fill="#713f12" font-size="10">tweet2</text>
+  <line x1="390" y1="129" x2="490" y2="129" stroke="#ca8a04" stroke-width="1.0"/>
+
+  <line x1="360" y1="86" x2="386" y2="86" stroke="#64748b" stroke-width="1.5" marker-end="url(#r)"/>
+  <defs>
+    <marker id="r" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto-start-reverse">
+      <path d="M0,0 L8,3 L0,6 z" fill="#64748b"/>
+    </marker>
+  </defs>
+</svg>

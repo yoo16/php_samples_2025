@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS replies;
 DROP TABLE IF EXISTS likes;
 DROP TABLE IF EXISTS follows;
 DROP TABLE IF EXISTS tweets;
@@ -61,4 +62,21 @@ ALTER TABLE follows ADD CONSTRAINT follows_follower_id_fk
 
 ALTER TABLE follows ADD CONSTRAINT follows_followee_id_fk
     FOREIGN KEY (followee_id) REFERENCES users(id)
+    ON DELETE CASCADE ON UPDATE CASCADE;
+
+CREATE TABLE replies (
+    id bigint PRIMARY KEY AUTO_INCREMENT,
+    tweet_id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    message text NOT NULL,
+    created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+ALTER TABLE replies ADD CONSTRAINT replies_tweet_id_fk
+    FOREIGN KEY (tweet_id) REFERENCES tweets(id)
+    ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE replies ADD CONSTRAINT replies_user_id_fk
+    FOREIGN KEY (user_id) REFERENCES users(id)
     ON DELETE CASCADE ON UPDATE CASCADE;

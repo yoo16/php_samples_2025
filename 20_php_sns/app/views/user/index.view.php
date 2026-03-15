@@ -11,8 +11,8 @@
 
         <!-- ツイート一覧（CSR） -->
         <div id="user-tweet-list"
-             data-user-id="<?= $user_data['id'] ?>"
-             data-auth-user-id="<?= $auth_user['id'] ?>">
+            data-user-id="<?= $user_data['id'] ?>"
+            data-auth-user-id="<?= $auth_user['id'] ?>">
             <div id="user-tweet-list-loading" class="p-8 flex justify-center text-slate-400">
                 <svg class="animate-spin w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

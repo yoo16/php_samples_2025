@@ -1,0 +1,49 @@
+<svg viewBox="0 0 560 340" xmlns="http://www.w3.org/2000/svg" font-family="monospace" font-size="12">
+  <!-- users テーブル -->
+  <rect x="20" y="30" width="160" height="200" rx="6" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+  <rect x="20" y="30" width="160" height="32" rx="6" fill="#3b82f6"/>
+  <rect x="20" y="50" width="160" height="12" fill="#3b82f6"/>
+  <text x="100" y="52" text-anchor="middle" fill="white" font-weight="bold" font-size="13">users</text>
+  <text x="30" y="82"  fill="#1e3a5f">🔑 id</text>
+  <text x="30" y="100" fill="#1e3a5f">account_name</text>
+  <text x="30" y="118" fill="#1e3a5f">email</text>
+  <text x="30" y="136" fill="#1e3a5f">display_name</text>
+  <text x="30" y="154" fill="#1e3a5f">password</text>
+  <text x="30" y="172" fill="#1e3a5f">profile</text>
+  <text x="30" y="190" fill="#1e3a5f">created_at</text>
+  <text x="30" y="208" fill="#1e3a5f">updated_at</text>
+
+  <!-- tweets テーブル -->
+  <rect x="220" y="30" width="160" height="168" rx="6" fill="#f0fdf4" stroke="#22c55e" stroke-width="1.5"/>
+  <rect x="220" y="30" width="160" height="32" rx="6" fill="#22c55e"/>
+  <rect x="220" y="50" width="160" height="12" fill="#22c55e"/>
+  <text x="300" y="52" text-anchor="middle" fill="white" font-weight="bold" font-size="13">tweets</text>
+  <text x="230" y="82"  fill="#14532d">🔑 id</text>
+  <text x="230" y="100" fill="#14532d">message</text>
+  <text x="230" y="118" fill="#166534">🔗 user_id</text>
+  <text x="230" y="136" fill="#14532d">image_path</text>
+  <text x="230" y="154" fill="#14532d">created_at</text>
+  <text x="230" y="172" fill="#14532d">updated_at</text>
+
+  <!-- likes テーブル -->
+  <rect x="220" y="222" width="160" height="94" rx="6" fill="#fff7ed" stroke="#f97316" stroke-width="1.5"/>
+  <rect x="220" y="222" width="160" height="32" rx="6" fill="#f97316"/>
+  <rect x="220" y="242" width="160" height="12" fill="#f97316"/>
+  <text x="300" y="244" text-anchor="middle" fill="white" font-weight="bold" font-size="13">likes</text>
+  <text x="230" y="272" fill="#431407">🔑 id</text>
+  <text x="230" y="290" fill="#7c2d12">🔗 user_id</text>
+  <text x="230" y="308" fill="#7c2d12">🔗 tweet_id</text>
+
+  <!-- users -> tweets (user_id FK) -->
+  <line x1="180" y1="118" x2="220" y2="118" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="200" y="112" text-anchor="middle" fill="#64748b" font-size="10">1:N</text>
+
+  <!-- users -> likes (user_id FK) -->
+  <line x1="100" y1="230" x2="100" y2="290" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <line x1="100" y1="290" x2="220" y2="290" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <!-- tweets -> likes (tweet_id FK) -->
+  <line x1="300" y1="198" x2="300" y2="222" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <line x1="300" y1="308" x2="380" y2="308" stroke="none"/>
+  <text x="340" y="214" text-anchor="middle" fill="#64748b" font-size="10">1:N</text>
+</svg>

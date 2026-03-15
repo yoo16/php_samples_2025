@@ -5,9 +5,8 @@ body {
 /* インラインコード（説明文中の単語）のスタイル */
 p code,
 li code {
-    font-family: 'Fira Code', monospace;
     color: hsl(213, 88%, 40%);
-    font-weight: 600;
+    font-weight: 400;
     background: #dcf0ff;
     padding: 0.1rem 0.3rem;
     border-radius: 0.25rem;

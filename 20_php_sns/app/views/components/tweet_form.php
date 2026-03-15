@@ -1,4 +1,5 @@
 <?php
+
 use App\Models\User;
 ?>
 <div class="px-4 py-4 border-b border-slate-100">

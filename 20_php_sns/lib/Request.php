@@ -4,11 +4,20 @@ namespace Lib;
 
 class Request
 {
+    /**
+     * POSTリクエストかどうかを返す
+     * @return bool
+     */
     public static function isPost()
     {
         return $_SERVER['REQUEST_METHOD'] === 'POST';
     }
 
+    /**
+     * Viewファイルを表示する
+     * @param string $path Viewファイルのパス
+     * @param array $data Viewファイルに渡す変数
+     */
     public static function render(string $path, array $data = [])
     {
         // Viewファイルを指定

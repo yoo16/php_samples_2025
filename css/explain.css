@@ -92,9 +92,3 @@
     background-color: #f1f5f9;
     /* slate-100 */
 }
-
-/* ホバー時に色を変える場合 */
-.prose tr:hover {
-    background-color: #fdf2f8;
-    /* ほんのりピンク（任意） */
-}

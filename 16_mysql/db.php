@@ -10,12 +10,14 @@ $db_port = DB_PORT;
 $db_user = DB_USERNAME;
 $db_password = DB_PASSWORD;
 
-// DSN設定
+// 1. DSN設定
 $dsn = "{$db_connection}:dbname={$db_name};host={$db_host};port={$db_port};charset=utf8;";
 
-// PDO接続
 try {
+    // 2. PDO インスタンスを生成（接続）
     $pdo = new PDO($dsn, $db_user, $db_password);
+
+    // 3. エラーモードの設定
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 } catch (PDOException $e) {

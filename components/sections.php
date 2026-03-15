@@ -10,7 +10,7 @@ $sections = [
             [
                 'name' => 'demo.php',
                 'label' => 'Hello World',
-                'explanation' => '04_hello/explanation.php'
+                'explanation' => 'explain.php?n=04'
             ]
         ]
     ],
@@ -22,17 +22,17 @@ $sections = [
             [
                 'name' => 'player.php',
                 'label' => '変数の基本',
-                'explanation' => '05_variable/explanation.php'
+                'explanation' => 'explain.php?n=05'
             ],
             [
                 'name' => 'superglobals.php',
                 'label' => 'スーパーグローバル変数',
-                'explanation' => '05_variable/explanation.php'
+                'explanation' => 'explain.php?n=05'
             ],
             [
                 'name' => 'check.php',
                 'label' => 'データ型チェック',
-                'explanation' => '05_variable/explanation.php'
+                'explanation' => 'explain.php?n=05'
             ]
         ]
     ],
@@ -44,7 +44,7 @@ $sections = [
             [
                 'name' => 'order.php',
                 'label' => '演算の基本',
-                'explanation' => '06_calculate/explanation.php'
+                'explanation' => 'explain.php?n=06'
             ],
         ]
     ],
@@ -56,7 +56,7 @@ $sections = [
             [
                 'name' => 'index.php',
                 'label' => 'ファイル分離の基本',
-                'explanation' => '07_includes/explanation.php'
+                'explanation' => 'explain.php?n=07'
             ],
         ]
     ],
@@ -68,17 +68,17 @@ $sections = [
             [
                 'name' => 'menu.php',
                 'label' => 'メニュー',
-                'explanation' => '03_condition/explanation.php'
+                'explanation' => 'explain.php?n=08'
             ],
             [
                 'name' => 'garbage.php',
                 'label' => 'ゴミ出しカレンダー',
-                'explanation' => '03_condition/explanation.php'
+                'explanation' => 'explain.php?n=08'
             ],
             [
                 'name' => 'payment.php',
                 'label' => 'お支払い判定',
-                'explanation' => '03_condition/explanation.php'
+                'explanation' => 'explain.php?n=08'
             ]
         ]
     ],
@@ -90,12 +90,12 @@ $sections = [
             [
                 'name' => 'bingo.php',
                 'label' => 'ビンゴカード生成',
-                'explanation' => '09_loops/explanation.php'
+                'explanation' => 'explain.php?n=09'
             ],
             [
                 'name' => 'calculate_loan.php',
                 'label' => 'ローン計算シミュレーター',
-                'explanation' => '09_loops/explanation.php'
+                'explanation' => 'explain.php?n=09'
             ]
         ]
     ],
@@ -107,7 +107,7 @@ $sections = [
             [
                 'name' => 'user/',
                 'label' => 'ユーザープロフィール',
-                'explanation' => '10_array_object/explanation.php'
+                'explanation' => 'explain.php?n=10'
             ]
         ]
     ],
@@ -119,12 +119,12 @@ $sections = [
             [
                 'name' => 'data_check.php',
                 'label' => 'ビルトイン関数',
-                'explanation' => '11_function/explanation.php'
+                'explanation' => 'explain.php?n=11'
             ],
             [
                 'name' => 'order.php',
                 'label' => 'ユーザ定義関数',
-                'explanation' => '11_function/explanation.php'
+                'explanation' => 'explain.php?n=11'
             ],
         ]
     ],
@@ -136,12 +136,12 @@ $sections = [
             [
                 'name' => 'get_request.php',
                 'label' => 'GETリクエスト',
-                'explanation' => '12_form_session/explanation.php'
+                'explanation' => 'explain.php?n=12'
             ],
             [
                 'name' => 'post_request.php',
                 'label' => 'POSTリクエスト',
-                'explanation' => '12_form_session/explanation.php'
+                'explanation' => 'explain.php?n=12'
             ],
         ]
     ],
@@ -153,17 +153,17 @@ $sections = [
             [
                 'name' => 'date.php',
                 'label' => 'date()関数',
-                'explanation' => '13_datetime/explanation.php'
+                'explanation' => 'explain.php?n=13'
             ],
             [
                 'name' => 'datetime.php',
                 'label' => 'DateTimeクラスの使い方',
-                'explanation' => '13_datetime/explanation.php'
+                'explanation' => 'explain.php?n=13'
             ],
             [
                 'name' => 'calendar.php',
                 'label' => 'カレンダー表示',
-                'explanation' => '13_datetime/explanation.php'
+                'explanation' => 'explain.php?n=13'
             ],
         ]
     ],
@@ -175,12 +175,12 @@ $sections = [
             [
                 'name' => 'instance.php',
                 'label' => 'OOPとクラス',
-                'explanation' => '14_class/explanation.php'
+                'explanation' => 'explain.php?n=14'
             ],
             [
                 'name' => 'card_list.php',
                 'label' => 'カードリスト',
-                'explanation' => '14_class/explanation.php'
+                'explanation' => 'explain.php?n=14'
             ],
         ]
     ],
@@ -192,7 +192,7 @@ $sections = [
             [
                 'name' => 'card_list.php',
                 'label' => 'ポリモーフィズム',
-                'explanation' => '15_card_game/explanation.php'
+                'explanation' => 'explain.php?n=15'
             ],
         ]
     ],
@@ -204,17 +204,17 @@ $sections = [
             [
                 'name' => 'create_database.php',
                 'label' => 'DB作成',
-                'explanation' => '16_mysql/explanation.php'
+                'explanation' => 'explain.php?n=16'
             ],
             [
                 'name' => 'connect_test.php',
                 'label' => 'DB接続テスト',
-                'explanation' => '16_mysql/explanation.php'
+                'explanation' => 'explain.php?n=16'
             ],
             [
                 'name' => 'connect_test_for_module.php',
                 'label' => 'DB接続テスト（モジュール化）',
-                'explanation' => '16_mysql/explanation.php'
+                'explanation' => 'explain.php?n=16'
             ],
         ]
     ],
@@ -226,7 +226,7 @@ $sections = [
             [
                 'name' => 'index.php',
                 'label' => 'CRUD操作',
-                'explanation' => '17_mysql_crud/explanation.php'
+                'explanation' => 'explain.php?n=17'
             ],
         ]
     ],

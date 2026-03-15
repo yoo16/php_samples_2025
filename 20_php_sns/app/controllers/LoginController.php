@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\AuthUser;
 use App\Models\User;
+use Lib\Csrf;
 use Lib\Request;
 
 class LoginController
@@ -33,10 +34,16 @@ class LoginController
             exit;
         }
 
-        $_SESSION['signin'] = $_POST;
+        if (!Csrf::verify()) {
+            $_SESSION['error'] = '不正なリクエストです。';
+            header('Location: ' . BASE_URL . 'login/input');
+            exit;
+        }
 
         $account_name = $_POST['account_name'];
         $password     = $_POST['password'];
+
+        $_SESSION['signin'] = ['account_name' => $account_name];
 
         $user      = new User();
         $auth_user = $user->auth($account_name, $password);

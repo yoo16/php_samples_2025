@@ -1,0 +1,28 @@
+<svg viewBox="0 0 580 100" xmlns="http://www.w3.org/2000/svg" font-family="monospace" font-size="12">
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect x="10"  y="30" width="110" height="40" rx="6" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="65"  y="48" text-anchor="middle" fill="#1e40af" font-weight="bold">prepare()</text>
+  <text x="65"  y="62" text-anchor="middle" fill="#3b82f6" font-size="10">SQL を事前準備</text>
+
+  <line x1="120" y1="50" x2="155" y2="50" stroke="#64748b" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect x="155" y="30" width="110" height="40" rx="6" fill="#f0fdf4" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="210" y="48" text-anchor="middle" fill="#166534" font-weight="bold">execute()</text>
+  <text x="210" y="62" text-anchor="middle" fill="#22c55e" font-size="10">値を渡して実行</text>
+
+  <line x1="265" y1="50" x2="300" y2="50" stroke="#64748b" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect x="300" y="30" width="110" height="40" rx="6" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.5"/>
+  <text x="355" y="48" text-anchor="middle" fill="#713f12" font-weight="bold">fetch()</text>
+  <text x="355" y="62" text-anchor="middle" fill="#92400e" font-size="10">結果を1件取得</text>
+
+  <line x1="410" y1="50" x2="445" y2="50" stroke="#64748b" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect x="445" y="30" width="120" height="40" rx="6" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.5"/>
+  <text x="505" y="48" text-anchor="middle" fill="#713f12" font-weight="bold">fetchAll()</text>
+  <text x="505" y="62" text-anchor="middle" fill="#92400e" font-size="10">結果を全件取得</text>
+</svg>
