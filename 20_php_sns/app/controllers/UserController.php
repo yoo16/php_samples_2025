@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\Tweet;
 use App\Models\User;
 use App\Models\AuthUser;
+use App\Models\Follow;
 use Lib\Request;
 
 class UserController
@@ -46,6 +47,44 @@ class UserController
         Request::render('user/edit', ['auth_user' => $auth_user]);
     }
 
+    public function follow()
+    {
+        if (!Request::isPost()) {
+            header('Location: ' . BASE_URL . 'user/');
+            exit;
+        }
+
+        $auth_user   = AuthUser::get();
+        $followee_id = (int) ($_POST['followee_id'] ?? 0);
+
+        if ($followee_id && $followee_id !== (int) $auth_user['id']) {
+            $follow = new Follow();
+            $follow->insert($auth_user['id'], $followee_id);
+        }
+
+        header('Location: ' . BASE_URL . 'user/?id=' . $followee_id);
+        exit;
+    }
+
+    public function unfollow()
+    {
+        if (!Request::isPost()) {
+            header('Location: ' . BASE_URL . 'user/');
+            exit;
+        }
+
+        $auth_user   = AuthUser::get();
+        $followee_id = (int) ($_POST['followee_id'] ?? 0);
+
+        if ($followee_id) {
+            $follow = new Follow();
+            $follow->delete($auth_user['id'], $followee_id);
+        }
+
+        header('Location: ' . BASE_URL . 'user/?id=' . $followee_id);
+        exit;
+    }
+
     public function index()
     {
         $auth_user = AuthUser::get();
@@ -62,12 +101,20 @@ class UserController
         $tweets = $tweet->getByUserID($user_data['id']);
         $tweet_count = count($tweets);
 
+        $follow = new Follow();
+        $follow_count    = $follow->countFollowing($user_data['id']);
+        $follower_count  = $follow->countFollowers($user_data['id']);
+        $is_following    = (bool) $follow->fetch($auth_user['id'], $user_data['id']);
+
         // Viewをレンダリング: app/views/user/index.view.php
         Request::render('user/index', [
-            'auth_user'   => $auth_user,
-            'user_data'   => $user_data,
-            'tweets'      => $tweets,
-            'tweet_count' => $tweet_count,
+            'auth_user'      => $auth_user,
+            'user_data'      => $user_data,
+            'tweets'         => $tweets,
+            'tweet_count'    => $tweet_count,
+            'follow_count'   => $follow_count,
+            'follower_count' => $follower_count,
+            'is_following'   => $is_following,
         ]);
     }
 }
