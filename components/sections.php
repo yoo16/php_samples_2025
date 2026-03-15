@@ -251,7 +251,11 @@ $sections = [
         'label' => 'PHP SNS',
         'public' => true,
         'files' => [
-            ['name' => 'home/', 'label' => 'SNSアプリ'],
+            [
+                'name' => 'home/',
+                'label' => 'SNSアプリ',
+                'explanation' => 'explain.php?n=20_0'
+            ],
         ]
     ],
 ];
