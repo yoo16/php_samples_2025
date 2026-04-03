@@ -5,12 +5,10 @@ const DB_HOST = '127.0.0.1';
 const DB_PORT = 3306;
 const DB_DATABASE = 'php_sns';
 const DB_USERNAME = 'root';
-// XAMP
 const DB_PASSWORD = '';
-// MAMP or Other
-// const DB_PASSWORD = 'root';
+const DB_CHARSET = 'utf8mb4';
 
-// アプリキー
+// アプリキー（セッションキー兼用）
 const APP_KEY = "php_sns";
 
 // サイトタイトル
