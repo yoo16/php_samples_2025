@@ -182,7 +182,7 @@ function initLikeButtons(container) {
             const tweetId = Number(btn.dataset.tweetId);
             try {
                 // データPOST送信
-                const uri = 'api/like/update/';
+                const uri = apiUrl('api/like/update/');
                 const res = await fetch(uri, {
                     method: 'POST',
                     credentials: 'include',
@@ -240,7 +240,7 @@ function initReplyForms(container) {
 
             btn.disabled = true;
             try {
-                const res = await fetch('api/reply/add/', {
+                const res = await fetch(apiUrl('api/reply/add/'), {
                     method: 'POST',
                     credentials: 'include',
                     headers: { 'Content-Type': 'application/json' },
@@ -287,7 +287,7 @@ async function fetchMoreTweets(container, authUserId, spinner, sentinel, observe
 
     try {
         // 投稿を取得
-        const uri = `api/tweet/get/?limit=${TWEET_LIMIT}&offset=${tweetOffset}`;
+        const uri = apiUrl(`api/tweet/get/?limit=${TWEET_LIMIT}&offset=${tweetOffset}`);
         // Fetch APIで投稿を取得
         const res = await fetch(uri, { credentials: 'include' });
         // レスポンスがOKでない場合はエラーを投げる
@@ -387,7 +387,7 @@ async function loadSearchResults() {
 
     try {
         // 検索結果を取得
-        const uri = `api/tweet/search/?keyword=${encodeURIComponent(keyword)}`;
+        const uri = apiUrl(`api/tweet/search/?keyword=${encodeURIComponent(keyword)}`);
         // Fetch APIで検索結果を取得
         const res = await fetch(uri, { credentials: 'include' });
         // エラーハンドリング
@@ -434,7 +434,7 @@ function initTweetForm() {
 
         const body = new FormData(form);
         try {
-            const uri = 'api/tweet/add/';
+            const uri = apiUrl('api/tweet/add/');
             const res = await fetch(uri, {
                 method: 'POST',
                 credentials: 'include',
@@ -506,7 +506,7 @@ async function loadUserTweets() {
     const loading    = document.getElementById('user-tweet-list-loading');
 
     try {
-        const res = await fetch(`api/tweet/user/?user_id=${userId}`, { credentials: 'include' });
+        const res = await fetch(apiUrl(`api/tweet/user/?user_id=${userId}`), { credentials: 'include' });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const tweets = await res.json();
 
@@ -534,7 +534,7 @@ async function loadMediaGallery() {
     const loading = document.getElementById('media-gallery-loading');
 
     try {
-        const res = await fetch('api/tweet/garally/', { credentials: 'include' });
+        const res = await fetch(apiUrl('api/tweet/garally/'), { credentials: 'include' });
 
         if (res.status === 401) {
             window.location.href = 'login/';

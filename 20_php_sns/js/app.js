@@ -1,4 +1,9 @@
 // ユーザメニューとポップアップの取得
+function apiUrl(path) {
+    const base = window.APP_BASE_URL ?? '/';
+    return `${base}${path}`;
+}
+
 const userMenu = document.getElementById('user-menu');
 const userPopup = document.getElementById('user-popup');
 
