@@ -6,25 +6,20 @@
     </header>
 
     <!-- メインコンテンツ -->
-    <main class="flex-1 border-r border-slate-100 min-h-screen p-6">
-        <h1 class="text-2xl font-bold mb-4">メディア</h1>
+    <main class="flex-1 border-r border-slate-100 min-h-screen">
+        <div class="px-6 py-5 border-b border-slate-100">
+            <h1 class="text-2xl font-bold text-slate-900">メディア</h1>
+            <p class="text-sm text-slate-500 mt-1">画像付きの投稿を新しい順に表示します。</p>
+        </div>
 
-        <?php if ($tweets): ?>
-            <div class="gap-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
-                <?php foreach ($tweets as $value): ?>
-                    <?php if (\Lib\File::has($value['image_path'])): ?>
-                        <div class="overflow-hidden rounded shadow bg-white">
-                            <a href="<?= BASE_URL ?>home/detail/?id=<?= $value['id'] ?>">
-                                <img src="<?= h($value['image_path']) ?>" alt=""
-                                    class="w-full h-48 object-cover hover:scale-105 transition-transform duration-200">
-                            </a>
-                        </div>
-                    <?php endif ?>
-                <?php endforeach; ?>
+        <div id="media-gallery" class="p-4">
+            <div id="media-gallery-loading" class="p-8 flex justify-center text-slate-400">
+                <svg class="animate-spin w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
             </div>
-        <?php else: ?>
-            <p class="text-gray-500">画像付きの投稿はまだありません。</p>
-        <?php endif; ?>
+        </div>
     </main>
 
 </div>

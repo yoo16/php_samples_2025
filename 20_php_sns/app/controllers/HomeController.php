@@ -106,11 +106,8 @@ class HomeController
 
     public function garally()
     {
-        $tweet = new Tweet();
-        $tweets = $tweet->getImages();
-
-        // Viewをレンダリング: app/views/home/garally.view.php
-        Request::render('home/garally', ['tweets' => $tweets]);
+        // メディア一覧は api/tweet/garally/ から CSR で取得
+        Request::render('home/garally');
     }
 
     public function delete()

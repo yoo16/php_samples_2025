@@ -151,6 +151,13 @@ function renderTweet(tweet, authUserId) {
         </div>`;
 }
 
+function renderMediaItem(tweet) {
+    return `
+        <a href="home/detail/?id=${tweet.id}" class="block overflow-hidden rounded-xl bg-white border border-slate-100 hover:shadow-md transition">
+            <img src="${escapeHtml(tweet.image_path)}" alt="" class="w-full h-48 object-cover hover:scale-105 transition-transform duration-200">
+        </a>`;
+}
+
 /**
  * ツイートメッセージのクリックイベントを初期化
  * @param {Element} container - ツイートが含まれるコンテナ要素
@@ -520,6 +527,40 @@ async function loadUserTweets() {
     }
 }
 
+async function loadMediaGallery() {
+    const container = document.getElementById('media-gallery');
+    if (!container) return;
+
+    const loading = document.getElementById('media-gallery-loading');
+
+    try {
+        const res = await fetch('api/tweet/garally/', { credentials: 'include' });
+
+        if (res.status === 401) {
+            window.location.href = 'login/';
+            return;
+        }
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const tweets = await res.json();
+
+        if (!tweets.length) {
+            loading.outerHTML = '<p class="p-8 text-center text-slate-400 text-sm">画像付きの投稿はまだありません。</p>';
+            return;
+        }
+
+        const grid = document.createElement('div');
+        grid.className = 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3';
+        grid.innerHTML = tweets.map(renderMediaItem).join('');
+        loading.replaceWith(grid);
+    } catch (e) {
+        if (loading) {
+            loading.outerHTML = '<p class="p-8 text-center text-red-400 text-sm">読み込みに失敗しました</p>';
+        }
+        console.error(e);
+    }
+}
+
 /**
  * 初期ロード
  */
@@ -528,4 +569,5 @@ document.addEventListener('DOMContentLoaded', () => {
     loadTweets();
     loadSearchResults();
     loadUserTweets();
+    loadMediaGallery();
 });
