@@ -67,10 +67,14 @@ function update($id, $display_name, $password)
         // パスワードが入力されている場合のみ更新対象に含める
         if (!empty($password)) {
             $hash = password_hash($password, PASSWORD_DEFAULT);
-            $sql = "UPDATE users SET display_name = :display_name, password = :password WHERE id = :id;";
+            // 問1. display_name と password を更新する UPDATE 文を書いてください
+            //   ヒント: SET に2カラム、WHERE で id を絞る。値はすべてプレースホルダー
+            $sql = "";
             $params['password'] = $hash;
         } else {
-            $sql = "UPDATE users SET display_name = :display_name WHERE id = :id;";
+            // 問2. display_name だけを更新する UPDATE 文を書いてください
+            //   ヒント: SET は1カラム、WHERE で id を絞る
+            $sql = "";
         }
 
         $stmt = $pdo->prepare($sql);

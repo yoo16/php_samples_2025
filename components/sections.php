@@ -202,17 +202,17 @@ $sections = [
         'public' => true,
         'files' => [
             [
-                'name' => 'create_database.php',
+                'name' => 'fin/create_database.php',
                 'label' => 'DB作成',
                 'explanation' => 'explain.php?n=16'
             ],
             [
-                'name' => 'connect_test.php',
+                'name' => 'fin/connect_test.php',
                 'label' => 'DB接続テスト',
                 'explanation' => 'explain.php?n=16'
             ],
             [
-                'name' => 'connect_test_for_module.php',
+                'name' => 'fin/connect_test_for_module.php',
                 'label' => 'DB接続テスト（モジュール化）',
                 'explanation' => 'explain.php?n=16'
             ],
@@ -224,7 +224,7 @@ $sections = [
         'public' => true,
         'files' => [
             [
-                'name' => 'index.php',
+                'name' => 'fin/',
                 'label' => 'CRUD操作',
                 'explanation' => 'explain.php?n=17'
             ],
@@ -235,7 +235,7 @@ $sections = [
         'label' => 'ユーザー登録',
         'public' => true,
         'files' => [
-            ['name' => 'regist/', 'label' => '登録画面'],
+            ['name' => 'fin/regist/', 'label' => '登録画面'],
         ]
     ],
     [

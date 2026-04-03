@@ -12,22 +12,6 @@ $menu_items = [
             ['name' => 'connect_test_for_module.php', 'label' => 'モジュール接続テスト', 'note' => 'Databaseクラス経由での接続確認'],
         ]
     ],
-    [
-        'category' => 'データ操作 (基本)',
-        'items' => [
-            ['name' => 'select_users.php', 'label' => 'ユーザ一覧表示', 'note' => 'SELECT：全件・件数限定での取得'],
-            ['name' => 'find_user.php', 'label' => 'ユーザ詳細検索', 'note' => 'SELECT/WHERE：特定IDによる1件取得'],
-            ['name' => 'insert_user.php', 'label' => '新規ユーザ登録', 'note' => 'INSERT：データの新規挿入とハッシュ化'],
-            ['name' => 'update_user.php', 'label' => 'ユーザ情報更新', 'note' => 'UPDATE：既存データの書き換え'],
-            ['name' => 'delete_user.php', 'label' => 'ユーザ削除処理', 'note' => 'DELETE：特定レコードの物理削除'],
-        ]
-    ],
-    [
-        'category' => '高度な操作',
-        'items' => [
-            ['name' => 'user_tweets.php', 'label' => 'ユーザ投稿一覧', 'note' => 'JOIN：複数テーブルの結合'],
-        ]
-    ]
 ];
 ?>
 
@@ -39,7 +23,7 @@ $menu_items = [
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title ?> | PHP Samples</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="css/app.css">
 </head>
 
 <body class="bg-slate-50 text-slate-800 leading-relaxed antialiased">
@@ -47,7 +31,7 @@ $menu_items = [
     <nav class="bg-white border-b border-slate-200 sticky top-0 z-10">
         <div class="max-w-5xl mx-auto px-6 py-4 flex justify-between items-center">
             <h1 class="text-xl font-bold tracking-tight text-slate-900"><?= $title ?></h1>
-            <a href="../index.php" class="text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition">&larr; ダッシュボード</a>
+            <a href="../../" class="text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition">&larr; ダッシュボード</a>
         </div>
     </nav>
 
