@@ -4,11 +4,19 @@ namespace App\Models;
 
 use PDO;
 use PDOException;
+use RuntimeException;
 use Lib\Database;
 use Lib\File;
 
 class Tweet
 {
+    private ?string $lastError = null;
+
+    public function getLastError(): ?string
+    {
+        return $this->lastError;
+    }
+
     /**
      * 投稿データを取得
      *
@@ -145,6 +153,8 @@ class Tweet
      */
     public function insert($user_id, $data)
     {
+        $this->lastError = null;
+
         try {
             $data['user_id'] = $user_id;
             $data['image_path'] = $this->uploadImage();
@@ -158,7 +168,12 @@ class Tweet
             if ($result) {
                 return $pdo->lastInsertId();
             }
+            $this->lastError = 'tweet insert execute returned false';
+        } catch (RuntimeException $e) {
+            $this->lastError = $e->getMessage();
+            error_log($e->getMessage());
         } catch (PDOException $e) {
+            $this->lastError = $e->getMessage();
             error_log($e->getMessage());
         }
         return;
@@ -232,6 +247,14 @@ class Tweet
      */
     public function uploadImage()
     {
+        if (!isset($_FILES['file']) || $_FILES['file']['error'] === UPLOAD_ERR_NO_FILE) {
+            return null;
+        }
+
+        if ($_FILES['file']['error'] !== UPLOAD_ERR_OK) {
+            throw new RuntimeException('image upload error code: ' . $_FILES['file']['error']);
+        }
+
         return File::upload(UPLOADS_BASE);
     }
 }

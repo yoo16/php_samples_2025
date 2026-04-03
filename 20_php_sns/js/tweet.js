@@ -441,8 +441,15 @@ function initTweetForm() {
             }
             // その他のエラー
             if (!res.ok) {
-                const { error } = await res.json();
-                alert(error ?? '投稿に失敗しました');
+                let payload = null;
+                try {
+                    payload = await res.json();
+                } catch (_) {
+                    const text = await res.text();
+                    console.error('tweet add non-json error:', text);
+                }
+                console.error('tweet add failed:', payload);
+                alert(payload?.error ?? '投稿に失敗しました');
                 return;
             }
 
