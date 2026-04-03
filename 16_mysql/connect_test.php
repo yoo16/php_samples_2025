@@ -1,5 +1,40 @@
 <?php
-require_once 'db.php';
+// connect_test.php
+// 環境変数を読み込む
+require_once './env.php';
+
+// 接続情報を変数に代入（完成品）
+$db_connection = DB_CONNECTION;
+$db_name       = DB_DATABASE;
+$db_host       = DB_HOST;
+$db_port       = DB_PORT;
+$db_user       = DB_USERNAME;
+$db_password   = DB_PASSWORD;
+
+// --------------------------------------------------------
+// (2) DSN（データソース名）を組み立てる
+//     ヒント: "{$db_connection}:dbname={$db_name};host=...;port=...;charset=utf8;"
+// --------------------------------------------------------
+$dsn = "{$db_connection}:dbname={$db_name};host={$db_host};port={$db_port};charset=utf8;";
+
+// --------------------------------------------------------
+// (3) PDO インスタンスを生成して MySQL に接続する
+// --------------------------------------------------------
+$pdo = null; // 初期値（接続前は null）
+
+try {
+    // (3-a) PDO オブジェクトを生成する
+    $pdo = new PDO($dsn, $db_user, $db_password);
+
+    // --------------------------------------------------------
+    // (4) エラーモードを「例外スロー」に設定する
+    // --------------------------------------------------------
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // 答え合わせ用
+    $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+} catch (PDOException $e) {
+    // 接続失敗時はエラーメッセージを表示して終了
+    $error_message = $e->getMessage();
+}
 
 // ステータス判定
 $is_connected = isset($pdo) && $pdo instanceof PDO;
