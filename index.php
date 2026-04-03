@@ -60,6 +60,7 @@ require_once 'components/sections.php';
                                                 <?= $file['label'] ?>
                                             </span>
                                             <a href="<?= $section['id'] . '/' . $file['name'] ?>"
+                                                target="_blank"
                                                 class="text-xs bg-white px-2 py-1 rounded shadow-sm border border-slate-200 text-slate-500 hover:text-indigo-600 hover:border-indigo-200 transition-colors font-semibold">
                                                 デモ
                                             </a>
