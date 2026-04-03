@@ -26,19 +26,17 @@ function find($id)
         // DB接続
         $pdo = Database::getInstance();
 
-        // 問1. SQL文を完成させてください
-        //   ヒント: users テーブルから id が一致する1件を取得する SELECT 文
-        //          WHERE 条件の値にはプレースホルダー :id を使う
+        // TODO : users テーブルから id が一致する1件を取得する SELECT 文
+        // WHERE 条件の値にはプレースホルダー :id を使う
         $sql = "";
 
         // SQL事前準備
         $stmt = $pdo->prepare($sql);
 
-        // 問2. SQL を実行してください
-        //   ヒント: execute() の引数に ['id' => $id] を渡してプレースホルダーをバインドする
+        // TODO : execute() の引数に ['id' => $id] を渡してプレースホルダーをバインドする
         // $stmt->execute(...);
 
-        // 問3. 1件を連想配列で取得して return してください
+        // TODO : 1件を連想配列で取得して return してください
         //   ヒント: fetch(PDO::FETCH_ASSOC)
         return null;
     } catch (PDOException $e) {

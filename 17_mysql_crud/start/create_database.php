@@ -43,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // 4. 初期データ挿入
         $pdo->exec($insert_sql);
         $message .= "✅ 初期データの挿入が完了しました。" . PHP_EOL;
+        $message .= "✅ phpMyAdmin などのクライアントツールで確認してください" . PHP_EOL;
 
         $status = "success";
     } catch (Exception $e) {
@@ -83,12 +84,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="bg-white/50 p-4 rounded-xl font-mono text-sm text-emerald-800 leading-loose mb-6">
                     <?= nl2br(htmlspecialchars($message)) ?>
                 </div>
-                <a href="select_users.php" class="inline-flex items-center px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition shadow-lg shadow-emerald-200">
-                    ユーザ一覧を確認する
-                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                    </svg>
-                </a>
             </div>
         <?php elseif ($status === 'error'): ?>
             <div class="mb-12 p-6 bg-rose-50 border border-rose-200 rounded-2xl">

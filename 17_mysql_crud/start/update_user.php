@@ -64,21 +64,24 @@ function update($id, $display_name, $password)
             'display_name' => $display_name
         ];
 
-        // パスワードが入力されている場合のみ更新対象に含める
         if (!empty($password)) {
+            // パスワードが入力されている場合
             $hash = password_hash($password, PASSWORD_DEFAULT);
-            // 問1. display_name と password を更新する UPDATE 文を書いてください
-            //   ヒント: SET に2カラム、WHERE で id を絞る。値はすべてプレースホルダー
+            // TODO: display_name と password を更新する UPDATE 文
+            // SET に2カラム、WHERE で id を絞る。値はすべてプレースホルダー
             $sql = "";
             $params['password'] = $hash;
         } else {
-            // 問2. display_name だけを更新する UPDATE 文を書いてください
-            //   ヒント: SET は1カラム、WHERE で id を絞る
+            // パスワードが入力されていない場合
+            // TODO: display_name だけを更新する UPDATE 文
+            // SET は1カラム、WHERE で id を絞る
             $sql = "";
         }
-
+        // SQLを設定して、プリペアードステートメントを生成
         $stmt = $pdo->prepare($sql);
-        return $stmt->execute($params);
+        // TODO: SQL実行して結果を返す
+        // $stmt->execute($params);
+        return null;
     } catch (PDOException $e) {
         error_log($e->getMessage());
         return false;

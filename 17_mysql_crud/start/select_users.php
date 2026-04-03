@@ -11,29 +11,27 @@ $users = get();
  */
 function get($limit = 50)
 {
-    // 問1. DB接続：Database クラスのシングルトンメソッドで $pdo を取得してください
-    //   ヒント: クラス名::getInstance()
+    // TODO: DB接続：Database クラスのシングルトンメソッドで $pdo を取得
+    // ヒント: クラス名::getInstance()
     $pdo = null;
 
-    // 問2. SQL作成：users テーブルから件数を絞って全カラムを取得する SELECT 文を書いてください
-    //   ヒント: LIMIT にはプレースホルダー :limit を使う
+    // TODO : users テーブルから件数を絞って全カラムを取得する SELECT 文
+    // LIMIT にはプレースホルダー :limit を使う
     $sql = "";
 
-    // 問3. プリペアドステートメントを作成してください
-    //   ヒント: $pdo->prepare($sql)
+    // TODO : プリペアドステートメントを作成
+    // ヒント: $pdo->prepare($sql)
     $stmt = null;
 
-    // 問4. :limit プレースホルダーに値をバインドしてください
-    //   ヒント: $stmt->bindValue(プレースホルダー名, 値, 型定数)  整数の型定数は PDO::PARAM_INT
+    // TODO : :limit プレースホルダーに値をバインド（コメントを外す）
     // $stmt->bindValue(':limit', (int)$limit, null);
 
-    // 問5. users テーブルから全件を取得する SQL を実行してください
-    // ヒント: $stmt->execute()
-    // プレースホルダー :limit を利用して、最大取得件数を指定してください
+    // TODO : users テーブルから最大件数を指定して取得する SQL
     // SQL: SELECT * FROM users LIMIT :limit
+    // $stmt->execute()
 
-    // 問6. 全件を連想配列で取得して return してください
-    //   ヒント: $stmt->fetchAll(PDO::FETCH_ASSOC)
+    // TODO : 全件を連想配列で取得して return
+    // $stmt->fetchAll(PDO::FETCH_ASSOC)
     return null;
 }
 

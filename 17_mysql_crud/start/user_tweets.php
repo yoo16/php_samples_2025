@@ -44,18 +44,20 @@ function getByUserID($user_id, $limit = 20)
     try {
         // DB接続
         $pdo = Database::getInstance();
-        // SQL文（プレースホルダ）
-        $sql = "SELECT 
-                    tweets.id, 
-                    users.display_name, 
-                    users.account_name,
-                    tweets.message, 
-                    tweets.created_at
-                FROM tweets
-                JOIN users ON tweets.user_id = users.id
-                WHERE tweets.user_id = :user_id
-                ORDER BY tweets.created_at DESC
-                LIMIT :limit";
+        // TODO : tweets と users をJOIN したSQL
+        $sql = "";
+        // $sql = "SELECT 
+        //             tweets.id, 
+        //             users.display_name, 
+        //             users.account_name,
+        //             tweets.message, 
+        //             tweets.created_at
+        //         FROM tweets
+        //         JOIN users ON tweets.user_id = users.id
+        //         WHERE tweets.user_id = :user_id
+        //         ORDER BY tweets.created_at DESC
+        //         LIMIT :limit";
+
         // SQL事前準備
         $stmt = $pdo->prepare($sql);
         // SQL実行：:user_id と :limit のパラメータを引数

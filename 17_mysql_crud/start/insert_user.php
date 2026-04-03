@@ -9,8 +9,8 @@ $user_id = null;
 $error_message = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // 問1. フォームの送信値を受け取ってください
-    //   ヒント: $_POST['キー名'] ?? '' で各値を取得する
+    // TODO: フォームの送信値を受け取る
+    // $_POST['キー名'] ?? '' で各値を取得
     // キー: account_name, email, display_name, password
     $posts = [
         'account_name' => null,
@@ -37,20 +37,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 function insert($posts)
 {
     try {
-        // 問2. パスワードをハッシュ化してください
-        //   ヒント: password_hash(元のパスワード, PASSWORD_DEFAULT)
+        // TODO: パスワードをハッシュ化
+        // password_hash(元のパスワード, PASSWORD_DEFAULT)
         $posts['password'] = null;
 
         // DB接続
         $pdo = Database::getInstance();
 
-        // 問3. INSERT 文を完成させてください
-        //   ヒント: users テーブルの4カラム(account_name, email, display_name, password)に
-        //          プレースホルダー(:account_name, :email, :display_name, :password)で挿入する
+        // TODO: INSERT文
         $sql = "";
+        // $sql = "INSERT INTO users (account_name, email, display_name, password) VALUES (:account_name, :email, :display_name, :password)";
 
         // SQLを設定して、プリペアードステートメントを生成
         $stmt = $pdo->prepare($sql);
+
         // SQL実行
         $result = $stmt->execute($posts);
 
