@@ -21,7 +21,7 @@ async function loadReplies() {
     if (!listEl || !loading) return;
 
     try {
-        const res = await fetch(apiUrl(`api/reply/get/?tweet_id=${tweetId}`), {
+        const res = await fetch(apiUrl(`api/reply/get.php?tweet_id=${tweetId}`), {
             credentials: 'include',
         });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -45,7 +45,7 @@ async function submitReply(tweetId) {
     if (!message) return;
 
     try {
-        const res = await fetch(apiUrl('api/reply/add/'), {
+        const res = await fetch(apiUrl('api/reply/add.php'), {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },

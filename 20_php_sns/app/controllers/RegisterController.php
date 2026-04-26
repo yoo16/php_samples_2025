@@ -12,7 +12,7 @@ class RegisterController
     public function index(): void
     {
         unset($_SESSION[APP_KEY]['regist']);
-        header('Location: ' . BASE_URL . 'register/input/');
+        header('Location: ' . BASE_URL . 'register/input.php');
         exit;
     }
 
@@ -29,14 +29,14 @@ class RegisterController
     {
         // POSTリクエストチェック
         if (!Request::isPost()) {
-            header('Location: ' . BASE_URL . 'register/input/');
+            header('Location: ' . BASE_URL . 'register/input.php');
             exit;
         }
 
         // CSRFトークンチェック
         if (!Csrf::verify()) {
             $_SESSION[APP_KEY]['errors']['public'] = '不正なリクエストです。';
-            header('Location: ' . BASE_URL . 'register/input/');
+            header('Location: ' . BASE_URL . 'register/input.php');
             exit;
         }
 
@@ -50,7 +50,7 @@ class RegisterController
         $user = new User();
         if (!empty($user->findForExists($posts)['id'])) {
             $_SESSION[APP_KEY]['errors']['public'] = 'このアカウント名は既に使用されています。';
-            header('Location: ' . BASE_URL . 'register/input/');
+            header('Location: ' . BASE_URL . 'register/input.php');
             exit;
         }
 
@@ -60,14 +60,14 @@ class RegisterController
 
         // ユーザー登録失敗
         if (empty($auth_user['id'])) {
-            header('Location: ' . BASE_URL . 'register/input/');
+            header('Location: ' . BASE_URL . 'register/input.php');
             exit;
         }
 
         // セッションに認証ユーザーを保存
         AuthUser::set($auth_user);
         // リダイレクト
-        header('Location: ' . BASE_URL . 'register/result/');
+        header('Location: ' . BASE_URL . 'register/result.php');
         exit;
     }
 

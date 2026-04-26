@@ -18,7 +18,7 @@ class HomeController
     public function index()
     {
         $auth_user = AuthUser::get();
-        // ツイート一覧は api/tweet/get/ から CSR で取得
+        // ツイート一覧は api/tweet/get.php から CSR で取得
         Request::render('home/index', ['auth_user' => $auth_user]);
     }
 
@@ -30,7 +30,7 @@ class HomeController
             exit;
         }
 
-        // ツイートデータは api/tweet/fetch/ から CSR で取得
+        // ツイートデータは api/tweet/fetch.php から CSR で取得
         Request::render('home/detail', ['tweet_id' => (int) $id]);
     }
 
@@ -47,7 +47,7 @@ class HomeController
         $user_data = $user->find($user_id);
         if (!$user_data) {
             // ユーザいない場合はホームにリダイレクト
-            header('Location: home/');
+            header('Location: ' . BASE_URL . 'home/');
             exit;
         }
         // ユーザ投稿
@@ -71,7 +71,7 @@ class HomeController
         $tweet->insert($auth_user['id'], $posts);
 
         // トップにリダイレクト
-        header('Location: ../');
+        header('Location: ' . BASE_URL . 'home/');
         exit;
     }
 
@@ -79,7 +79,7 @@ class HomeController
     {
         $keyword = h($_GET['keyword'] ?? '');
 
-        // ツイート検索結果は api/tweet/search/ から CSR で取得
+        // ツイート検索結果は api/tweet/search.php から CSR で取得
         Request::render('home/search', ['keyword' => $keyword]);
     }
 
@@ -106,7 +106,7 @@ class HomeController
 
     public function garally()
     {
-        // メディア一覧は api/tweet/garally/ から CSR で取得
+        // メディア一覧は api/tweet/garally.php から CSR で取得
         Request::render('home/garally');
     }
 

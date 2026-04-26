@@ -13,7 +13,7 @@ $auth_user = AuthUser::get();
             <span>ホーム</span>
         </a>
 
-        <a href="home/garally/" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-sky-50 text-slate-800 font-semibold transition">
+        <a href="home/garally.php" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-sky-50 text-slate-800 font-semibold transition">
             <img src="svg/camera.svg" class="w-6 h-6 shrink-0">
             <span>メディア</span>
         </a>
@@ -34,7 +34,7 @@ $auth_user = AuthUser::get();
                 <a href="user/" class="block px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-sky-50 transition">
                     プロフィール
                 </a>
-                <a href="user/logout/" class="block px-4 py-3 text-sm font-semibold text-red-500 hover:bg-red-50 transition border-t border-slate-100">
+                <a href="user/logout.php" class="block px-4 py-3 text-sm font-semibold text-red-500 hover:bg-red-50 transition border-t border-slate-100">
                     @<?= htmlspecialchars($auth_user['account_name']) ?> からログアウト
                 </a>
             </div>

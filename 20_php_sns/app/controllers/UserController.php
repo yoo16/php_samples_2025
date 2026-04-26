@@ -18,7 +18,7 @@ class UserController
     public function update()
     {
         if (!Request::isPost()) {
-            header('Location: ' . BASE_URL . 'user/edit/');
+            header('Location: ' . BASE_URL . 'user/edit.php');
             exit;
         }
 
@@ -31,7 +31,7 @@ class UserController
         // ユーザ情報をセッションに保存
         AuthUser::set($user->find($auth_user['id']));
 
-        header('Location: ' . BASE_URL . 'user/edit/');
+        header('Location: ' . BASE_URL . 'user/edit.php');
         exit;
     }
 

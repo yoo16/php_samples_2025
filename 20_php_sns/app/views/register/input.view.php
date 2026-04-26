@@ -16,7 +16,7 @@
         <!-- エラーメッセージ -->
         <?php include COMPONENT_DIR . 'error_message.php' ?>
 
-        <form action="register/add/" method="post" class="space-y-4">
+        <form action="register/add.php" method="post" class="space-y-4">
             <input type="hidden" name="csrf_token" value="<?= Lib\Csrf::token() ?>">
 
             <!-- アカウント名 -->

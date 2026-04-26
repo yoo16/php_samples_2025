@@ -43,7 +43,7 @@
         const authUserId = container.dataset.authUserId ? Number(container.dataset.authUserId) : null;
 
         try {
-            const res = await fetch('<?= BASE_URL ?>api/tweet/fetch/?id=' + tweetId, {
+            const res = await fetch('<?= BASE_URL ?>api/tweet/fetch.php?id=' + tweetId, {
                 credentials: 'include'
             });
             if (!res.ok) throw new Error(`HTTP ${res.status}`);

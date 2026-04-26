@@ -1,5 +1,5 @@
 <div class="sticky top-0 z-10 bg-white/90 backdrop-blur-sm px-4 py-3 border-b border-slate-100">
-    <form action="home/search/" method="get">
+    <form action="home/search.php" method="get">
         <div class="relative">
             <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none"
                 fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -16,7 +16,7 @@
         <!-- エラーメッセージ -->
         <?php include COMPONENT_DIR . 'error_message.php' ?>
 
-        <form action="login/auth/" method="post" class="space-y-5">
+        <form action="login/auth.php" method="post" class="space-y-5">
             <input type="hidden" name="csrf_token" value="<?= Lib\Csrf::token() ?>">
 
             <!-- アカウント名 -->
@@ -69,7 +69,7 @@
         <div class="mt-6 space-y-2 text-center">
             <p class="text-sm text-gray-500">
                 まだアカウントをお持ちでないですか？
-                <a href="register/input/" class="text-sky-500 font-semibold hover:text-sky-700 hover:underline transition">
+                <a href="register/input.php" class="text-sky-500 font-semibold hover:text-sky-700 hover:underline transition">
                     Sign Up
                 </a>
             </p>

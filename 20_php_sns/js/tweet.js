@@ -33,7 +33,7 @@ function nl2br(str) {
  */
 function linkHashtag(html) {
     return html.replace(/#\s*([一-龯ぁ-んァ-ンー\w]+)/gu, (match, tag) => {
-        const url = `home/search/?keyword=%23${encodeURIComponent(tag)}`;
+        const url = `home/search.php?keyword=%23${encodeURIComponent(tag)}`;
         return `<a href="${url}" class="text-sky-500 hover:underline">${match}</a>`;
     });
 }
@@ -66,7 +66,7 @@ function renderTweetNav(tweet, authUserId) {
 
     // 削除ボタン
     const deleteBtn = (authUserId && authUserId === tweet.user_id) ? `
-        <form action="home/delete/" method="post" class="ml-auto">
+        <form action="home/delete.php" method="post" class="ml-auto">
             <div onclick="deleteTweet(this)" class="inline-flex items-center gap-1.5 text-slate-400 hover:text-red-500 transition cursor-pointer">
                 <img src="svg/trash.svg" class="w-4 h-4" alt="削除">
             </div>
@@ -153,7 +153,7 @@ function renderTweet(tweet, authUserId) {
 
 function renderMediaItem(tweet) {
     return `
-        <a href="home/detail/?id=${tweet.id}" class="block overflow-hidden rounded-xl bg-white border border-slate-100 hover:shadow-md transition">
+        <a href="home/detail.php?id=${tweet.id}" class="block overflow-hidden rounded-xl bg-white border border-slate-100 hover:shadow-md transition">
             <img src="${escapeHtml(tweet.image_path)}" alt="" class="w-full h-48 object-cover hover:scale-105 transition-transform duration-200">
         </a>`;
 }
@@ -166,7 +166,7 @@ function initTweetMessages(container) {
     container.querySelectorAll('.tweet-message').forEach(el => {
         el.addEventListener('click', (e) => {
             if (e.target.tagName.toLowerCase() !== 'a') {
-                window.location.href = `home/detail/?id=${el.dataset.id}`;
+                window.location.href = `home/detail.php?id=${el.dataset.id}`;
             }
         });
     });
@@ -182,7 +182,7 @@ function initLikeButtons(container) {
             const tweetId = Number(btn.dataset.tweetId);
             try {
                 // データPOST送信
-                const uri = apiUrl('api/like/update/');
+                const uri = apiUrl('api/like/update.php');
                 const res = await fetch(uri, {
                     method: 'POST',
                     credentials: 'include',
@@ -240,7 +240,7 @@ function initReplyForms(container) {
 
             btn.disabled = true;
             try {
-                const res = await fetch(apiUrl('api/reply/add/'), {
+                const res = await fetch(apiUrl('api/reply/add.php'), {
                     method: 'POST',
                     credentials: 'include',
                     headers: { 'Content-Type': 'application/json' },
@@ -287,7 +287,7 @@ async function fetchMoreTweets(container, authUserId, spinner, sentinel, observe
 
     try {
         // 投稿を取得
-        const uri = apiUrl(`api/tweet/get/?limit=${TWEET_LIMIT}&offset=${tweetOffset}`);
+        const uri = apiUrl(`api/tweet/get.php?limit=${TWEET_LIMIT}&offset=${tweetOffset}`);
         // Fetch APIで投稿を取得
         const res = await fetch(uri, { credentials: 'include' });
         // レスポンスがOKでない場合はエラーを投げる
@@ -387,7 +387,7 @@ async function loadSearchResults() {
 
     try {
         // 検索結果を取得
-        const uri = apiUrl(`api/tweet/search/?keyword=${encodeURIComponent(keyword)}`);
+        const uri = apiUrl(`api/tweet/search.php?keyword=${encodeURIComponent(keyword)}`);
         // Fetch APIで検索結果を取得
         const res = await fetch(uri, { credentials: 'include' });
         // エラーハンドリング
@@ -434,7 +434,7 @@ function initTweetForm() {
 
         const body = new FormData(form);
         try {
-            const uri = apiUrl('api/tweet/add/');
+            const uri = apiUrl('api/tweet/add.php');
             const res = await fetch(uri, {
                 method: 'POST',
                 credentials: 'include',
@@ -506,7 +506,7 @@ async function loadUserTweets() {
     const loading    = document.getElementById('user-tweet-list-loading');
 
     try {
-        const res = await fetch(apiUrl(`api/tweet/user/?user_id=${userId}`), { credentials: 'include' });
+        const res = await fetch(apiUrl(`api/tweet/user.php?user_id=${userId}`), { credentials: 'include' });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const tweets = await res.json();
 
@@ -534,7 +534,7 @@ async function loadMediaGallery() {
     const loading = document.getElementById('media-gallery-loading');
 
     try {
-        const res = await fetch(apiUrl('api/tweet/garally/'), { credentials: 'include' });
+        const res = await fetch(apiUrl('api/tweet/garally.php'), { credentials: 'include' });
 
         if (res.status === 401) {
             window.location.href = 'login/';

@@ -14,7 +14,7 @@ class LoginController
         if (isset($_SESSION['signin'])) {
             unset($_SESSION['signin']);
         }
-        header('Location: ' . BASE_URL . 'login/input');
+        header('Location: ' . BASE_URL . 'login/input.php');
         exit;
     }
 
@@ -30,18 +30,18 @@ class LoginController
     public function auth()
     {
         if (!Request::isPost()) {
-            header('Location: ' . BASE_URL . 'login/input');
+            header('Location: ' . BASE_URL . 'login/input.php');
             exit;
         }
 
         if (!Csrf::verify()) {
             $_SESSION['error'] = '不正なリクエストです。';
-            header('Location: ' . BASE_URL . 'login/input');
+            header('Location: ' . BASE_URL . 'login/input.php');
             exit;
         }
 
         $account_name = $_POST['account_name'];
-        $password     = $_POST['password'];
+        $password = $_POST['password'];
 
         $_SESSION['signin'] = ['account_name' => $account_name];
 
@@ -50,7 +50,7 @@ class LoginController
 
         if (empty($auth_user['id'])) {
             $_SESSION['error'] = 'アカウント名またはパスワードが間違っています。';
-            header('Location: ' . BASE_URL . 'login/input');
+            header('Location: ' . BASE_URL . 'login/input.php');
             exit;
         }
 

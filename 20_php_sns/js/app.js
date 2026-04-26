@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const text = el.innerHTML;
         // ハッシュタグ検出（日本語 + アルファベット + 数字 + _ に対応）
         const linked = text.replace(/#\s*([一-龯ぁ-んァ-ンー\w]+)/gu, function (match, tag) {
-            const url = `home/search/?keyword=%23${encodeURIComponent(tag)}`;
+            const url = `home/search.php?keyword=%23${encodeURIComponent(tag)}`;
             return `<a href="${url}" class="text-blue-500 hover:underline">${match}</a>`;
         });
         el.innerHTML = linked;
@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
         el.addEventListener("click", function (e) {
             if (e.target.tagName.toLowerCase() !== 'a') {
                 const tweetId = el.dataset.id;
-                window.location.href = `home/detail/?id=${tweetId}`;
+                window.location.href = `home/detail.php?id=${tweetId}`;
             }
         });
     });

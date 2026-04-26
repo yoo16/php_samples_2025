@@ -21,7 +21,7 @@ use App\Models\User;
             <!-- ユーザ画像アップロード -->
             <div class="flex justify-center items-center">
                 <div class="bg-white p-8 rounded-lg">
-                    <form action="user/upload_profile_image/" method="post" enctype="multipart/form-data" class="flex flex-col items-center">
+                    <form action="user/upload_profile_image.php" method="post" enctype="multipart/form-data" class="flex flex-col items-center">
                         <label for="image-input" class="cursor-pointer">
                             <img id="preview-image" src="<?= User::profileImage($auth_user['profile_image']) ?>" alt="Profile Picture" class="w-32 h-32 object-cover rounded-full mb-4">
                         </label>
@@ -102,7 +102,7 @@ use App\Models\User;
                     msg.className = 'hidden mb-3 text-sm text-center';
 
                     try {
-                        const uri = 'api/user/update/';
+                        const uri = 'api/user/update.php';
                         const res = await fetch(uri, {
                             method: 'POST',
                             credentials: 'include',
