@@ -2,6 +2,10 @@
 // 共通ファイル app.php を読み込み
 require_once '../app.php';
 
+use App\Models\AuthUser;
+
+$auth_user = AuthUser::get();
+
 ?>
 
 <!DOCTYPE html>
@@ -10,7 +14,11 @@ require_once '../app.php';
 <?php include COMPONENT_DIR . 'head.php'; ?>
 
 <body class="bg-sky-50 min-h-screen">
-    <?php include COMPONENT_DIR . 'nav.php'; ?>
+    <?php if (isset($auth_user)): ?>
+        <?php include COMPONENT_DIR . 'nav.php'; ?>
+    <?php else: ?>
+        <?php include COMPONENT_DIR . 'public_nav.php'; ?>
+    <?php endif; ?>
 
     <main class="max-w-5xl mx-auto px-6 py-10">
 
@@ -37,13 +45,23 @@ require_once '../app.php';
                     <tbody class="text-gray-600 divide-y divide-gray-50">
                         <?php
                         $pages = [
-                            ['トップページ',       '/',                  'index.php',           'GET',  'auth_user セッション確認'],
-                            ['About',             '/about/',            'about/index.php',     'GET',  ''],
-                            ['ログイン（リセット）', '/signin/',           'signin/index.php',    'GET',  'signin セッション削除 → input.php にリダイレクト'],
-                            ['ログイン入力',       '/signin/input.php',  'signin/input.php',    'GET',  'フラッシュ入力値・エラー取得'],
-                            ['ログイン認証',       '/signin/auth.php',   'signin/auth.php',     'POST', 'account_name + password で認証、セッション登録'],
-                            ['ログアウト',         '/signout/',          'signout/index.php',   'GET',  'auth_user セッション削除'],
-                            ['マイページ',         '/home/',             'home/index.php',      'GET',  'auth_user セッション検証、未認証はリダイレクト'],
+                            ['トップページ',       BASE_URL,                         'index.php',            'GET',  'home/ へリダイレクト'],
+                            ['About',             BASE_URL . 'about/',              'about/index.php',      'GET',  '公開ページ'],
+                            ['新規登録',           BASE_URL . 'register/',           'register/index.php',   'GET',  'register/input.php へリダイレクト'],
+                            ['新規登録入力',       BASE_URL . 'register/input.php',  'register/input.php',   'GET',  '入力フォーム表示'],
+                            ['新規登録実行',       BASE_URL . 'register/add.php',    'register/add.php',     'POST', 'ユーザー登録'],
+                            ['新規登録完了',       BASE_URL . 'register/result.php', 'register/result.php',  'GET',  '登録完了画面'],
+                            ['ログイン',           BASE_URL . 'login/',              'login/index.php',      'GET',  'login/input.php へリダイレクト'],
+                            ['ログイン入力',       BASE_URL . 'login/input.php',     'login/input.php',      'GET',  '入力フォーム表示'],
+                            ['ログイン認証',       BASE_URL . 'login/auth.php',      'login/auth.php',       'POST', '認証してセッション保存'],
+                            ['ホーム',             BASE_URL . 'home/',               'home/index.php',       'GET',  '要ログイン'],
+                            ['ツイート詳細',       BASE_URL . 'home/detail.php',     'home/detail.php',      'GET',  'id クエリ必須'],
+                            ['検索',               BASE_URL . 'home/search.php',     'home/search.php',      'GET',  'keyword クエリで検索'],
+                            ['メディア',           BASE_URL . 'home/garally.php',    'home/garally.php',     'GET',  '画像一覧'],
+                            ['プロフィール',       BASE_URL . 'user/',               'user/index.php',       'GET',  'id 未指定時は自分のプロフィール'],
+                            ['プロフィール編集',   BASE_URL . 'user/edit.php',       'user/edit.php',        'GET',  '要ログイン'],
+                            ['プロフィール更新',   BASE_URL . 'user/update.php',     'user/update.php',      'POST', '要ログイン'],
+                            ['ログアウト',         BASE_URL . 'user/logout.php',     'user/logout.php',      'GET',  'セッション破棄'],
                         ];
                         foreach ($pages as [$label, $endpoint, $file, $method, $note]):
                             $badge = $method === 'GET'
