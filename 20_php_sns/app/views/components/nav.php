@@ -18,6 +18,11 @@ $auth_user = AuthUser::get();
             <span class="hidden xl:inline">メディア</span>
         </a>
 
+        <a href="<?= BASE_URL ?>about/" class="flex items-center justify-center gap-0 rounded-xl px-3 py-3 font-semibold text-slate-800 transition hover:bg-sky-50 xl:justify-start xl:gap-3">
+            <img src="<?= BASE_URL ?>svg/info.svg" class="w-6 h-6 shrink-0">
+            <span class="hidden xl:inline">About</span>
+        </a>
+
         <!-- ユーザーメニュー（下部） -->
         <div class="mt-auto pt-4 border-t border-slate-100 relative">
             <button id="user-menu" class="flex w-full items-center justify-center gap-0 rounded-xl px-3 py-2 text-left transition hover:bg-sky-50 xl:justify-start xl:gap-3">
