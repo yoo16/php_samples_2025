@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$body     = json_decode(file_get_contents('php://input'), true);
+$body = json_decode(file_get_contents('php://input'), true);
 $tweet_id = isset($body['tweet_id']) ? (int) $body['tweet_id'] : 0;
 $message  = isset($body['message'])  ? trim($body['message'])  : '';
 
@@ -33,7 +33,7 @@ if (!$tweet_id || $message === '') {
 }
 
 $reply = new Reply();
-$id    = $reply->insert($tweet_id, (int) $auth_user['id'], $message);
+$id = $reply->insert($tweet_id, (int) $auth_user['id'], $message);
 
 if (!$id) {
     http_response_code(500);

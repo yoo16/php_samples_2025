@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Lib\Request;
+
 class AuthUser extends User
 {
     /**
@@ -14,9 +16,7 @@ class AuthUser extends User
         // セッションから認証ユーザ情報を取得
         $auth_user = $_SESSION[APP_KEY]['auth_user'] ?? null;
         // 認証ユーザ情報が存在しない場合は null を返す
-        if (empty($auth_user)) {
-            return null;
-        }
+        if (empty($auth_user)) return null;
         // 認証ユーザ情報を返す
         return $auth_user;
     }
@@ -45,24 +45,19 @@ class AuthUser extends User
         // セッションから認証ユーザ情報を取得
         $auth_user = self::get();
         // 認証ユーザ情報が存在しない場合はログイン画面にリダイレクト
-        if (empty($auth_user)) {
-            header('Location: ' . BASE_URL . 'login/');
-            exit;
-        }
+        if (empty($auth_user)) Request::redirect(BASE_URL . 'login/');
+        // 認証ユーザ情報を返す
         return $auth_user;
     }
 
     /**
      * ログアウト処理
-     *
-     * @param string $path ログイン画面へのパス
      */
-    public static function logout($path = '../login/'): void
+    public static function logout(): void
     {
         // セッションから認証ユーザ情報を削除
         unset($_SESSION[APP_KEY]['auth_user']);
         // ログアウト処理後のリダイレクト先を指定
-        header('Location: ' . $path);
-        exit;
+        Request::redirect(BASE_URL . 'login/');
     }
 }

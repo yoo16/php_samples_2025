@@ -40,7 +40,7 @@ $auth_user = AuthUser::get();
                     プロフィール
                 </a>
                 <a href="<?= BASE_URL ?>user/logout.php" class="block px-4 py-3 text-sm font-semibold text-red-500 hover:bg-red-50 transition border-t border-slate-100">
-                    @<?= htmlspecialchars($auth_user['account_name']) ?> からログアウト
+                    @<?= h($auth_user['account_name']) ?> からログアウト
                 </a>
             </div>
         </div>

@@ -1,11 +1,6 @@
 <?php
-
-if (!function_exists('tweet_message_html')) {
-    function tweet_message_html(string $message): string
-    {
-        return nl2br(h($message));
-    }
-}
+if (!isset($tweet)) return;
+if (!isset($auth_user)) return;
 ?>
 <div class="tweet-card px-4 py-4 border-b border-slate-100 hover:bg-slate-50 transition"
     data-tweet-id="<?= (int) $tweet['id'] ?>"
@@ -29,7 +24,7 @@ if (!function_exists('tweet_message_html')) {
                 <span class="text-slate-400 text-sm"><?= h($tweet['created_at']) ?></span>
             </div>
             <div class="mt-1 text-slate-800 text-sm leading-relaxed tweet-message cursor-pointer" data-id="<?= (int) $tweet['id'] ?>">
-                <?= tweet_message_html($tweet['message']) ?>
+                <?= nl2br(h($tweet['message'])) ?>
             </div>
 
             <?php if (!empty($tweet['image_path'])) : ?>

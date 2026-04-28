@@ -106,25 +106,6 @@ class HomeController extends AuthenticatedController
         ]);
     }
 
-    public function like()
-    {
-        // POST以外は処理しない
-        Request::checkPost();
-
-        // 投稿IDとユーザIDを取得
-        $tweet_id = $_POST['tweet_id'] ?? null;
-        $user_id = $_POST['user_id'] ?? null;
-
-        // いいね処理
-        if ($tweet_id && $user_id) {
-            $like = new Like();
-            $like->update($tweet_id, $user_id);
-        }
-
-        // ホームにリダイレクト
-        Request::redirect('home/');
-    }
-
     public function garally()
     {
         // 投稿クラス
@@ -140,18 +121,14 @@ class HomeController extends AuthenticatedController
     public function delete()
     {
         // POSTリクエスト以外は処理しない
-        if (!Request::isPost()) {
-            header('Location: ' . BASE_URL . 'home/');
-            exit;
-        }
+        Request::checkPost();
 
         // POSTデータを取得
         $posts = sanitize($_POST);
 
         // ログインユーザのIDと投稿のユーザIDが一致しない場合はホームにリダイレクト
         if ((int) $this->authUser['id'] !== (int) $posts['user_id']) {
-            header('Location: ' . BASE_URL . 'home/');
-            exit;
+            Request::redirect(BASE_URL . 'home/');
         }
 
         // 削除処理
@@ -159,7 +136,6 @@ class HomeController extends AuthenticatedController
         $tweet->delete($posts['tweet_id']);
 
         // ホームにリダイレクト
-        header('Location: ' . BASE_URL . 'home/');
-        exit;
+        Request::redirect(BASE_URL . 'home/');
     }
 }

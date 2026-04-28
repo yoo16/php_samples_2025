@@ -39,18 +39,18 @@ class UserController extends AuthenticatedController
 
     public function update()
     {
+        // バリデート&リダイレクト
         $posts = UserUpdateRequest::validateOrRedirect();
-
+        // ユーザ情報を更新
         $user = new User();
         $result = $user->update($this->authUser['id'], $posts);
-
+        // 更新失敗
         if (!$result) {
             $_SESSION[APP_KEY]['user_edit'] = [
                 'form' => $posts,
                 'error' => '更新に失敗しました。',
             ];
-            header('Location: ' . BASE_URL . 'user/edit.php');
-            exit;
+            Request::redirect(BASE_URL . 'user/edit.php');
         }
 
         // ユーザ情報をセッションに保存
@@ -59,9 +59,15 @@ class UserController extends AuthenticatedController
         $_SESSION[APP_KEY]['user_edit'] = [
             'success' => '保存しました。',
         ];
+        // 編集画面へリダイレクト
+        Request::redirect(BASE_URL . 'user/edit.php');
+    }
 
-        header('Location: ' . BASE_URL . 'user/edit.php');
-        exit;
+    public function logout()
+    {
+        AuthUser::logout();
+        // ログアウト処理後のリダイレクト先を指定
+        Request::redirect(BASE_URL . 'login/');
     }
 
     public function edit()
@@ -83,29 +89,27 @@ class UserController extends AuthenticatedController
 
     public function follow()
     {
-        if (!Request::isPost()) {
-            header('Location: ' . BASE_URL . 'user/');
-            exit;
-        }
+        // POSTチェック
+        Request::checkPost();
 
+        // フォローするユーザID
         $followee_id = (int) ($_POST['followee_id'] ?? 0);
 
+        // フォロー処理
         if ($followee_id && $followee_id !== (int) $this->authUser['id']) {
             $follow = new Follow();
             $follow->insert($this->authUser['id'], $followee_id);
         }
 
-        header('Location: ' . BASE_URL . 'user/?id=' . $followee_id);
-        exit;
+        Request::redirect(BASE_URL . 'user/?id=' . $followee_id);
     }
 
     public function unfollow()
     {
-        if (!Request::isPost()) {
-            header('Location: ' . BASE_URL . 'user/');
-            exit;
-        }
+        // POSTチェック
+        Request::checkPost();
 
+        // フォロー解除するユーザID
         $followee_id = (int) ($_POST['followee_id'] ?? 0);
 
         if ($followee_id) {
@@ -113,22 +117,26 @@ class UserController extends AuthenticatedController
             $follow->delete($this->authUser['id'], $followee_id);
         }
 
-        header('Location: ' . BASE_URL . 'user/?id=' . $followee_id);
-        exit;
+        Request::redirect(BASE_URL . 'user/?id=' . $followee_id);
     }
 
     public function index()
     {
+        // ユーザ情報を検索
         $user_data = $this->findRequestedUser();
+        // 該当ユーザがなければホームへリダイレクト
         if (!$user_data) {
-            header('Location: ' . BASE_URL . 'home/');
-            exit;
+            Request::redirect(BASE_URL . 'home/');
         }
 
+        // プロフィールデータ
         $profile = $this->buildProfileData($user_data);
+
+        // 投稿データを取得
         $tweet = new Tweet();
         $tweetService = new TweetService();
 
+        // Viewをレンダリング: app/views/user/index.view.php
         View::render('user/index', [
             'auth_user' => $this->authUser,
             'user_data' => $user_data,
@@ -143,15 +151,16 @@ class UserController extends AuthenticatedController
 
     public function following()
     {
+        // ユーザ情報を検索
         $user_data = $this->findRequestedUser();
-        if (!$user_data) {
-            header('Location: ' . BASE_URL . 'home/');
-            exit;
-        }
+        // 該当ユーザがなければホームへリダイレクト
+        if (!$user_data) Request::redirect(BASE_URL . 'home/');
 
+        // フォローデータを取得
         $follow = new Follow();
         $users = $follow->getFollowingUsers((int) $user_data['id']);
 
+        // Viewをレンダリング: app/views/user/following.view.php
         View::render('user/following', [
             'auth_user' => $this->authUser,
             'user_data' => $user_data,
@@ -163,15 +172,29 @@ class UserController extends AuthenticatedController
 
     public function followers()
     {
+        // ユーザ情報を検索
         $user_data = $this->findRequestedUser();
-        if (!$user_data) {
-            header('Location: ' . BASE_URL . 'home/');
-            exit;
-        }
+        // 該当ユーザがなければホームへリダイレクト
+        if (!$user_data) Request::redirect(BASE_URL . 'home/');
 
+        // フォロワーデータを取得
         $follow = new Follow();
         $users = $follow->getFollowerUsers((int) $user_data['id']);
 
+        // Viewをレンダリング: app/views/user/followers.view.php
+        View::render('user/followers', [
+            'auth_user' => $this->authUser,
+            'user_data' => $user_data,
+            'users' => $users,
+            'active_tab' => 'followers',
+            ...$this->buildProfileData($user_data),
+        ]);
+
+        // フォロー一覧を取得
+        $follow = new Follow();
+        $users = $follow->getFollowerUsers((int) $user_data['id']);
+
+        // Viewをレンダリング: app/views/user/followers.view.php
         View::render('user/followers', [
             'auth_user' => $this->authUser,
             'user_data' => $user_data,
