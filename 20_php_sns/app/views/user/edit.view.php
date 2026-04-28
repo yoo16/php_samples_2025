@@ -2,6 +2,8 @@
 
 use App\Models\User;
 
+if (empty($auth_user)) exit('Not found auth user.');
+
 $form = $form ?? [];
 $displayName = $form['display_name'] ?? $auth_user['display_name'];
 $profile = $form['profile'] ?? ($auth_user['profile'] ?? '');

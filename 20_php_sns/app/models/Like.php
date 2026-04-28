@@ -15,7 +15,7 @@ class Like
      * @param int $user_id ユーザーID
      * @return array|null いいね情報、もしくは該当する投稿がなければ null
      */
-    public function fetch($tweet_id, $user_id)
+    public function fetch(int $tweet_id, int $user_id): ?array
     {
         if (empty($tweet_id) || empty($user_id)) {
             return null;
@@ -36,7 +36,7 @@ class Like
         }
     }
 
-    public function insert($tweet_id, $user_id)
+    public function insert(int $tweet_id, int $user_id): bool
     {
         try {
             // DB接続
@@ -49,6 +49,7 @@ class Like
             return $stmt->execute(['tweet_id' => $tweet_id, 'user_id' => $user_id]);
         } catch (PDOException $e) {
             error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -59,7 +60,7 @@ class Like
      * @param int $user_id ユーザーID
      * @return void
      */
-    public function update($tweet_id, $user_id)
+    public function update(int $tweet_id, int $user_id): void
     {
         $value = $this->fetch($tweet_id, $user_id);
         if ($value) {
@@ -78,7 +79,7 @@ class Like
      * @param int $user_id ユーザーID
      * @return bool 成功した場合は true、失敗した場合は false
      */
-    public function delete($tweet_id, $user_id)
+    public function delete(int $tweet_id, int $user_id): bool
     {
         try {
             // DB接続
@@ -91,6 +92,7 @@ class Like
             return $stmt->execute(['tweet_id' => $tweet_id, 'user_id' => $user_id]);
         } catch (PDOException $e) {
             error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -99,7 +101,7 @@ class Like
      *
      * @return int|null いいね数、もしくは該当する投稿がなければ null
      */
-    public function count($tweet_id)
+    public function count(int $tweet_id): int
     {
         try {
             // DB接続
@@ -119,7 +121,7 @@ class Like
             return $result['like_count'];
         } catch (PDOException $e) {
             error_log($e->getMessage());
-            return null;
+            return 0;
         }
     }
 }

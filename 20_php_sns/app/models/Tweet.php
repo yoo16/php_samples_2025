@@ -22,12 +22,12 @@ class Tweet
      *
      * @return array|null 投稿データの連想配列、もしくは該当する投稿がなければ null
      */
-    public function get(int $auth_user_id, int $limit = 10, int $offset = 0)
+    public function get(int $auth_user_id, int $limit = 10, int $offset = 0): ?array
     {
         return $this->fetchTweets('', [], $auth_user_id, $limit, $offset);
     }
 
-    public function getByFollowingUsers(int $auth_user_id, int $limit = 10, int $offset = 0)
+    public function getByFollowingUsers(int $auth_user_id, int $limit = 10, int $offset = 0): ?array
     {
         $where = 'tweets.user_id IN (
             SELECT follows.followee_id
@@ -38,7 +38,7 @@ class Tweet
         return $this->fetchTweets($where, ['auth_user_id' => $auth_user_id], $auth_user_id, $limit, $offset);
     }
 
-    public function getByUserID(int $user_id, int $auth_user_id, int $limit = 50)
+    public function getByUserID(int $user_id, int $auth_user_id, int $limit = 50): ?array
     {
         return $this->fetchTweets('tweets.user_id = :user_id', ['user_id' => $user_id], $auth_user_id, $limit);
     }
@@ -48,7 +48,7 @@ class Tweet
      *
      * @return array|null 投稿データの連想配列、もしくは該当する投稿がなければ null
      */
-    public function search(string $keyword, int $auth_user_id, int $limit = 50)
+    public function search(string $keyword, int $auth_user_id, int $limit = 50): ?array
     {
         // # 直後のスペース有無を正規化して両方にマッチさせる
         // 例: "#anime" → "%#anime%" と "%# anime%" の両方を検索
@@ -118,7 +118,7 @@ class Tweet
      * @param int $id 投稿ID
      * @return array|null 投稿データの連想配列、もしくは該当する投稿がなければ null
      */
-    public function find(int $id)
+    public function find(int $id): ?array
     {
         try {
             $pdo = Database::getInstance();
@@ -139,7 +139,7 @@ class Tweet
      * @param int $id 投稿ID
      * @return array|null 投稿データの連想配列、もしくは該当する投稿がなければ null
      */
-    public function findWithUser(int $id, ?int $auth_user_id = null)
+    public function findWithUser(int $id, ?int $auth_user_id = null): ?array
     {
         try {
             $pdo = Database::getInstance();
@@ -182,7 +182,7 @@ class Tweet
      * @param array $data 登録する投稿データ
      * @return mixed 登録成功時は投稿ID、失敗時は null
      */
-    public function insert($user_id, $data)
+    public function insert(int $user_id, array $data): ?int
     {
         $this->lastError = null;
 
@@ -200,23 +200,25 @@ class Tweet
                 return $pdo->lastInsertId();
             }
             $this->lastError = 'tweet insert execute returned false';
+            return null;
         } catch (RuntimeException $e) {
             $this->lastError = $e->getMessage();
             error_log($e->getMessage());
+            return null;
         } catch (PDOException $e) {
             $this->lastError = $e->getMessage();
             error_log($e->getMessage());
+            return null;
         }
-        return;
     }
 
     /**
      * 投稿データを削除
      *
-     * @param int $tweet_id 投稿ID
+     * @param int $id 投稿ID
      * @return mixed
      */
-    public function delete($id)
+    public function delete(int $id): bool
     {
         try {
             $pdo = Database::getInstance();
@@ -225,28 +227,28 @@ class Tweet
             return $stmt->execute(['id' => $id]);
         } catch (PDOException $e) {
             error_log($e->getMessage());
+            return false;
         }
-        return;
     }
 
     /**
      * 投稿データのカウント
      *
      * @param int $user_id ユーザID
-     * @return mixed
+     * @return int 投稿数
      */
-    public function countByUserID($user_id)
+    public function countByUserID($user_id): int
     {
         try {
             $pdo = Database::getInstance();
             $sql = "SELECT COUNT(*) FROM tweets WHERE user_id = :user_id;";
             $stmt = $pdo->prepare($sql);
             $stmt->execute(['user_id' => $user_id]);
-            return $stmt->fetchColumn();
+            return (int) $stmt->fetchColumn();
         } catch (PDOException $e) {
             error_log($e->getMessage());
+            return 0;
         }
-        return;
     }
 
     /**
@@ -254,7 +256,7 @@ class Tweet
      *
      * @return array|null 画像データの連想配列、もしくは該当する画像がなければ null
      */
-    public function getImages()
+    public function getImages(): ?array
     {
         try {
             $pdo = Database::getInstance();
@@ -273,10 +275,9 @@ class Tweet
     /**
      * アップロード画像を取得
      *
-     * @param int $id 投稿ID
-     * @return bool 成功した場合は画像ファイルパス、失敗した場合は null
+     * @return ?string 成功した場合は画像ファイルパス、失敗した場合は null
      */
-    public function uploadImage()
+    public function uploadImage(): ?string
     {
         if (!isset($_FILES['file']) || $_FILES['file']['error'] === UPLOAD_ERR_NO_FILE) {
             return null;

@@ -15,8 +15,9 @@ class UserController extends AuthenticatedController
 {
     private function findRequestedUser(): ?array
     {
+        // ユーザIDを取得: GETで取得したID、またはログインユーザのID
         $user_id = (int) ($_GET['id'] ?? $this->authUser['id']);
-
+        // ユーザ情報を取得: ユーザIDで検索
         $user = new User();
         return $user->find($user_id);
     }
@@ -27,7 +28,7 @@ class UserController extends AuthenticatedController
         $follow = new Follow();
 
         return [
-            'tweet_count' => (int) $tweet->countByUserID($user_data['id']),
+            'tweet_count' => $tweet->countByUserID($user_data['id']),
             'follow_count' => $follow->countFollowing((int) $user_data['id']),
             'follower_count' => $follow->countFollowers((int) $user_data['id']),
             'is_following' => (int) $this->authUser['id'] === (int) $user_data['id']

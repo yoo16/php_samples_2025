@@ -15,7 +15,7 @@ class Follow
      * @param int $followee_id フォローされるユーザーID
      * @return array|null フォロー情報、存在しなければ null
      */
-    public function fetch($follower_id, $followee_id)
+    public function fetch(int $follower_id, int $followee_id): ?array
     {
         if (empty($follower_id) || empty($followee_id)) {
             return null;
@@ -37,9 +37,9 @@ class Follow
     /**
      * フォローを追加
      */
-    public function insert($follower_id, $followee_id)
+    public function insert(int $follower_id, int $followee_id): bool
     {
-        if ((int) $follower_id === (int) $followee_id) {
+        if ($follower_id === $followee_id) {
             return false;
         }
 
@@ -51,13 +51,14 @@ class Follow
             return $stmt->execute(['follower_id' => $follower_id, 'followee_id' => $followee_id]);
         } catch (PDOException $e) {
             error_log($e->getMessage());
+            return false;
         }
     }
 
     /**
      * フォローを削除
      */
-    public function delete($follower_id, $followee_id)
+    public function delete(int $follower_id, int $followee_id): bool
     {
         try {
             $pdo = Database::getInstance();
@@ -66,18 +67,19 @@ class Follow
             return $stmt->execute(['follower_id' => $follower_id, 'followee_id' => $followee_id]);
         } catch (PDOException $e) {
             error_log($e->getMessage());
+            return false;
         }
     }
 
     /**
      * フォローのトグル（フォロー中ならアンフォロー、未フォローならフォロー）
      */
-    public function update($follower_id, $followee_id)
+    public function update(int $follower_id, int $followee_id): bool
     {
         if ($this->fetch($follower_id, $followee_id)) {
-            $this->delete($follower_id, $followee_id);
+            return $this->delete($follower_id, $followee_id);
         } else {
-            $this->insert($follower_id, $followee_id);
+            return $this->insert($follower_id, $followee_id);
         }
     }
 
@@ -87,7 +89,7 @@ class Follow
      * @param int $user_id ユーザーID
      * @return int フォロー数
      */
-    public function countFollowing($user_id)
+    public function countFollowing(int $user_id): int
     {
         try {
             $pdo = Database::getInstance();
@@ -108,7 +110,7 @@ class Follow
      * @param int $user_id ユーザーID
      * @return int フォロワー数
      */
-    public function countFollowers($user_id)
+    public function countFollowers(int $user_id): int
     {
         try {
             $pdo = Database::getInstance();

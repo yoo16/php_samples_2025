@@ -13,14 +13,17 @@ class HomeController extends AuthenticatedController
 {
     public function index()
     {
+        // タブの種類（公開・フォロー中）
         $tab = $_GET['tab'] ?? 'public';
         if (!in_array($tab, ['public', 'followers'], true)) {
             $tab = 'public';
         }
 
+        // 投稿タイムラインを取得: ログインユーザのID、タブの種類、表示件数
         $tweetService = new TweetService();
         $tweets = $tweetService->getTimelineTweets((int) $this->authUser['id'], $tab, 50);
 
+        // Viewをレンダリング: app/views/home/index.view.php
         View::render('home/index', [
             'auth_user' => $this->authUser,
             'tweets' => $tweets,
@@ -30,20 +33,19 @@ class HomeController extends AuthenticatedController
 
     public function detail()
     {
-        $id = (int) ($_GET['id'] ?? null);
-        if (!$id) {
-            header('Location: ' . BASE_URL . 'home/');
-            exit;
-        }
+        // 投稿IDを、GETで取得
+        $id = 0;
+        // 投稿IDがなければホームにリダイレクト
+        if (!$id) Request::redirect('home/');
 
+        // 投稿詳細を取得: 投稿ID、ログインユーザのID
         $tweetService = new TweetService();
-
         $tweet_data = $tweetService->getTweetDetail((int) $id, (int) $this->authUser['id']);
-        if (!$tweet_data) {
-            header('Location: ' . BASE_URL . 'home/');
-            exit;
-        }
 
+        // 投稿詳細がなければホームにリダイレクト
+        if (!$tweet_data) Request::redirect('home/');
+
+        // Viewをレンダリング: app/views/home/detail.view.php
         View::render('home/detail', [
             'auth_user' => $this->authUser,
             'tweet' => $tweet_data,
@@ -59,12 +61,11 @@ class HomeController extends AuthenticatedController
         // ユーザ検索
         $user = new User();
         $user_data = $user->find($user_id);
-        if (!$user_data) {
-            // ユーザいない場合はホームにリダイレクト
-            header('Location: ' . BASE_URL . 'home/');
-            exit;
-        }
-        // ユーザ投稿
+
+        // ユーザいない場合はホームにリダイレクト
+        if (!$user_data) Request::redirect('home/');
+
+        // ユーザ投稿データを取得: ユーザID、ログインユーザのID
         $tweet = new Tweet();
         $tweets = $tweet->getByUserID((int) $user_data['id'], (int) $this->authUser['id']);
 
@@ -74,12 +75,10 @@ class HomeController extends AuthenticatedController
 
     public function add()
     {
-        if (!Request::isPost()) {
-            header('Location: ' . BASE_URL . 'home/');
-            exit;
-        }
+        // POST以外はリダイレクト
+        Request::checkPost();
 
-        // POSTデータを取得
+        // POSTデータを取得: 投稿内容、画像
         $posts = sanitize($_POST);
 
         // 投稿処理
@@ -87,20 +86,22 @@ class HomeController extends AuthenticatedController
         $tweet->insert($this->authUser['id'], $posts);
 
         // トップにリダイレクト
-        header('Location: ' . BASE_URL . 'home/');
-        exit;
+        Request::redirect('home/');
     }
 
     public function search()
     {
+        // キーワードを取得
         $keyword = trim((string) ($_GET['keyword'] ?? ''));
         $tweets = [];
 
+        // キーワードがあれば検索実行
         if ($keyword !== '') {
             $tweetService = new TweetService();
             $tweets = $tweetService->searchTweets($keyword, (int) $this->authUser['id']);
         }
 
+        // Viewをレンダリング: app/views/home/search.view.php
         View::render('home/search', [
             'auth_user' => $this->authUser,
             'keyword' => $keyword,
@@ -110,29 +111,29 @@ class HomeController extends AuthenticatedController
 
     public function like()
     {
-        // POSTリクエスト以外は処理しない
-        if (!Request::isPost()) {
-            header('Location: ' . BASE_URL . 'home/');
-            exit;
-        }
+        // POST以外は処理しない
+        Request::checkPost();
 
+        // 投稿IDとユーザIDを取得
         $tweet_id = $_POST['tweet_id'] ?? null;
         $user_id = $_POST['user_id'] ?? null;
 
+        // いいね処理
         if ($tweet_id && $user_id) {
             $like = new Like();
             $like->update($tweet_id, $user_id);
         }
 
         // ホームにリダイレクト
-        header('Location: ' . BASE_URL . 'home/');
-        exit;
+        Request::redirect('home/');
     }
 
     public function garally()
     {
+        // 投稿クラス
         $tweet = new Tweet();
 
+        // Viewをレンダリング: app/views/home/garally.view.php
         View::render('home/garally', [
             'auth_user' => $this->authUser,
             'tweets' => $tweet->getImages() ?? [],

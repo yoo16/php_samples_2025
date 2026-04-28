@@ -25,7 +25,7 @@ class User
      * @param int $id ユーザID
      * @return array|null ユーザデータの連想配列、もしくは該当するユーザがなければ null
      */
-    public function find(int $id)
+    public function find(int $id): ?array
     {
         try {
             $pdo = Database::getInstance();
@@ -43,10 +43,10 @@ class User
     /**
      * ユーザデータを取得
      *
-     * @param string $account_name ユーザのアカウント名
+     * @param array $posts ユーザのアカウント名
      * @return array|null ユーザデータの連想配列、もしくは該当するユーザがなければ null
      */
-    public function findForExists($posts)
+    public function findForExists(array $posts): ?array
     {
         try {
             $account_name = $posts['account_name'];
@@ -70,7 +70,7 @@ class User
      * @param array $data 登録するユーザデータ
      * @return mixed 登録成功時はユーザID、失敗時は null
      */
-    public function insert($data)
+    public function insert(array $data): ?int
     {
         try {
             // パスワードのハッシュ化
@@ -79,15 +79,12 @@ class User
             $sql = "INSERT INTO users (account_name, email, display_name, password) 
                     VALUES (:account_name, :email, :display_name, :password)";
             $stmt = $pdo->prepare($sql);
-            $result = $stmt->execute($data);
-            if ($result) {
-                return $pdo->lastInsertId();
-            }
+            $stmt->execute($data);
+            return $pdo->lastInsertId();
         } catch (PDOException $e) {
             error_log($e->getMessage());
             return null;
         }
-        return;
     }
 
     /**
@@ -95,9 +92,9 @@ class User
      *
      * @param int $id ユーザID
      * @param array $data 更新するユーザデータ
-     * @return mixed 更新成功時はユーザデータの連想配列、失敗時は null
+     * @return bool 更新成功時は真、失敗時は偽
      */
-    public function update($id, $data)
+    public function update(int $id, array $data): bool
     {
         try {
             $pdo = Database::getInstance();
@@ -116,7 +113,7 @@ class User
             ]);
         } catch (PDOException $e) {
             error_log($e->getMessage());
-            return null;
+            return false;
         }
     }
 
@@ -127,7 +124,7 @@ class User
      * @param string $password 入力されたパスワード
      * @return mixed 認証成功時はユーザデータの連想配列、失敗時はnull
      */
-    public function auth($account_name, $password)
+    public function auth(string $account_name, string $password): ?array
     {
         // DB接続
         $pdo = Database::getInstance();
@@ -140,10 +137,11 @@ class User
             if ($user && password_verify($password, $user['password'])) {
                 return $user;
             }
+            return null;
         } catch (PDOException $e) {
             error_log($e->getMessage());
+            return null;
         }
-        return;
     }
 
     /**
@@ -152,12 +150,10 @@ class User
      * @param int $user_id ユーザID
      * @return string|null アップロードされた画像のパス、失敗時は null
      */
-    public function uploadProfileImage($user_id)
+    public function uploadProfileImage($user_id): ?string
     {
         $profile_image = File::upload(PROFILE_BASE, $user_id);
-        if (!$profile_image) {
-            return null;
-        }
+        if (!$profile_image) return null;
         try {
             $pdo = Database::getInstance();
             $sql = "UPDATE users SET profile_image = :profile_image WHERE id = :id;";
@@ -169,16 +165,17 @@ class User
             ]);
         } catch (PDOException $e) {
             error_log($e->getMessage());
+            return null;
         }
     }
 
     /**
      * プロフィール画像の保存先パスを取得する
      *
-     * @param int $user_id ユーザID
+     * @param string|null $profile_image プロフィール画像のパス
      * @return string プロフィール画像の保存先パス
      */
-    public static function profileImage($profile_image)
+    public static function profileImage(?string $profile_image): string
     {
         // プロフィール画像のパスを取得
         $localPath = BASE_DIR . '/' . $profile_image;

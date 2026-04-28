@@ -9,7 +9,7 @@ class AuthUser extends User
      *
      * @return array|null 認証ユーザ情報、もしくは該当するユーザがなければ null
      */
-    public static function get()
+    public static function get(): ?array
     {
         // セッションから認証ユーザ情報を取得
         $auth_user = $_SESSION[APP_KEY]['auth_user'] ?? null;
@@ -21,13 +21,13 @@ class AuthUser extends User
         return $auth_user;
     }
 
-    public static function set($auth_user)
+    public static function set(array $auth_user): void
     {
         // セッションから認証ユーザ情報を取得
         $_SESSION[APP_KEY]['auth_user'] = $auth_user;
     }
 
-    public static function isLogin()
+    public static function isLogin(): bool
     {
         // セッションから認証ユーザ情報を取得
         $auth_user = self::get();
@@ -38,10 +38,9 @@ class AuthUser extends User
     /**
      * ログインチェック
      *
-     * @param string $path ログイン画面へのパス
      * @return array|null 認証ユーザ情報、もしくは該当するユーザがなければ null
      */
-    public static function checkLogin()
+    public static function checkLogin(): array
     {
         // セッションから認証ユーザ情報を取得
         $auth_user = self::get();
@@ -58,7 +57,7 @@ class AuthUser extends User
      *
      * @param string $path ログイン画面へのパス
      */
-    public static function logout($path = '../login/')
+    public static function logout($path = '../login/'): void
     {
         // セッションから認証ユーザ情報を削除
         unset($_SESSION[APP_KEY]['auth_user']);

@@ -8,7 +8,7 @@
         <?php include COMPONENT_DIR . 'dashboard.php' ?>
         <?php include COMPONENT_DIR . 'profile_tabs.php' ?>
 
-        <?php if (!$users) : ?>
+        <?php if (empty($users)) : ?>
             <p class="p-8 text-center text-slate-400 text-sm">フォロー中のユーザーはいません</p>
         <?php else : ?>
             <?php foreach ($users as $follow_user) : ?>
