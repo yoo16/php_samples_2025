@@ -56,6 +56,7 @@ require_once APP_DIR . 'models/AuthUser.php';
 
 // サービスクラスの読み込み
 require_once APP_DIR . 'services/TweetService.php';
+require_once APP_DIR . 'services/UserProfileService.php';
 
 // リクエストクラスの読み込み
 require_once REQUEST_DIR . 'UserUpdateRequest.php';

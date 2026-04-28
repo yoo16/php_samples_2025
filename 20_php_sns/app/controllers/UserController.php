@@ -8,36 +8,13 @@ use App\Models\AuthUser;
 use App\Models\Follow;
 use App\Requests\UserUpdateRequest;
 use App\Services\TweetService;
+use App\Services\UserProfileService;
 use Lib\Csrf;
 use Lib\Request;
 use Lib\View;
 
 class UserController extends AuthenticatedController
 {
-    private function findRequestedUser(): ?array
-    {
-        // ユーザIDを取得: GETで取得したID、またはログインユーザのID
-        $user_id = (int) ($_GET['id'] ?? $this->authUser['id']);
-        // ユーザ情報を取得: ユーザIDで検索
-        $user = new User();
-        return $user->find($user_id);
-    }
-
-    private function buildProfileData(array $user_data): array
-    {
-        $tweet = new Tweet();
-        $follow = new Follow();
-
-        return [
-            'tweet_count' => $tweet->countByUserID($user_data['id']),
-            'follow_count' => $follow->countFollowing((int) $user_data['id']),
-            'follower_count' => $follow->countFollowers((int) $user_data['id']),
-            'is_following' => (int) $this->authUser['id'] === (int) $user_data['id']
-                ? false
-                : (bool) $follow->fetch((int) $this->authUser['id'], (int) $user_data['id']),
-        ];
-    }
-
     public function update()
     {
         // バリデート&リダイレクト
@@ -69,8 +46,6 @@ class UserController extends AuthenticatedController
     public function logout()
     {
         AuthUser::logout();
-        // ログアウト処理後のリダイレクト先を指定
-        Request::redirect('login/');
     }
 
     public function uploadProfileImage()
@@ -135,7 +110,7 @@ class UserController extends AuthenticatedController
         // フォローするユーザID
         $followee_id = (int) ($_POST['followee_id'] ?? 0);
 
-        // フォロー処理
+        // フォロー処理: 自分のID以外、かつ、フォローされていない場合のみ追加
         if ($followee_id && $followee_id !== (int) $this->authUser['id']) {
             $follow = new Follow();
             $follow->insert($this->authUser['id'], $followee_id);
@@ -151,8 +126,8 @@ class UserController extends AuthenticatedController
 
         // フォロー解除するユーザID
         $followee_id = (int) ($_POST['followee_id'] ?? 0);
-        // フォロー解除処理
-        if ($followee_id) {
+        // フォロー解除処理: 自分のID以外、かつ、フォローされている場合のみ追加
+        if ($followee_id && $followee_id !== (int) $this->authUser['id']) {
             $follow = new Follow();
             $follow->delete($this->authUser['id'], $followee_id);
         }
@@ -162,15 +137,19 @@ class UserController extends AuthenticatedController
 
     public function index()
     {
+        $userProfileService = new UserProfileService();
         // ユーザ情報を検索
-        $user_data = $this->findRequestedUser();
+        $user_data = $userProfileService->findRequestedUser(
+            isset($_GET['id']) ? (int) $_GET['id'] : null,
+            (int) $this->authUser['id']
+        );
         // 該当ユーザがなければホームへリダイレクト
         if (!$user_data) {
             Request::redirect('home/');
         }
 
         // プロフィールデータ
-        $profile = $this->buildProfileData($user_data);
+        $profile = $userProfileService->buildProfileData($user_data, (int) $this->authUser['id']);
 
         // 投稿データを取得
         $tweet = new Tweet();
@@ -191,8 +170,12 @@ class UserController extends AuthenticatedController
 
     public function following()
     {
+        $userProfileService = new UserProfileService();
         // ユーザ情報を検索
-        $user_data = $this->findRequestedUser();
+        $user_data = $userProfileService->findRequestedUser(
+            isset($_GET['id']) ? (int) $_GET['id'] : null,
+            (int) $this->authUser['id']
+        );
         // 該当ユーザがなければホームへリダイレクト
         if (!$user_data) Request::redirect('home/');
 
@@ -206,14 +189,18 @@ class UserController extends AuthenticatedController
             'user_data' => $user_data,
             'users' => $users,
             'active_tab' => 'following',
-            ...$this->buildProfileData($user_data),
+            ...$userProfileService->buildProfileData($user_data, (int) $this->authUser['id']),
         ]);
     }
 
     public function followers()
     {
+        $userProfileService = new UserProfileService();
         // ユーザ情報を検索
-        $user_data = $this->findRequestedUser();
+        $user_data = $userProfileService->findRequestedUser(
+            isset($_GET['id']) ? (int) $_GET['id'] : null,
+            (int) $this->authUser['id']
+        );
         // 該当ユーザがなければホームへリダイレクト
         if (!$user_data) Request::redirect('home/');
 
@@ -227,7 +214,7 @@ class UserController extends AuthenticatedController
             'user_data' => $user_data,
             'users' => $users,
             'active_tab' => 'followers',
-            ...$this->buildProfileData($user_data),
+            ...$userProfileService->buildProfileData($user_data, (int) $this->authUser['id']),
         ]);
 
         // フォロー一覧を取得
@@ -240,7 +227,7 @@ class UserController extends AuthenticatedController
             'user_data' => $user_data,
             'users' => $users,
             'active_tab' => 'followers',
-            ...$this->buildProfileData($user_data),
+            ...$userProfileService->buildProfileData($user_data, (int) $this->authUser['id']),
         ]);
     }
 }

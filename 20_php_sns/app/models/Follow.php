@@ -45,7 +45,7 @@ class Follow
 
         try {
             $pdo = Database::getInstance();
-            $sql = "INSERT IGNORE INTO follows (follower_id, followee_id)
+            $sql = "INSERT INTO follows (follower_id, followee_id)
                     VALUES (:follower_id, :followee_id)";
             $stmt = $pdo->prepare($sql);
             return $stmt->execute(['follower_id' => $follower_id, 'followee_id' => $followee_id]);
