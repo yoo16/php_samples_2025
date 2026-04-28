@@ -12,7 +12,7 @@
             <p class="text-sm text-gray-400 mt-1">アカウント登録が完了しました。</p>
 
             <div class="mt-6">
-                <a href="<?= BASE_URL ?>home/"
+                <a href="home/"
                     class="text-sky-500 font-semibold hover:text-sky-700 hover:underline transition">
                     ホームへ
                 </a>

@@ -2,7 +2,7 @@
 
 use App\Models\User;
 ?>
-<a href="<?= BASE_URL ?>user/?id=<?= (int) $follow_user['id'] ?>" class="flex gap-3 px-4 py-4 border-b border-slate-100 hover:bg-slate-50 transition">
+<a href="user/?id=<?= (int) $follow_user['id'] ?>" class="flex gap-3 px-4 py-4 border-b border-slate-100 hover:bg-slate-50 transition">
     <img
         src="<?= h(User::profileImage($follow_user['profile_image'] ?? null)) ?>"
         class="w-12 h-12 rounded-full object-cover shrink-0"

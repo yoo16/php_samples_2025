@@ -8,7 +8,7 @@
     <!-- メインコンテンツ -->
     <main class="flex-1 border-r border-slate-100 min-h-screen">
         <div class="p-5 border-b border-slate-100">
-            <a href="<?= BASE_URL ?>home/" class="font-bold">&larr; <span class="ml-4">ポスト</span></a>
+            <a href="home/" class="font-bold">&larr; <span class="ml-4">ポスト</span></a>
         </div>
 
         <div id="tweet-detail" data-tweet-id="<?= (int) $tweet['id'] ?>" data-auth-user-id="<?= (int) $auth_user['id'] ?>">

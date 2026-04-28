@@ -19,7 +19,7 @@ $profile = $form['profile'] ?? ($auth_user['profile'] ?? '');
     <!-- メインコンテンツ -->
     <main class="flex-1 border-r border-slate-100 min-h-screen">
         <div class="p-5 border-b border-slate-100">
-            <a href="<?= BASE_URL ?>user/?id=<?= $auth_user['id'] ?>" class="font-bold">&larr; <span class="ml-4">もどる</span></a>
+            <a href="user/?id=<?= $auth_user['id'] ?>" class="font-bold">&larr; <span class="ml-4">もどる</span></a>
         </div>
         <div class="w-full mt-3 p-5">
             <h2 class="text-2xl mb-3 font-bold text-center">プロフィールを編集</h2>
