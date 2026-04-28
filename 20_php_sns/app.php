@@ -17,6 +17,8 @@ const MODEL_DIR = APP_DIR . "models/";
 const CONTROLLER_DIR = APP_DIR . "controllers/";
 // app/services/ ディレクトリパス
 const SERVICE_DIR = APP_DIR . "services/";
+// app/requests/ ディレクトリパス
+const REQUEST_DIR = APP_DIR . "requests/";
 // app/views/ ディレクトリパス
 const VIEW_DIR = APP_DIR . "views/";
 // app/views/components/ ディレクトリパス
@@ -41,6 +43,7 @@ require_once LIB_DIR . 'Database.php';
 require_once LIB_DIR . 'Sanitize.php';
 require_once LIB_DIR . 'File.php';
 require_once LIB_DIR . 'Request.php';
+require_once LIB_DIR . 'View.php';
 require_once LIB_DIR . 'Csrf.php';
 
 // モデルクラスの読み込み
@@ -53,6 +56,9 @@ require_once APP_DIR . 'models/AuthUser.php';
 
 // サービスクラスの読み込み
 require_once APP_DIR . 'services/TweetService.php';
+
+// リクエストクラスの読み込み
+require_once REQUEST_DIR . 'UserUpdateRequest.php';
 
 // コントローラークラスの読み込み
 require_once APP_DIR . 'controllers/AuthenticatedController.php';

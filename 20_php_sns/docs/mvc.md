@@ -60,7 +60,7 @@ public function index()
     $tweet = new Tweet();
     $tweets = $this->hydrateTweets($tweet->get(), (int) $auth_user['id']);
 
-    Request::render('home/index', [
+    View::render('home/index', [
         'auth_user' => $auth_user,
         'tweets' => $tweets,
     ]);

@@ -7,6 +7,7 @@ use App\Models\Like;
 use App\Models\User;
 use App\Services\TweetService;
 use Lib\Request;
+use Lib\View;
 
 class HomeController extends AuthenticatedController
 {
@@ -20,7 +21,7 @@ class HomeController extends AuthenticatedController
         $tweetService = new TweetService();
         $tweets = $tweetService->getTimelineTweets((int) $this->authUser['id'], $tab, 50);
 
-        Request::render('home/index', [
+        View::render('home/index', [
             'auth_user' => $this->authUser,
             'tweets' => $tweets,
             'active_tab' => $tab,
@@ -43,7 +44,7 @@ class HomeController extends AuthenticatedController
             exit;
         }
 
-        Request::render('home/detail', [
+        View::render('home/detail', [
             'auth_user' => $this->authUser,
             'tweet' => $tweet_data,
             'replies' => $tweet_data['replies'],
@@ -68,7 +69,7 @@ class HomeController extends AuthenticatedController
         $tweets = $tweet->getByUserID((int) $user_data['id'], (int) $this->authUser['id']);
 
         // Viewをレンダリング: app/views/home/user_tweets.view.php
-        Request::render('home/user_tweets', ['tweets' => $tweets]);
+        View::render('home/user_tweets', ['tweets' => $tweets]);
     }
 
     public function add()
@@ -100,7 +101,7 @@ class HomeController extends AuthenticatedController
             $tweets = $tweetService->searchTweets($keyword, (int) $this->authUser['id']);
         }
 
-        Request::render('home/search', [
+        View::render('home/search', [
             'auth_user' => $this->authUser,
             'keyword' => $keyword,
             'tweets' => $tweets,
@@ -132,7 +133,7 @@ class HomeController extends AuthenticatedController
     {
         $tweet = new Tweet();
 
-        Request::render('home/garally', [
+        View::render('home/garally', [
             'auth_user' => $this->authUser,
             'tweets' => $tweet->getImages() ?? [],
         ]);

@@ -6,6 +6,7 @@ use App\Models\AuthUser;
 use App\Models\User;
 use Lib\Csrf;
 use Lib\Request;
+use Lib\View;
 
 class RegisterController
 {
@@ -22,7 +23,7 @@ class RegisterController
         $error  = $_SESSION[APP_KEY]['errors']['public'] ?? null;
         unset($_SESSION[APP_KEY]['errors']);
 
-        Request::render('register/input', ['regist' => $regist, 'error' => $error]);
+        View::render('register/input', ['regist' => $regist, 'error' => $error]);
     }
 
     public function add(): void
@@ -74,6 +75,6 @@ class RegisterController
     public function result(): void
     {
         unset($_SESSION[APP_KEY]['regist'], $_SESSION[APP_KEY]['errors']);
-        Request::render('register/result', []);
+        View::render('register/result', []);
     }
 }

@@ -6,6 +6,7 @@ use App\Models\AuthUser;
 use App\Models\User;
 use Lib\Csrf;
 use Lib\Request;
+use Lib\View;
 
 class LoginController
 {
@@ -24,7 +25,7 @@ class LoginController
         $error = $_SESSION['error'] ?? null;
         unset($_SESSION['error']);
 
-        Request::render('login/input', ['form' => $form, 'error' => $error]);
+        View::render('login/input', ['form' => $form, 'error' => $error]);
     }
 
     public function auth()

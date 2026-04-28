@@ -6,8 +6,10 @@ use App\Models\Tweet;
 use App\Models\User;
 use App\Models\AuthUser;
 use App\Models\Follow;
+use App\Requests\UserUpdateRequest;
 use App\Services\TweetService;
 use Lib\Request;
+use Lib\View;
 
 class UserController extends AuthenticatedController
 {
@@ -36,19 +38,26 @@ class UserController extends AuthenticatedController
 
     public function update()
     {
-        if (!Request::isPost()) {
+        $posts = UserUpdateRequest::validateOrRedirect();
+
+        $user = new User();
+        $result = $user->update($this->authUser['id'], $posts);
+
+        if (!$result) {
+            $_SESSION[APP_KEY]['user_edit'] = [
+                'form' => $posts,
+                'error' => '更新に失敗しました。',
+            ];
             header('Location: ' . BASE_URL . 'user/edit.php');
             exit;
         }
 
-        $posts = sanitize($_POST);
-
-        $user = new User();
-        $user->update($this->authUser['id'], $posts);
-
         // ユーザ情報をセッションに保存
         $this->authUser = $user->find($this->authUser['id']);
         AuthUser::set($this->authUser);
+        $_SESSION[APP_KEY]['user_edit'] = [
+            'success' => '保存しました。',
+        ];
 
         header('Location: ' . BASE_URL . 'user/edit.php');
         exit;
@@ -59,9 +68,16 @@ class UserController extends AuthenticatedController
         // ユーザ情報をDBから再読み込み
         $user = new User();
         $this->authUser = $user->find($this->authUser['id']);
+        $editState = $_SESSION[APP_KEY]['user_edit'] ?? [];
+        unset($_SESSION[APP_KEY]['user_edit']);
 
         // Viewをレンダリング: app/views/user/edit.view.php
-        Request::render('user/edit', ['auth_user' => $this->authUser]);
+        View::render('user/edit', [
+            'auth_user' => $this->authUser,
+            'form' => $editState['form'] ?? [],
+            'error' => $editState['error'] ?? null,
+            'success' => $editState['success'] ?? null,
+        ]);
     }
 
     public function follow()
@@ -112,7 +128,7 @@ class UserController extends AuthenticatedController
         $tweet = new Tweet();
         $tweetService = new TweetService();
 
-        Request::render('user/index', [
+        View::render('user/index', [
             'auth_user' => $this->authUser,
             'user_data' => $user_data,
             'tweets' => $tweetService->hydrateTweets(
@@ -135,7 +151,7 @@ class UserController extends AuthenticatedController
         $follow = new Follow();
         $users = $follow->getFollowingUsers((int) $user_data['id']);
 
-        Request::render('user/following', [
+        View::render('user/following', [
             'auth_user' => $this->authUser,
             'user_data' => $user_data,
             'users' => $users,
@@ -155,7 +171,7 @@ class UserController extends AuthenticatedController
         $follow = new Follow();
         $users = $follow->getFollowerUsers((int) $user_data['id']);
 
-        Request::render('user/followers', [
+        View::render('user/followers', [
             'auth_user' => $this->authUser,
             'user_data' => $user_data,
             'users' => $users,
