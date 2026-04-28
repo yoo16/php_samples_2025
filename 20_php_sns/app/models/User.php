@@ -148,12 +148,15 @@ class User
      * ユーザのプロフィール画像をアップロードする
      *
      * @param int $user_id ユーザID
-     * @return string|null アップロードされた画像のパス、失敗時は null
+     * @return bool アップロード成功時は真、失敗時は偽
      */
-    public function uploadProfileImage($user_id): ?string
+    public function uploadProfileImage($user_id): bool
     {
+        // プロフィール画像を保存
         $profile_image = File::upload(PROFILE_BASE, $user_id);
-        if (!$profile_image) return null;
+        // 保存失敗
+        if (!$profile_image) return false;
+
         try {
             $pdo = Database::getInstance();
             $sql = "UPDATE users SET profile_image = :profile_image WHERE id = :id;";
@@ -165,7 +168,7 @@ class User
             ]);
         } catch (PDOException $e) {
             error_log($e->getMessage());
-            return null;
+            return false;
         }
     }
 

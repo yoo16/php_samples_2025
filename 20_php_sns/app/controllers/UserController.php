@@ -8,6 +8,7 @@ use App\Models\AuthUser;
 use App\Models\Follow;
 use App\Requests\UserUpdateRequest;
 use App\Services\TweetService;
+use Lib\Csrf;
 use Lib\Request;
 use Lib\View;
 
@@ -55,7 +56,9 @@ class UserController extends AuthenticatedController
 
         // ユーザ情報をセッションに保存
         $this->authUser = $user->find($this->authUser['id']);
+        // 認証ユーザ情報を更新
         AuthUser::set($this->authUser);
+        // セッションに成功メッセージを設定
         $_SESSION[APP_KEY]['user_edit'] = [
             'success' => '保存しました。',
         ];
@@ -70,13 +73,46 @@ class UserController extends AuthenticatedController
         Request::redirect('login/');
     }
 
+    public function uploadProfileImage()
+    {
+        // POSTチェック
+        Request::checkPost('user/edit.php');
+        // CSRFトークンを検証
+        if (!Csrf::verify()) {
+            $_SESSION[APP_KEY]['user_edit'] = [
+                'error' => '不正なリクエストです。',
+            ];
+            Request::redirect('user/edit.php');
+        }
+        $user = new User();
+        // 画像を保存
+        $result = $user->uploadProfileImage($this->authUser['id']);
+        // 更新失敗
+        if (!$result) {
+            $_SESSION[APP_KEY]['user_edit'] = [
+                'error' => '画像の更新に失敗しました。',
+            ];
+            Request::redirect('user/edit.php');
+        }
+        // ユーザ情報をセッションに保存
+        $this->authUser = $user->find($this->authUser['id']);
+        // 認証ユーザ情報を更新
+        AuthUser::set($this->authUser);
+        // セッションに成功メッセージを設定
+        $_SESSION[APP_KEY]['user_edit'] = [
+            'success' => '画像を更新しました。',
+        ];
+        // 編集画面へリダイレクト
+        Request::redirect('user/edit.php');
+    }
+
     public function edit()
     {
         // ユーザ情報をDBから再読み込み
         $user = new User();
         $this->authUser = $user->find($this->authUser['id']);
+        // セッションからeditStateを取得
         $editState = $_SESSION[APP_KEY]['user_edit'] ?? [];
-        unset($_SESSION[APP_KEY]['user_edit']);
 
         // Viewをレンダリング: app/views/user/edit.view.php
         View::render('user/edit', [
@@ -100,7 +136,7 @@ class UserController extends AuthenticatedController
             $follow = new Follow();
             $follow->insert($this->authUser['id'], $followee_id);
         }
-
+        // ユーザページへリダイレクト
         Request::redirect('user/?id=' . $followee_id);
     }
 
@@ -111,12 +147,12 @@ class UserController extends AuthenticatedController
 
         // フォロー解除するユーザID
         $followee_id = (int) ($_POST['followee_id'] ?? 0);
-
+        // フォロー解除処理
         if ($followee_id) {
             $follow = new Follow();
             $follow->delete($this->authUser['id'], $followee_id);
         }
-
+        // ユーザページへリダイレクト
         Request::redirect('user/?id=' . $followee_id);
     }
 

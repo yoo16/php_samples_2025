@@ -9,28 +9,29 @@ class UserUpdateRequest
 {
     public static function validateOrRedirect(): array
     {
-        if (!Request::isPost()) Request::redirect('user/edit.php');
-
+        // POSTチェック
+        Request::checkPost();
+        // CSRFトークンを検証
         if (!Csrf::verify()) {
             self::redirectWithState([], '不正なリクエストです。');
         }
-
+        // ユーザ情報取得
         $posts = sanitize($_POST);
+        // CSRFトークンを削除
         unset($posts['csrf_token']);
-
+        // バリデーション
         $validated = [
             'display_name' => trim((string) ($posts['display_name'] ?? '')),
             'profile' => trim((string) ($posts['profile'] ?? '')),
         ];
-
+        // ディスプレイ名のチェック
         if ($validated['display_name'] === '') {
             self::redirectWithState($validated, 'ディスプレイ名は必須です。');
         }
-
+        // ディスプレイ名の文字数チェック
         if (mb_strlen($validated['display_name']) > 255) {
             self::redirectWithState($validated, 'ディスプレイ名は255文字以内で入力してください。');
         }
-
         return $validated;
     }
 

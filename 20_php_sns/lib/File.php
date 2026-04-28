@@ -4,19 +4,19 @@ namespace Lib;
 
 class File
 {
-    public static function localDir($path)
+    public static function localDir(string $path): string
     {
         // 末尾スラッシュを付けてディレクトリ連結を安定させる
         return rtrim(BASE_DIR . '/' . trim($path, '/'), '/') . '/';
     }
 
-    public static function has($path)
+    public static function has(string $path): bool
     {
         $localDir = self::localDir($path);
         return file_exists($localDir);
     }
 
-    public static function checkUploadDir($uploadDir)
+    public static function checkUploadDir(string $uploadDir): bool
     {
         // ディレクトリが存在しない場合は作成
         if (!is_dir($uploadDir)) {
@@ -32,7 +32,7 @@ class File
         return false;
     }
 
-    public static function upload($uploadDir, $fileName = '', $key = 'file')
+    public static function upload(string $uploadDir, string $fileName = '', string $key = 'file'): ?string
     {
         // 画像がアップロードされているか確認
         if (isset($_FILES[$key]) && $_FILES[$key]['error'] === UPLOAD_ERR_OK) {
