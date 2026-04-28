@@ -9,16 +9,7 @@
     <main class="flex-1 border-r border-slate-100 min-h-screen">
         <?php include COMPONENT_DIR . 'dashboard.php' ?>
         <?php include COMPONENT_DIR . 'profile_tabs.php' ?>
-
-        <div id="user-tweet-list">
-            <?php if (empty($tweets)) : ?>
-                <p class="p-8 text-center text-slate-400 text-sm">投稿がありません</p>
-            <?php else : ?>
-                <?php foreach ($tweets as $tweet) : ?>
-                    <?php include COMPONENT_DIR . 'tweet_item.php' ?>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </div>
+        <?php include COMPONENT_DIR . 'home_tweet_list.php' ?>
     </main>
 
 </div>

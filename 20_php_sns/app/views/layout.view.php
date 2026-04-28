@@ -11,7 +11,7 @@
         <?php include COMPONENT_DIR . 'public_nav.php' ?>
     <?php endif ?>
 
-    <?= $content ?>
+    <?= $content ?? "" ?>
 
 </body>
 
