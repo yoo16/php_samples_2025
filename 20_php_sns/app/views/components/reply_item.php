@@ -1,3 +1,5 @@
+<?php if (empty($reply) || !is_array($reply)) return; ?>
+
 <div class="flex gap-2 py-3 border-b border-slate-50 last:border-0">
     <img src="<?= h($reply['profile_image_url']) ?>" class="w-8 h-8 rounded-full object-cover shrink-0 mt-0.5">
     <div class="flex-1 min-w-0">

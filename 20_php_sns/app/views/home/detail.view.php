@@ -1,3 +1,5 @@
+<?php if (empty($tweet) || !is_array($tweet)) return; ?>
+
 <div class="flex max-w-4xl mx-auto min-h-screen">
 
     <!-- サイドナビ -->
@@ -16,7 +18,7 @@
         </div>
 
         <div id="reply-list" data-tweet-id="<?= (int) $tweet['id'] ?>" class="mx-4 border-t border-slate-100">
-            <?php if (!$replies) : ?>
+            <?php if (empty($replies)) : ?>
                 <p class="p-6 text-center text-slate-400 text-sm">返信がありません</p>
             <?php else : ?>
                 <?php foreach ($replies as $reply) : ?>

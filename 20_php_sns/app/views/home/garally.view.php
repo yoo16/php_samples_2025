@@ -13,7 +13,7 @@
         </div>
 
         <div id="media-gallery" class="p-4" data-ssr-rendered="true">
-            <?php if (!$tweets) : ?>
+            <?php if (empty($tweets)) : ?>
                 <p class="p-8 text-center text-slate-400 text-sm">画像付きの投稿はまだありません。</p>
             <?php else : ?>
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">

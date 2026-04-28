@@ -12,18 +12,14 @@ function h($str)
 
 /**
  * サニタイズ関数2
- * @param mixed $data サニタイズするデータ
- * @return mixed サニタイズ後のデータ
+ * @param array $data サニタイズするデータ
+ * @return array サニタイズ後のデータ
  */
-function sanitize($data)
+function sanitize(array $data): array
 {
-    // 配列の場合、再帰的にサニタイズ
-    if (is_array($data)) {
-        return array_map('sanitize', $data);
+    $cleaned = [];
+    foreach ($data as $key => $value) {
+        $cleaned[$key] = $value ? h((string) $value) : $value;
     }
-    // サニタイズ処理
-    // htmlspecialchars() を使用して、HTMLエスケープを行う
-    // trim() を使用して、前後の空白を削除
-    // ENT_QUOTES を指定して、シングルクォートとダブルクォートをエスケープ
-    return trim(h($data, ENT_QUOTES, 'UTF-8'));
+    return $cleaned;
 }

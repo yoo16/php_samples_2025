@@ -1,9 +1,10 @@
 <?php
+if (empty($auth_user)) return;
 
 use App\Models\User;
 ?>
 <div class="px-4 py-4 border-b border-slate-100">
-    <form id="tweet-form" action="<?= BASE_URL ?>home/add.php" method="post" enctype="multipart/form-data">
+    <form id="tweet-form" action="home/add.php" method="post" enctype="multipart/form-data">
         <div class="flex gap-3">
 
             <!-- プロフィール画像 -->

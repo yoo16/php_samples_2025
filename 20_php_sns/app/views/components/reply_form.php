@@ -1,5 +1,7 @@
+<?php if (empty($value) || !is_array($value)) return; ?>
+
 <div id="reply-section-<?= $value['id'] ?>" class="hidden mt-2 pl-2 border-l-2 border-slate-100">
-    <?php include COMPONENT_DIR . 'reply_list.php' ?>
+    <div id="reply-list-<?= $value['id'] ?>" class="ml-2"></div>
 
     <div class="flex gap-2 mt-2">
         <textarea

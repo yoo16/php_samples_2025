@@ -114,6 +114,10 @@ class UserController extends AuthenticatedController
         // セッションからeditStateを取得
         $editState = $_SESSION[APP_KEY]['user_edit'] ?? [];
 
+        // フラッシュメッセージ
+        unset($_SESSION[APP_KEY]['user_edit']['error']);
+        unset($_SESSION[APP_KEY]['user_edit']['success']);
+
         // Viewをレンダリング: app/views/user/edit.view.php
         View::render('user/edit', [
             'auth_user' => $this->authUser,
