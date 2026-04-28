@@ -3,7 +3,6 @@
     $appJsVersion = filemtime(BASE_DIR . '/js/app.js');
     $imageJsVersion = filemtime(BASE_DIR . '/js/image.js');
     $tweetJsVersion = filemtime(BASE_DIR . '/js/tweet.js');
-    $replyJsVersion = filemtime(BASE_DIR . '/js/reply.js');
     ?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,5 +13,4 @@
     <script src="js/app.js?v=<?= $appJsVersion ?>" defer></script>
     <script src="js/image.js?v=<?= $imageJsVersion ?>" defer></script>
     <script src="js/tweet.js?v=<?= $tweetJsVersion ?>" defer></script>
-    <script src="js/reply.js?v=<?= $replyJsVersion ?>" defer></script>
 </head>

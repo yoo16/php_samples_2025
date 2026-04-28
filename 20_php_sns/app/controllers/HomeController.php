@@ -18,7 +18,7 @@ class HomeController extends AuthenticatedController
         }
 
         $tweetService = new TweetService();
-        $tweets = $tweetService->getTimelineTweets((int) $this->authUser['id'], $tab);
+        $tweets = $tweetService->getTimelineTweets((int) $this->authUser['id'], $tab, 50);
 
         Request::render('home/index', [
             'auth_user' => $this->authUser,
@@ -73,6 +73,11 @@ class HomeController extends AuthenticatedController
 
     public function add()
     {
+        if (!Request::isPost()) {
+            header('Location: ' . BASE_URL . 'home/');
+            exit;
+        }
+
         // POSTデータを取得
         $posts = sanitize($_POST);
 

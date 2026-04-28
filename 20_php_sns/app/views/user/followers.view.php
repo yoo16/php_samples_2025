@@ -1,6 +1,6 @@
 <div class="flex max-w-4xl mx-auto min-h-screen">
 
-    <header class="w-56 shrink-0 sticky top-0 self-start h-screen border-r border-slate-100">
+    <header class="sticky top-0 h-screen w-20 shrink-0 self-start border-r border-slate-100 xl:w-56">
         <?php include COMPONENT_DIR . 'nav.php' ?>
     </header>
 

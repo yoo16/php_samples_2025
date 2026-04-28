@@ -6,6 +6,7 @@ use App\Models\Tweet;
 use App\Models\User;
 use App\Models\AuthUser;
 use App\Models\Follow;
+use App\Services\TweetService;
 use Lib\Request;
 
 class UserController extends AuthenticatedController
@@ -108,10 +109,16 @@ class UserController extends AuthenticatedController
         }
 
         $profile = $this->buildProfileData($user_data);
+        $tweet = new Tweet();
+        $tweetService = new TweetService();
 
         Request::render('user/index', [
             'auth_user' => $this->authUser,
             'user_data' => $user_data,
+            'tweets' => $tweetService->hydrateTweets(
+                $tweet->getByUserID((int) $user_data['id'], (int) $this->authUser['id']),
+                (int) $this->authUser['id']
+            ),
             'active_tab' => 'posts',
             ...$profile,
         ]);
