@@ -15,9 +15,6 @@ class HomeController extends AuthenticatedController
     {
         // タブの種類（公開・フォロー中）
         $tab = $_GET['tab'] ?? 'public';
-        if (!in_array($tab, ['public', 'followers'], true)) {
-            $tab = 'public';
-        }
 
         // 投稿タイムラインを取得: ログインユーザのID、タブの種類、表示件数
         $tweetService = new TweetService();
@@ -34,7 +31,7 @@ class HomeController extends AuthenticatedController
     public function detail()
     {
         // 投稿IDを、GETで取得
-        $id = 0;
+        $id = (int) ($_GET['id'] ?? 0);
         // 投稿IDがなければホームにリダイレクト
         if (!$id) Request::redirect('home/');
 

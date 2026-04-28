@@ -18,7 +18,7 @@ class Like
     public function fetch(int $tweet_id, int $user_id): ?array
     {
         if (empty($tweet_id) || empty($user_id)) {
-            return null;
+            return [];
         }
         try {
             // DB接続
@@ -29,10 +29,11 @@ class Like
                     AND user_id = :user_id;";
             $stmt = $pdo->prepare($sql);
             $stmt->execute(['tweet_id' => $tweet_id, 'user_id' => $user_id]);
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $row ? $row : null;
         } catch (PDOException $e) {
             error_log($e->getMessage());
-            return null;
+            return [];
         }
     }
 

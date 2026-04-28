@@ -42,6 +42,7 @@ function initLikeButtons(container) {
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
                 const { like_count, liked } = await res.json();
+                console.log(like_count, liked)
                 btn.dataset.liked = String(liked);
                 btn.innerHTML = heartSvg(liked) + `<span class="like-count text-xs">${like_count}</span>`;
 

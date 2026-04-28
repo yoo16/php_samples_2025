@@ -38,6 +38,6 @@ $like->update($tweet_id, $user_id);
 
 // トグル後の状態を返す
 $like_count = (int) $like->count($tweet_id);
-$liked = (bool) $like->fetch($tweet_id, $user_id);
+$liked = $like->fetch($tweet_id, $user_id);
 
 echo json_encode(['like_count' => $like_count, 'liked' => $liked], JSON_UNESCAPED_UNICODE);
