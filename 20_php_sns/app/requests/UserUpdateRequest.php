@@ -9,7 +9,7 @@ class UserUpdateRequest
 {
     public static function validateOrRedirect(): array
     {
-        if (!Request::isPost()) Request::redirect(BASE_URL . 'user/edit.php');
+        if (!Request::isPost()) Request::redirect('user/edit.php');
 
         if (!Csrf::verify()) {
             self::redirectWithState([], '不正なリクエストです。');
@@ -41,6 +41,6 @@ class UserUpdateRequest
             'error' => $error,
         ];
 
-        Request::redirect(BASE_URL . 'user/edit.php');
+        Request::redirect('user/edit.php');
     }
 }

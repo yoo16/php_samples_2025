@@ -27,7 +27,7 @@ class Follow
                     AND followee_id = :followee_id";
             $stmt = $pdo->prepare($sql);
             $stmt->execute(['follower_id' => $follower_id, 'followee_id' => $followee_id]);
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+            return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
         } catch (PDOException $e) {
             error_log($e->getMessage());
             return null;

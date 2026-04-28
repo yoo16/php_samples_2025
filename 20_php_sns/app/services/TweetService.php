@@ -11,41 +11,45 @@ class TweetService
     public function getTimelineTweets(int $authUserId, string $tab = 'public', int $limit = 10, int $offset = 0): array
     {
         $tweet = new Tweet();
+        // $tabの値で条件分岐し、投稿を取得
         $tweets = match ($tab) {
             'followers' => $tweet->getByFollowingUsers($authUserId, $limit, $offset),
             default => $tweet->get($authUserId, $limit, $offset),
         };
-
+        // 取得した投稿にユーザ情報をマージ
         return $this->hydrateTweets($tweets, $authUserId);
     }
 
     public function searchTweets(string $keyword, int $authUserId): array
     {
         $tweet = new Tweet();
-        return $this->hydrateTweets($tweet->search($keyword, $authUserId), $authUserId);
+        // $keywordで検索して投稿を取得
+        $tweets = $tweet->search($keyword, $authUserId);
+        // 投稿にユーザ情報をマージ
+        return $this->hydrateTweets($tweets, $authUserId);
     }
 
     public function getTweetDetail(int $tweetId, int $authUserId): ?array
     {
         $tweet = new Tweet();
         $reply = new Reply();
-
+        // 投稿を取得
         $tweetData = $tweet->findWithUser($tweetId, $authUserId);
-        if (!$tweetData) {
-            return null;
-        }
-
+        // 投稿がなければnullを返す
+        if (!$tweetData) return null;
+        // 投稿にユーザ情報をマージ
         $tweetData = $this->hydrateTweet($tweetData, $authUserId);
+        // リプライを取得
         $tweetData['replies'] = $this->hydrateReplies($reply->getByTweetId($tweetId));
-
+        // 投稿データを返す
         return $tweetData;
     }
 
     public function hydrateTweets(?array $tweets, int $authUserId): array
     {
         if (!$tweets) return [];
-
         foreach ($tweets as &$tweet) {
+            // 投稿にユーザ情報をマージ
             $tweet = $this->hydrateTweet($tweet, $authUserId);
         }
         unset($tweet);
@@ -62,8 +66,9 @@ class TweetService
         if (empty($tweet['image_path'])) {
             $tweet['image_path'] = null;
         }
-
+        // いいね数を設定
         $tweet['like_count'] = (int) ($tweet['like_count'] ?? 0);
+        // リプライ数を設定
         $tweet['reply_count'] = (int) ($tweet['reply_count'] ?? 0);
 
         return $tweet;
@@ -71,9 +76,7 @@ class TweetService
 
     public function hydrateReplies(?array $replies): array
     {
-        if (!$replies) {
-            return [];
-        }
+        if (!$replies) return [];
 
         foreach ($replies as &$reply) {
             $reply['profile_image_url'] = User::profileImage($reply['profile_image'] ?? null);

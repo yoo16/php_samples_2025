@@ -128,7 +128,7 @@ class HomeController extends AuthenticatedController
 
         // ログインユーザのIDと投稿のユーザIDが一致しない場合はホームにリダイレクト
         if ((int) $this->authUser['id'] !== (int) $posts['user_id']) {
-            Request::redirect(BASE_URL . 'home/');
+            Request::redirect('home/');
         }
 
         // 削除処理
@@ -136,6 +136,6 @@ class HomeController extends AuthenticatedController
         $tweet->delete($posts['tweet_id']);
 
         // ホームにリダイレクト
-        Request::redirect(BASE_URL . 'home/');
+        Request::redirect('home/');
     }
 }

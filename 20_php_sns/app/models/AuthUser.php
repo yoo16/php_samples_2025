@@ -45,7 +45,7 @@ class AuthUser extends User
         // セッションから認証ユーザ情報を取得
         $auth_user = self::get();
         // 認証ユーザ情報が存在しない場合はログイン画面にリダイレクト
-        if (empty($auth_user)) Request::redirect(BASE_URL . 'login/');
+        if (empty($auth_user)) Request::redirect('login/');
         // 認証ユーザ情報を返す
         return $auth_user;
     }
@@ -58,6 +58,6 @@ class AuthUser extends User
         // セッションから認証ユーザ情報を削除
         unset($_SESSION[APP_KEY]['auth_user']);
         // ログアウト処理後のリダイレクト先を指定
-        Request::redirect(BASE_URL . 'login/');
+        Request::redirect('login/');
     }
 }

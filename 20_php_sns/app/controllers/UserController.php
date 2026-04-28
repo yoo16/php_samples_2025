@@ -50,7 +50,7 @@ class UserController extends AuthenticatedController
                 'form' => $posts,
                 'error' => '更新に失敗しました。',
             ];
-            Request::redirect(BASE_URL . 'user/edit.php');
+            Request::redirect('user/edit.php');
         }
 
         // ユーザ情報をセッションに保存
@@ -60,14 +60,14 @@ class UserController extends AuthenticatedController
             'success' => '保存しました。',
         ];
         // 編集画面へリダイレクト
-        Request::redirect(BASE_URL . 'user/edit.php');
+        Request::redirect('user/edit.php');
     }
 
     public function logout()
     {
         AuthUser::logout();
         // ログアウト処理後のリダイレクト先を指定
-        Request::redirect(BASE_URL . 'login/');
+        Request::redirect('login/');
     }
 
     public function edit()
@@ -101,7 +101,7 @@ class UserController extends AuthenticatedController
             $follow->insert($this->authUser['id'], $followee_id);
         }
 
-        Request::redirect(BASE_URL . 'user/?id=' . $followee_id);
+        Request::redirect('user/?id=' . $followee_id);
     }
 
     public function unfollow()
@@ -117,7 +117,7 @@ class UserController extends AuthenticatedController
             $follow->delete($this->authUser['id'], $followee_id);
         }
 
-        Request::redirect(BASE_URL . 'user/?id=' . $followee_id);
+        Request::redirect('user/?id=' . $followee_id);
     }
 
     public function index()
@@ -126,7 +126,7 @@ class UserController extends AuthenticatedController
         $user_data = $this->findRequestedUser();
         // 該当ユーザがなければホームへリダイレクト
         if (!$user_data) {
-            Request::redirect(BASE_URL . 'home/');
+            Request::redirect('home/');
         }
 
         // プロフィールデータ
@@ -154,7 +154,7 @@ class UserController extends AuthenticatedController
         // ユーザ情報を検索
         $user_data = $this->findRequestedUser();
         // 該当ユーザがなければホームへリダイレクト
-        if (!$user_data) Request::redirect(BASE_URL . 'home/');
+        if (!$user_data) Request::redirect('home/');
 
         // フォローデータを取得
         $follow = new Follow();
@@ -175,7 +175,7 @@ class UserController extends AuthenticatedController
         // ユーザ情報を検索
         $user_data = $this->findRequestedUser();
         // 該当ユーザがなければホームへリダイレクト
-        if (!$user_data) Request::redirect(BASE_URL . 'home/');
+        if (!$user_data) Request::redirect('home/');
 
         // フォロワーデータを取得
         $follow = new Follow();
