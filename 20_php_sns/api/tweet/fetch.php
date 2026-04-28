@@ -2,7 +2,6 @@
 require_once '../../app.php';
 
 use App\Models\AuthUser;
-use App\Models\Like;
 use App\Models\Tweet;
 use App\Models\User;
 
@@ -28,23 +27,19 @@ if (!$id) {
 // Tweetモデル
 $tweet = new Tweet();
 // ツイートデータ
-$data  = $tweet->findWithUser($id);
+$data  = $tweet->findWithUser($id, (int) $auth_user['id']);
 if (!$data) {
     http_response_code(404);
     echo json_encode(['error' => 'Not Found'], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
-// Likeモデル
-$like = new Like();
-// いいね数
-$data['like_count'] = (int) $like->count($id);
-// いいねしているかどうか
-$data['liked'] = (bool) $like->fetch($id, $auth_user['id']);
-
 // Userモデル
 // プロフィール画像URL
 $data['profile_image_url'] = User::profileImage($data['profile_image']);
+$data['like_count'] = (int) ($data['like_count'] ?? 0);
+$data['reply_count'] = (int) ($data['reply_count'] ?? 0);
+$data['liked'] = (bool) ($data['liked'] ?? false);
 // 画像パス
 if (empty($data['image_path'])) {
     $data['image_path'] = null;

@@ -39,9 +39,14 @@ class Follow
      */
     public function insert($follower_id, $followee_id)
     {
+        if ((int) $follower_id === (int) $followee_id) {
+            return false;
+        }
+
         try {
             $pdo = Database::getInstance();
-            $sql = "INSERT INTO follows (follower_id, followee_id) VALUES (:follower_id, :followee_id)";
+            $sql = "INSERT IGNORE INTO follows (follower_id, followee_id)
+                    VALUES (:follower_id, :followee_id)";
             $stmt = $pdo->prepare($sql);
             return $stmt->execute(['follower_id' => $follower_id, 'followee_id' => $followee_id]);
         } catch (PDOException $e) {
@@ -115,6 +120,56 @@ class Follow
         } catch (PDOException $e) {
             error_log($e->getMessage());
             return 0;
+        }
+    }
+
+    public function getFollowingUsers(int $user_id): array
+    {
+        try {
+            $pdo = Database::getInstance();
+            $sql = "SELECT
+                        users.id,
+                        users.account_name,
+                        users.display_name,
+                        users.profile,
+                        users.profile_image,
+                        follows.created_at AS followed_at
+                    FROM follows
+                    INNER JOIN users ON follows.followee_id = users.id
+                    WHERE follows.follower_id = :user_id
+                    ORDER BY follows.created_at DESC";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(['user_id' => $user_id]);
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+        } catch (PDOException $e) {
+            error_log($e->getMessage());
+            return [];
+        }
+    }
+
+    public function getFollowerUsers(int $user_id): array
+    {
+        try {
+            $pdo = Database::getInstance();
+            $sql = "SELECT
+                        users.id,
+                        users.account_name,
+                        users.display_name,
+                        users.profile,
+                        users.profile_image,
+                        follows.created_at AS followed_at
+                    FROM follows
+                    INNER JOIN users ON follows.follower_id = users.id
+                    WHERE follows.followee_id = :user_id
+                    ORDER BY follows.created_at DESC";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(['user_id' => $user_id]);
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+        } catch (PDOException $e) {
+            error_log($e->getMessage());
+            return [];
         }
     }
 }

@@ -8,6 +8,7 @@
     <!-- メインコンテンツ -->
     <main class="flex-1 border-r border-slate-100 min-h-screen">
         <?php include COMPONENT_DIR . 'dashboard.php' ?>
+        <?php include COMPONENT_DIR . 'profile_tabs.php' ?>
 
         <!-- ツイート一覧（CSR） -->
         <div id="user-tweet-list"

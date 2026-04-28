@@ -22,14 +22,25 @@ class Tweet
      *
      * @return array|null 投稿データの連想配列、もしくは該当する投稿がなければ null
      */
-    public function get($limit = 10, $offset = 0)
+    public function get(int $auth_user_id, int $limit = 10, int $offset = 0)
     {
-        return $this->fetchTweets('', [], $limit, $offset);
+        return $this->fetchTweets('', [], $auth_user_id, $limit, $offset);
     }
 
-    public function getByUserID($user_id, $limit = 50)
+    public function getByFollowingUsers(int $auth_user_id, int $limit = 10, int $offset = 0)
     {
-        return $this->fetchTweets('tweets.user_id = :user_id', ['user_id' => $user_id], $limit);
+        $where = 'tweets.user_id IN (
+            SELECT follows.followee_id
+            FROM follows
+            WHERE follows.follower_id = :auth_user_id
+        )';
+
+        return $this->fetchTweets($where, ['auth_user_id' => $auth_user_id], $auth_user_id, $limit, $offset);
+    }
+
+    public function getByUserID(int $user_id, int $auth_user_id, int $limit = 50)
+    {
+        return $this->fetchTweets('tweets.user_id = :user_id', ['user_id' => $user_id], $auth_user_id, $limit);
     }
 
     /**
@@ -37,7 +48,7 @@ class Tweet
      *
      * @return array|null 投稿データの連想配列、もしくは該当する投稿がなければ null
      */
-    public function search($keyword, $limit = 50)
+    public function search(string $keyword, int $auth_user_id, int $limit = 50)
     {
         // # 直後のスペース有無を正規化して両方にマッチさせる
         // 例: "#anime" → "%#anime%" と "%# anime%" の両方を検索
@@ -49,10 +60,10 @@ class Tweet
             'keyword'        => "%{$normalized}%",
             'keyword_spaced' => "%{$spaced}%",
         ];
-        return $this->fetchTweets($where, $params, $limit);
+        return $this->fetchTweets($where, $params, $auth_user_id, $limit);
     }
 
-    private function fetchTweets(string $where, array $params, int $limit, int $offset = 0): ?array
+    private function fetchTweets(string $where, array $params, int $auth_user_id, int $limit, int $offset = 0): ?array
     {
         try {
             $pdo = Database::getInstance();
@@ -67,11 +78,15 @@ class Tweet
                     users.display_name,
                     users.profile_image,
                     COUNT(DISTINCT likes.id) AS like_count,
-                    COUNT(DISTINCT replies.id) AS reply_count
+                    COUNT(DISTINCT replies.id) AS reply_count,
+                    CASE WHEN COUNT(DISTINCT my_likes.id) > 0 THEN 1 ELSE 0 END AS liked
                 FROM tweets
                 JOIN users ON tweets.user_id = users.id
                 LEFT JOIN likes ON tweets.id = likes.tweet_id
-                LEFT JOIN replies ON tweets.id = replies.tweet_id"
+                LEFT JOIN replies ON tweets.id = replies.tweet_id
+                LEFT JOIN likes AS my_likes
+                    ON tweets.id = my_likes.tweet_id
+                    AND my_likes.user_id = :viewer_user_id"
                 . ($where ? " WHERE {$where}" : "")
                 . " GROUP BY
                     tweets.id,
@@ -85,6 +100,7 @@ class Tweet
                     users.profile_image
                 ORDER BY tweets.created_at DESC
                 LIMIT :limit OFFSET :offset";
+            $params['viewer_user_id'] = $auth_user_id;
             $params['limit']  = $limit;
             $params['offset'] = $offset;
             $stmt = $pdo->prepare($sql);
@@ -123,19 +139,34 @@ class Tweet
      * @param int $id 投稿ID
      * @return array|null 投稿データの連想配列、もしくは該当する投稿がなければ null
      */
-    public function findWithUser(int $id)
+    public function findWithUser(int $id, ?int $auth_user_id = null)
     {
         try {
             $pdo = Database::getInstance();
-            $sql = "SELECT tweets.*,
-                            users.display_name,
-                            users.account_name,
-                            users.profile_image
-                    FROM tweets
-                    JOIN users ON tweets.user_id = users.id
-                    WHERE tweets.id = :id";
+            $sql = "SELECT
+                        t.*,
+                        u.display_name,
+                        u.account_name,
+                        u.profile_image,
+
+                        (SELECT COUNT(*) FROM likes WHERE tweet_id = t.id) AS like_count,
+                        (SELECT COUNT(*) FROM replies WHERE tweet_id = t.id) AS reply_count,
+
+                        CASE
+                            WHEN EXISTS (
+                                SELECT 1 FROM likes
+                                WHERE tweet_id = t.id AND user_id = :viewer_user_id
+                            ) THEN 1 ELSE 0
+                        END AS liked
+
+                    FROM tweets t
+                    JOIN users u ON t.user_id = u.id
+                    WHERE t.id = :id;";
             $stmt = $pdo->prepare($sql);
-            $stmt->execute(['id' => $id]);
+            $stmt->execute([
+                'id' => $id,
+                'viewer_user_id' => $auth_user_id,
+            ]);
             $value = $stmt->fetch(PDO::FETCH_ASSOC);
             return $value;
         } catch (PDOException $e) {

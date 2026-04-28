@@ -15,6 +15,8 @@ const APP_DIR = __DIR__ . "/app/";
 const MODEL_DIR = APP_DIR . "models/";
 // app/controllers/ ディレクトリパス
 const CONTROLLER_DIR = APP_DIR . "controllers/";
+// app/services/ ディレクトリパス
+const SERVICE_DIR = APP_DIR . "services/";
 // app/views/ ディレクトリパス
 const VIEW_DIR = APP_DIR . "views/";
 // app/views/components/ ディレクトリパス
@@ -49,7 +51,11 @@ require_once APP_DIR . 'models/Follow.php';
 require_once APP_DIR . 'models/Reply.php';
 require_once APP_DIR . 'models/AuthUser.php';
 
+// サービスクラスの読み込み
+require_once APP_DIR . 'services/TweetService.php';
+
 // コントローラークラスの読み込み
+require_once APP_DIR . 'controllers/AuthenticatedController.php';
 require_once APP_DIR . 'controllers/LoginController.php';
 require_once APP_DIR . 'controllers/HomeController.php';
 require_once APP_DIR . 'controllers/UserController.php';

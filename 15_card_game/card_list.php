@@ -1,8 +1,12 @@
 <?php
+session_start();
+
 require_once 'models/AquaCard.php';
 require_once 'models/ForestCard.php';
 require_once 'models/KnightCard.php';
 require_once 'models/ThunderCard.php';
+
+unset($_SESSION['player_card'], $_SESSION['enemy_card']);
 
 $aquaCard = new AquaCard();
 $forestCard = new ForestCard();

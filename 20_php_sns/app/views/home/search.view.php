@@ -11,8 +11,26 @@
 
         <?php include COMPONENT_DIR . 'tweet_form.php' ?>
 
-        <!-- 検索結果（CSR） -->
-        <div id="search-result" data-auth-user-id="<?= $auth_user['id'] ?>"></div>
+        <div id="search-result"
+            data-auth-user-id="<?= (int) $auth_user['id'] ?>"
+            data-ssr-rendered="true">
+            <?php if ($keyword === '') : ?>
+                <p class="p-8 text-center text-slate-400 text-sm">キーワードを入力してください</p>
+            <?php else : ?>
+                <div class="px-4 py-3 border-b border-slate-100">
+                    <p class="text-sm text-slate-500">「<span class="font-bold text-slate-800"><?= h($keyword) ?></span>」の検索結果</p>
+                    <p class="text-xs text-slate-400 mt-0.5"><?= count($tweets) ?> 件</p>
+                </div>
+
+                <?php if (!$tweets) : ?>
+                    <p class="p-8 text-center text-slate-400 text-sm">投稿が見つかりませんでした</p>
+                <?php else : ?>
+                    <?php foreach ($tweets as $tweet) : ?>
+                        <?php include COMPONENT_DIR . 'tweet_item.php' ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            <?php endif; ?>
+        </div>
     </main>
 
 </div>

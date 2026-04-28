@@ -2,13 +2,19 @@
 // クラスを読み込む
 require_once __DIR__ . '/services/GameService.php';
 
-// セッションを開始する
+// セッション開始
 session_start();
 
+// CSRFトークンを生成
+if (!isset($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+// ゲームサービスの初期化
 $game = new GameService();
 
 // カード選択があった場合、プレイヤーを初期化
-if ($cardId = $_GET['card_id'] ?? '') {
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && ($cardId = $_GET['card_id'] ?? '')) {
     $game->setupPlayer($cardId);
 }
 
@@ -23,13 +29,32 @@ $game->setupEnemy();
 
 // ボタンが押された時の処理
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $game->handleAction($_POST['action'] ?? '');
+    $postedToken = $_POST['csrf_token'] ?? '';
+    $sessionToken = $_SESSION['csrf_token'] ?? '';
+
+    if (is_string($postedToken) && is_string($sessionToken) && hash_equals($sessionToken, $postedToken)) {
+        $game->handleAction($_POST['action'] ?? '');
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    } else {
+        $game->message = '不正なリクエストです。画面を開き直して操作してください。';
+    }
 }
 
 // ビュー用変数
+// Player
 $player = $game->player;
+// Enemy
 $enemy = $game->enemy;
+// メッセージ
 $message = $game->message;
+// 勝敗
+$isWin = $game->isWin();
+// ゲームオーバー
+$isGameOver = $game->isGameOver();
+// 終了
+$isFinished = $isWin || $isGameOver;
+// CSRFトークン
+$csrfToken = $_SESSION['csrf_token'];
 ?>
 
 <!DOCTYPE html>
@@ -54,20 +79,29 @@ $message = $game->message;
             <p class="text-base font-bold text-center text-slate-200 leading-relaxed"><?= nl2br($message) ?></p>
         </div>
 
+        <?php if ($isFinished): ?>
+            <div class="text-center my-4">
+                <p class="inline-block px-4 py-2 rounded-full font-game font-bold <?= $isWin ? 'bg-emerald-600/90 text-white' : 'bg-rose-600/90 text-white' ?>">
+                    <?= $isWin ? 'YOU WIN' : 'YOU LOSE' ?>
+                </p>
+            </div>
+        <?php endif; ?>
+
         <!-- 操作パネル -->
         <form method="POST" class="flex flex-wrap justify-center gap-4">
-            <button type="submit" name="action" value="attack" class="px-8 py-3 bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 rounded-lg font-game font-bold shadow-lg shadow-rose-900/40 transition-all active:scale-95 border-b-4 border-rose-900">
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
+            <button type="submit" name="action" value="attack" class="px-8 py-3 bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 rounded-lg font-game font-bold shadow-lg shadow-rose-900/40 transition-all active:scale-95 border-b-4 border-rose-900 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-rose-600 disabled:hover:to-rose-700" <?= $isFinished ? 'disabled' : '' ?>>
                 ATTACK
             </button>
-            <button type="submit" name="action" value="special" class="px-8 py-3 bg-gradient-to-r from-sky-600 to-sky-700 hover:from-sky-500 hover:to-sky-600 rounded-lg font-game font-bold shadow-lg shadow-sky-900/40 transition-all active:scale-95 border-b-4 border-sky-900">
+            <button type="submit" name="action" value="special" class="px-8 py-3 bg-gradient-to-r from-sky-600 to-sky-700 hover:from-sky-500 hover:to-sky-600 rounded-lg font-game font-bold shadow-lg shadow-sky-900/40 transition-all active:scale-95 border-b-4 border-sky-900 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-sky-600 disabled:hover:to-sky-700" <?= $isFinished ? 'disabled' : '' ?>>
                 SPECIAL SKILL
             </button>
-            <button type="submit" name="action" value="gain_exp" class="px-8 py-3 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 rounded-lg font-game font-bold shadow-lg shadow-emerald-900/40 transition-all active:scale-95 border-b-4 border-emerald-900">
-                GAIN EXP
+            <button type="submit" name="action" value="level_up" class="px-8 py-3 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 rounded-lg font-game font-bold shadow-lg shadow-orange-900/40 transition-all active:scale-95 border-b-4 border-orange-900 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-amber-500 disabled:hover:to-orange-600" <?= $isFinished ? 'disabled' : '' ?>>
+                LEVEL UP
             </button>
-            <button type="submit" name="action" value="reset" class="px-8 py-3 bg-slate-700 hover:bg-slate-600 rounded-lg font-game font-bold shadow-lg shadow-slate-900/40 transition-all active:scale-95 border-b-4 border-slate-900">
-                RESET
-            </button>
+            <a href="card_list.php" class="px-8 py-3 bg-slate-700 hover:bg-slate-600 rounded-lg font-game font-bold shadow-lg shadow-slate-900/40 transition-all active:scale-95 border-b-4 border-slate-900 text-center">
+                CARD LIST
+            </a>
         </form>
 
         <!-- カード -->
@@ -75,8 +109,6 @@ $message = $game->message;
             <!-- プレイヤーカード -->
             <div class="tcg-card player-card rounded-2xl p-4 w-full max-w-xs shadow-xl">
                 <h2 class="text-sm font-game font-bold mb-3 text-sky-400 border-b border-sky-400/30 pb-1">Player Unit</h2>
-                <?php $card = $player;
-                include 'views/card.php'; ?>
                 <div class="mt-3 bg-slate-900 rounded-full h-3 overflow-hidden border border-slate-700">
                     <div class="hp-bar bg-sky-500 h-full" style="width: <?= ($player->hp / $player->maxHp) * 100 ?>%"></div>
                 </div>
@@ -84,6 +116,10 @@ $message = $game->message;
                     <span>HP: <?= $player->hp ?> / <?= $player->maxHp ?></span>
                     <span>EXP: <?= $player->exp ?></span>
                 </div>
+                <?php
+                $card = $player;
+                include 'views/card.php';
+                ?>
             </div>
 
             <!-- ログエリア（デスクトップでは中央、モバイルでは間） -->
@@ -96,20 +132,17 @@ $message = $game->message;
             <!-- エネミーカード -->
             <div class="tcg-card enemy-card rounded-2xl p-4 w-full max-w-xs shadow-xl">
                 <h2 class="text-sm font-game font-bold mb-3 text-rose-400 border-b border-rose-400/30 pb-1">Enemy Unit</h2>
-                <?php $card = $enemy;
-                include 'views/card.php'; ?>
                 <div class="mt-3 bg-slate-900 rounded-full h-3 overflow-hidden border border-slate-700">
                     <div class="hp-bar bg-rose-500 h-full" style="width: <?= ($enemy->hp / $enemy->maxHp) * 100 ?>%"></div>
                 </div>
                 <div class="flex justify-between text-[10px] font-game mt-1 px-1 text-slate-400">
                     <span>HP: <?= $enemy->hp ?> / <?= $enemy->maxHp ?></span>
                 </div>
+                <?php
+                $card = $enemy;
+                include 'views/card.php';
+                ?>
             </div>
-        </div>
-
-
-        <div class="mt-10 text-center">
-            <a href="card_list.php" class="text-slate-300 hover:text-sky-400 transition-colors underline decoration-sky-800">カード選択に戻る</a>
         </div>
     </main>
 </body>

@@ -12,13 +12,18 @@
             <p class="text-sm text-slate-500 mt-1">画像付きの投稿を新しい順に表示します。</p>
         </div>
 
-        <div id="media-gallery" class="p-4">
-            <div id="media-gallery-loading" class="p-8 flex justify-center text-slate-400">
-                <svg class="animate-spin w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-                </svg>
-            </div>
+        <div id="media-gallery" class="p-4" data-ssr-rendered="true">
+            <?php if (!$tweets) : ?>
+                <p class="p-8 text-center text-slate-400 text-sm">画像付きの投稿はまだありません。</p>
+            <?php else : ?>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                    <?php foreach ($tweets as $tweet) : ?>
+                        <a href="home/detail.php?id=<?= (int) $tweet['id'] ?>" class="block overflow-hidden rounded-xl bg-white border border-slate-100 hover:shadow-md transition">
+                            <img src="<?= h($tweet['image_path']) ?>" alt="" class="w-full h-48 object-cover hover:scale-105 transition-transform duration-200">
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
         </div>
     </main>
 

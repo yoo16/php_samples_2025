@@ -50,6 +50,7 @@ class AuthUser extends User
             header('Location: ' . BASE_URL . 'login/');
             exit;
         }
+        return $auth_user;
     }
 
     /**

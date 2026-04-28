@@ -3,6 +3,7 @@ const TWEET_LIMIT = 10;
 let tweetOffset = 0;
 let tweetLoading = false;
 let tweetHasMore = true;
+let activeReplyTweetId = null;
 
 /**
  * Sanitize（サニタイズ）
@@ -81,7 +82,7 @@ function renderTweetNav(tweet, authUserId) {
                 class="reply-btn inline-flex items-center gap-1.5 text-slate-400 hover:text-sky-500 transition"
                 data-tweet-id="${tweet.id}">
                 <img src="svg/bubble.svg" class="w-4 h-4" alt="コメント">
-                <span class="reply-count text-xs">${tweet.reply_count ?? 0}</span>
+                <span class="reply-count text-xs" data-tweet-id="${tweet.id}">${tweet.reply_count ?? 0}</span>
             </button>
             <button type="button"
                 class="like-btn inline-flex items-center gap-1.5 ${heartColor} hover:text-rose-500 transition"
@@ -114,7 +115,14 @@ function renderTweet(tweet, authUserId) {
 
     // ツイートHTMLのレンダリング
     return `
-        <div class="px-4 py-4 border-b border-slate-100 hover:bg-slate-50 transition">
+        <div class="tweet-card px-4 py-4 border-b border-slate-100 hover:bg-slate-50 transition"
+            data-tweet-id="${tweet.id}"
+            data-display-name="${escapeHtml(tweet.display_name)}"
+            data-account-name="${escapeHtml(tweet.account_name)}"
+            data-created-at="${escapeHtml(tweet.created_at)}"
+            data-message="${escapeHtml(tweet.message)}"
+            data-profile-image-url="${escapeHtml(tweet.profile_image_url)}"
+            data-image-path="${escapeHtml(tweet.image_path ?? '')}">
             <div class="flex gap-3">
                 <a href="user/?id=${tweet.user_id}" class="shrink-0">
                     <img src="${escapeHtml(tweet.profile_image_url)}" class="rounded-full w-10 h-10 object-cover">
@@ -134,19 +142,6 @@ function renderTweet(tweet, authUserId) {
                     ${imageHtml}
                     ${renderTweetNav(tweet, authUserId)}
                 </div>
-            </div>
-        </div>
-        <div class="reply-form-area hidden px-4 pb-3 border-b border-slate-100" data-tweet-id="${tweet.id}">
-            <div class="flex gap-2 mt-2">
-                <textarea
-                    class="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:border-sky-400"
-                    rows="2"
-                    placeholder="返信を入力..."></textarea>
-                <button type="button"
-                    class="reply-submit-btn px-4 py-2 bg-sky-500 text-white text-sm rounded-full hover:bg-sky-600 transition self-end"
-                    data-tweet-id="${tweet.id}">
-                    返信
-                </button>
             </div>
         </div>`;
 }
@@ -219,52 +214,141 @@ function initLikeButtons(container) {
  * 返信フォームのイベントを初期化
  * @param {Element} container - ツイートが含まれるコンテナ要素
  */
+function updateReplyCount(tweetId, count) {
+    document.querySelectorAll(`.reply-count[data-tweet-id="${tweetId}"]`).forEach(el => {
+        el.textContent = String(count);
+    });
+}
+
+function closeReplyModal() {
+    const modal = document.getElementById('reply-modal');
+    const textarea = document.getElementById('reply-modal-textarea');
+    const error = document.getElementById('reply-modal-error');
+
+    if (!modal || !textarea || !error) return;
+
+    activeReplyTweetId = null;
+    modal.classList.add('hidden');
+    modal.setAttribute('aria-hidden', 'true');
+    textarea.value = '';
+    error.textContent = '';
+    error.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+}
+
+function openReplyModal(btn) {
+    const card = btn.closest('.tweet-card');
+    const modal = document.getElementById('reply-modal');
+    const textarea = document.getElementById('reply-modal-textarea');
+    const avatar = document.getElementById('reply-target-avatar');
+    const displayName = document.getElementById('reply-target-display-name');
+    const accountName = document.getElementById('reply-target-account-name');
+    const createdAt = document.getElementById('reply-target-created-at');
+    const message = document.getElementById('reply-target-message');
+    const image = document.getElementById('reply-target-image');
+
+    if (!card || !modal || !textarea || !avatar || !displayName || !accountName || !createdAt || !message || !image) {
+        return;
+    }
+
+    activeReplyTweetId = Number(btn.dataset.tweetId);
+    avatar.src = card.dataset.profileImageUrl || 'images/avater.png';
+    displayName.textContent = card.dataset.displayName || '';
+    accountName.textContent = `@${card.dataset.accountName || ''}`;
+    createdAt.textContent = card.dataset.createdAt || '';
+    message.textContent = card.dataset.message || '';
+
+    if (card.dataset.imagePath) {
+        image.src = card.dataset.imagePath;
+        image.classList.remove('hidden');
+    } else {
+        image.src = '';
+        image.classList.add('hidden');
+    }
+
+    modal.classList.remove('hidden');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('overflow-hidden');
+    textarea.focus();
+}
+
+async function submitReplyFromModal() {
+    const textarea = document.getElementById('reply-modal-textarea');
+    const submitBtn = document.getElementById('reply-modal-submit');
+    const error = document.getElementById('reply-modal-error');
+    const replyList = document.getElementById('reply-list');
+
+    if (!textarea || !submitBtn || !error || !activeReplyTweetId) return;
+
+    const message = textarea.value.trim();
+    if (!message) {
+        error.textContent = '返信を入力してください';
+        error.classList.remove('hidden');
+        return;
+    }
+
+    submitBtn.disabled = true;
+    error.textContent = '';
+    error.classList.add('hidden');
+
+    try {
+        const res = await fetch(apiUrl('api/reply/add.php'), {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tweet_id: activeReplyTweetId, message }),
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const reply = await res.json();
+        updateReplyCount(activeReplyTweetId, Number(reply.reply_count ?? 0));
+
+        if (replyList && Number(replyList.dataset.tweetId) === activeReplyTweetId) {
+            const empty = replyList.querySelector('p');
+            if (empty) empty.remove();
+            replyList.insertAdjacentHTML('beforeend', createReplyHtml(reply));
+        }
+
+        closeReplyModal();
+    } catch (e) {
+        console.error('reply error:', e);
+        error.textContent = '返信に失敗しました';
+        error.classList.remove('hidden');
+    } finally {
+        submitBtn.disabled = false;
+    }
+}
+
+function initReplyModal() {
+    const modal = document.getElementById('reply-modal');
+    const backdrop = document.getElementById('reply-modal-backdrop');
+    const closeBtn = document.getElementById('reply-modal-close');
+    const cancelBtn = document.getElementById('reply-modal-cancel');
+    const submitBtn = document.getElementById('reply-modal-submit');
+    const textarea = document.getElementById('reply-modal-textarea');
+
+    if (!modal || !backdrop || !closeBtn || !cancelBtn || !submitBtn || !textarea) return;
+
+    backdrop.addEventListener('click', closeReplyModal);
+    closeBtn.addEventListener('click', closeReplyModal);
+    cancelBtn.addEventListener('click', closeReplyModal);
+    submitBtn.addEventListener('click', submitReplyFromModal);
+    textarea.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+            submitReplyFromModal();
+        }
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+            closeReplyModal();
+        }
+    });
+}
+
 function initReplyForms(container) {
-    // 返信ボタン → フォームのトグル
     container.querySelectorAll('.reply-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-            const tweetId = btn.dataset.tweetId;
-            const area = container.querySelector(`.reply-form-area[data-tweet-id="${tweetId}"]`);
-            if (area) area.classList.toggle('hidden');
-        });
-    });
-
-    // 返信送信ボタン
-    container.querySelectorAll('.reply-submit-btn').forEach(btn => {
-        btn.addEventListener('click', async () => {
-            const tweetId = Number(btn.dataset.tweetId);
-            const area = btn.closest('.reply-form-area');
-            const textarea = area.querySelector('textarea');
-            const message = textarea.value.trim();
-            if (!message) return;
-
-            btn.disabled = true;
-            try {
-                const res = await fetch(apiUrl('api/reply/add.php'), {
-                    method: 'POST',
-                    credentials: 'include',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ tweet_id: tweetId, message }),
-                });
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                const reply = await res.json();
-
-                // 入力欄をリセット・閉じる
-                textarea.value = '';
-                area.classList.add('hidden');
-
-                // 返信数を更新
-                const replyBtn = container.querySelector(`.reply-btn[data-tweet-id="${tweetId}"]`);
-                if (replyBtn) {
-                    const countEl = replyBtn.querySelector('.reply-count');
-                    if (countEl) countEl.textContent = reply.reply_count;
-                }
-            } catch (e) {
-                console.error('reply error:', e);
-                alert('返信に失敗しました');
-            } finally {
-                btn.disabled = false;
-            }
+            openReplyModal(btn);
         });
     });
 }
@@ -286,8 +370,9 @@ async function fetchMoreTweets(container, authUserId, spinner, sentinel, observe
     spinner.classList.remove('hidden');
 
     try {
+        const tab = container.dataset.tab || 'public';
         // 投稿を取得
-        const uri = apiUrl(`api/tweet/get.php?limit=${TWEET_LIMIT}&offset=${tweetOffset}`);
+        const uri = apiUrl(`api/tweet/get.php?tab=${encodeURIComponent(tab)}&limit=${TWEET_LIMIT}&offset=${tweetOffset}`);
         // Fetch APIで投稿を取得
         const res = await fetch(uri, { credentials: 'include' });
         // レスポンスがOKでない場合はエラーを投げる
@@ -297,7 +382,9 @@ async function fetchMoreTweets(container, authUserId, spinner, sentinel, observe
 
         // 最初のページで投稿がない場合は、投稿がない旨を表示
         if (tweetOffset === 0 && !tweets.length) {
-            container.innerHTML = '<p class="p-8 text-center text-slate-400 text-sm">投稿がありません</p>';
+            container.innerHTML = tab === 'followers'
+                ? '<p class="p-8 text-center text-slate-400 text-sm">フォロワーの投稿はありません</p>'
+                : '<p class="p-8 text-center text-slate-400 text-sm">投稿がありません</p>';
             tweetHasMore = false;
             return;
         }
@@ -344,9 +431,20 @@ async function loadTweets() {
 
     // ログインユーザーIDを取得
     const authUserId = container.dataset.authUserId ? Number(container.dataset.authUserId) : null;
+    const initialCount = container.dataset.initialCount ? Number(container.dataset.initialCount) : 0;
+    const tab = container.dataset.tab || 'public';
 
     // 既存の #tweet-list-loading をスピナーとして使用
     const spinner = document.getElementById('tweet-list-loading');
+    if (!spinner) return;
+
+    tweetOffset = initialCount;
+    tweetHasMore = initialCount === 0 || initialCount >= TWEET_LIMIT;
+    container.dataset.tab = tab;
+
+    if (!tweetHasMore) {
+        return;
+    }
 
     // IntersectionObserver の監視対象（sentinel）
     const sentinel = document.createElement('div');
@@ -372,6 +470,7 @@ async function loadTweets() {
 async function loadSearchResults() {
     const container = document.getElementById('search-result');
     if (!container) return;
+    if (container.dataset.ssrRendered === 'true') return;
 
     // キーワード
     const keyword = new URLSearchParams(location.search).get('keyword') ?? '';
@@ -530,6 +629,7 @@ async function loadUserTweets() {
 async function loadMediaGallery() {
     const container = document.getElementById('media-gallery');
     if (!container) return;
+    if (container.dataset.ssrRendered === 'true') return;
 
     const loading = document.getElementById('media-gallery-loading');
 
@@ -565,6 +665,9 @@ async function loadMediaGallery() {
  * 初期ロード
  */
 document.addEventListener('DOMContentLoaded', () => {
+    initLikeButtons(document);
+    initReplyModal();
+    initReplyForms(document);
     initTweetForm();
     loadTweets();
     loadSearchResults();

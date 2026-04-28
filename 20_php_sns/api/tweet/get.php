@@ -2,9 +2,7 @@
 require_once '../../app.php';
 
 use App\Models\AuthUser;
-use App\Models\Like;
-use App\Models\Tweet;
-use App\Models\User;
+use App\Services\TweetService;
 
 header('Content-Type: application/json');
 
@@ -19,22 +17,13 @@ if (!$auth_user) {
 // ページネーションパラメータ
 $limit  = isset($_GET['limit'])  ? (int) $_GET['limit']  : 10;
 $offset = isset($_GET['offset']) ? (int) $_GET['offset'] : 0;
+$tab = $_GET['tab'] ?? 'public';
 
-// ツイート取得
-$tweet  = new Tweet();
-$tweets = $tweet->get($limit, $offset);
-
-// profile_image_url・liked を付与し、空の image_path を null に統一
-if ($tweets) {
-    $like = new Like();
-    foreach ($tweets as &$t) {
-        $t['profile_image_url'] = User::profileImage($t['profile_image']);
-        $t['liked']             = (bool) $like->fetch($t['id'], $auth_user['id']);
-        if (empty($t['image_path'])) {
-            $t['image_path'] = null;
-        }
-    }
-    unset($t);
+if (!in_array($tab, ['public', 'followers'], true)) {
+    $tab = 'public';
 }
+
+$tweetService = new TweetService();
+$tweets = $tweetService->getTimelineTweets((int) $auth_user['id'], $tab, $limit, $offset);
 
 echo json_encode($tweets ?? [], JSON_UNESCAPED_UNICODE);

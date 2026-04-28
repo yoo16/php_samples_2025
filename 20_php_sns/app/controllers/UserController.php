@@ -8,11 +8,29 @@ use App\Models\AuthUser;
 use App\Models\Follow;
 use Lib\Request;
 
-class UserController
+class UserController extends AuthenticatedController
 {
-    public function __construct()
+    private function findRequestedUser(): ?array
     {
-        AuthUser::checkLogin();
+        $user_id = (int) ($_GET['id'] ?? $this->authUser['id']);
+
+        $user = new User();
+        return $user->find($user_id);
+    }
+
+    private function buildProfileData(array $user_data): array
+    {
+        $tweet = new Tweet();
+        $follow = new Follow();
+
+        return [
+            'tweet_count' => (int) $tweet->countByUserID($user_data['id']),
+            'follow_count' => $follow->countFollowing((int) $user_data['id']),
+            'follower_count' => $follow->countFollowers((int) $user_data['id']),
+            'is_following' => (int) $this->authUser['id'] === (int) $user_data['id']
+                ? false
+                : (bool) $follow->fetch((int) $this->authUser['id'], (int) $user_data['id']),
+        ];
     }
 
     public function update()
@@ -22,14 +40,14 @@ class UserController
             exit;
         }
 
-        $auth_user = AuthUser::get();
         $posts = sanitize($_POST);
 
         $user = new User();
-        $user->update($auth_user['id'], $posts);
+        $user->update($this->authUser['id'], $posts);
 
         // ユーザ情報をセッションに保存
-        AuthUser::set($user->find($auth_user['id']));
+        $this->authUser = $user->find($this->authUser['id']);
+        AuthUser::set($this->authUser);
 
         header('Location: ' . BASE_URL . 'user/edit.php');
         exit;
@@ -37,14 +55,12 @@ class UserController
 
     public function edit()
     {
-        $auth_user = AuthUser::get();
-
         // ユーザ情報をDBから再読み込み
         $user = new User();
-        $auth_user = $user->find($auth_user['id']);
+        $this->authUser = $user->find($this->authUser['id']);
 
         // Viewをレンダリング: app/views/user/edit.view.php
-        Request::render('user/edit', ['auth_user' => $auth_user]);
+        Request::render('user/edit', ['auth_user' => $this->authUser]);
     }
 
     public function follow()
@@ -54,12 +70,11 @@ class UserController
             exit;
         }
 
-        $auth_user   = AuthUser::get();
         $followee_id = (int) ($_POST['followee_id'] ?? 0);
 
-        if ($followee_id && $followee_id !== (int) $auth_user['id']) {
+        if ($followee_id && $followee_id !== (int) $this->authUser['id']) {
             $follow = new Follow();
-            $follow->insert($auth_user['id'], $followee_id);
+            $follow->insert($this->authUser['id'], $followee_id);
         }
 
         header('Location: ' . BASE_URL . 'user/?id=' . $followee_id);
@@ -73,12 +88,11 @@ class UserController
             exit;
         }
 
-        $auth_user   = AuthUser::get();
         $followee_id = (int) ($_POST['followee_id'] ?? 0);
 
         if ($followee_id) {
             $follow = new Follow();
-            $follow->delete($auth_user['id'], $followee_id);
+            $follow->delete($this->authUser['id'], $followee_id);
         }
 
         header('Location: ' . BASE_URL . 'user/?id=' . $followee_id);
@@ -87,32 +101,59 @@ class UserController
 
     public function index()
     {
-        $auth_user = AuthUser::get();
-        $user_id = $_GET['id'] ?? $auth_user['id'];
-
-        $user = new User();
-        $user_data = $user->find($user_id);
+        $user_data = $this->findRequestedUser();
         if (!$user_data) {
             header('Location: ' . BASE_URL . 'home/');
             exit;
         }
 
-        $tweet = new Tweet();
-        $tweet_count = $tweet->countByUserID($user_data['id']);
+        $profile = $this->buildProfileData($user_data);
+
+        Request::render('user/index', [
+            'auth_user' => $this->authUser,
+            'user_data' => $user_data,
+            'active_tab' => 'posts',
+            ...$profile,
+        ]);
+    }
+
+    public function following()
+    {
+        $user_data = $this->findRequestedUser();
+        if (!$user_data) {
+            header('Location: ' . BASE_URL . 'home/');
+            exit;
+        }
 
         $follow = new Follow();
-        $follow_count    = $follow->countFollowing($user_data['id']);
-        $follower_count  = $follow->countFollowers($user_data['id']);
-        $is_following    = (bool) $follow->fetch($auth_user['id'], $user_data['id']);
+        $users = $follow->getFollowingUsers((int) $user_data['id']);
 
-        // Viewをレンダリング: app/views/user/index.view.php
-        Request::render('user/index', [
-            'auth_user'      => $auth_user,
-            'user_data'      => $user_data,
-            'tweet_count'    => $tweet_count,
-            'follow_count'   => $follow_count,
-            'follower_count' => $follower_count,
-            'is_following'   => $is_following,
+        Request::render('user/following', [
+            'auth_user' => $this->authUser,
+            'user_data' => $user_data,
+            'users' => $users,
+            'active_tab' => 'following',
+            ...$this->buildProfileData($user_data),
+        ]);
+    }
+
+    public function followers()
+    {
+        $user_data = $this->findRequestedUser();
+        if (!$user_data) {
+            header('Location: ' . BASE_URL . 'home/');
+            exit;
+        }
+
+        $follow = new Follow();
+        $users = $follow->getFollowerUsers((int) $user_data['id']);
+
+        Request::render('user/followers', [
+            'auth_user' => $this->authUser,
+            'user_data' => $user_data,
+            'users' => $users,
+            'active_tab' => 'followers',
+            ...$this->buildProfileData($user_data),
         ]);
     }
 }

@@ -5,40 +5,53 @@ namespace App\Controllers;
 use App\Models\Tweet;
 use App\Models\Like;
 use App\Models\User;
-use App\Models\AuthUser;
+use App\Services\TweetService;
 use Lib\Request;
 
-class HomeController
+class HomeController extends AuthenticatedController
 {
-    public function __construct()
-    {
-        AuthUser::checkLogin();
-    }
-
     public function index()
     {
-        $auth_user = AuthUser::get();
-        // ツイート一覧は api/tweet/get.php から CSR で取得
-        Request::render('home/index', ['auth_user' => $auth_user]);
+        $tab = $_GET['tab'] ?? 'public';
+        if (!in_array($tab, ['public', 'followers'], true)) {
+            $tab = 'public';
+        }
+
+        $tweetService = new TweetService();
+        $tweets = $tweetService->getTimelineTweets((int) $this->authUser['id'], $tab);
+
+        Request::render('home/index', [
+            'auth_user' => $this->authUser,
+            'tweets' => $tweets,
+            'active_tab' => $tab,
+        ]);
     }
 
     public function detail()
     {
-        $id = $_GET['id'] ?? null;
+        $id = (int) ($_GET['id'] ?? null);
         if (!$id) {
             header('Location: ' . BASE_URL . 'home/');
             exit;
         }
 
-        // ツイートデータは api/tweet/fetch.php から CSR で取得
-        Request::render('home/detail', ['tweet_id' => (int) $id]);
+        $tweetService = new TweetService();
+
+        $tweet_data = $tweetService->getTweetDetail((int) $id, (int) $this->authUser['id']);
+        if (!$tweet_data) {
+            header('Location: ' . BASE_URL . 'home/');
+            exit;
+        }
+
+        Request::render('home/detail', [
+            'auth_user' => $this->authUser,
+            'tweet' => $tweet_data,
+            'replies' => $tweet_data['replies'],
+        ]);
     }
 
     public function user_tweets()
     {
-        // ユーザセッションの確認し、ログインしていない場合はログイン画面にリダイレクト
-        $auth_user = AuthUser::checkLogin();
-
         // ユーザIDを取得
         $user_id = $_GET['id'] ?? null;
 
@@ -52,7 +65,7 @@ class HomeController
         }
         // ユーザ投稿
         $tweet = new Tweet();
-        $tweets = $tweet->getByUserID($user_data['id']);
+        $tweets = $tweet->getByUserID((int) $user_data['id'], (int) $this->authUser['id']);
 
         // Viewをレンダリング: app/views/home/user_tweets.view.php
         Request::render('home/user_tweets', ['tweets' => $tweets]);
@@ -63,12 +76,9 @@ class HomeController
         // POSTデータを取得
         $posts = sanitize($_POST);
 
-        // ログインユーザセッションの確認
-        $auth_user = AuthUser::get();
-
         // 投稿処理
         $tweet = new Tweet();
-        $tweet->insert($auth_user['id'], $posts);
+        $tweet->insert($this->authUser['id'], $posts);
 
         // トップにリダイレクト
         header('Location: ' . BASE_URL . 'home/');
@@ -77,10 +87,19 @@ class HomeController
 
     public function search()
     {
-        $keyword = h($_GET['keyword'] ?? '');
+        $keyword = trim((string) ($_GET['keyword'] ?? ''));
+        $tweets = [];
 
-        // ツイート検索結果は api/tweet/search.php から CSR で取得
-        Request::render('home/search', ['keyword' => $keyword]);
+        if ($keyword !== '') {
+            $tweetService = new TweetService();
+            $tweets = $tweetService->searchTweets($keyword, (int) $this->authUser['id']);
+        }
+
+        Request::render('home/search', [
+            'auth_user' => $this->authUser,
+            'keyword' => $keyword,
+            'tweets' => $tweets,
+        ]);
     }
 
     public function like()
@@ -106,8 +125,12 @@ class HomeController
 
     public function garally()
     {
-        // メディア一覧は api/tweet/garally.php から CSR で取得
-        Request::render('home/garally');
+        $tweet = new Tweet();
+
+        Request::render('home/garally', [
+            'auth_user' => $this->authUser,
+            'tweets' => $tweet->getImages() ?? [],
+        ]);
     }
 
     public function delete()
@@ -122,8 +145,7 @@ class HomeController
         $posts = sanitize($_POST);
 
         // ログインユーザのIDと投稿のユーザIDが一致しない場合はホームにリダイレクト
-        $auth_user = AuthUser::get();
-        if ((int) $auth_user['id'] !== (int) $posts['user_id']) {
+        if ((int) $this->authUser['id'] !== (int) $posts['user_id']) {
             header('Location: ' . BASE_URL . 'home/');
             exit;
         }

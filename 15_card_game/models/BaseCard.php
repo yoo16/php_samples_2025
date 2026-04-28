@@ -16,7 +16,6 @@ class BaseCard implements CardInterface
     public string $image = '';
     public string $specialSkill = '';
     public int $specialSkillPower = 0;
-    public array $levelUpThresholds = [20, 50, 90, 150, 220, 300, 400, 500, 700, 1000];
 
     /**
      * 子クラスから送られてきた値でプロパティを初期化する
@@ -93,20 +92,15 @@ class BaseCard implements CardInterface
         $this->exp += $exp;
     }
 
-    public function isLevelUp(): bool
-    {
-        if ($this->level >= 10) return false;
-        return $this->exp >= $this->levelUpThresholds[$this->level - 1];
-    }
-
     public function levelUp(): void
     {
         $this->level++;
         $this->attack += 5;
-        $this->defense += 2;
-        $this->maxHp += 20;
-        $this->hp = $this->maxHp; // レベルアップで全回復
+        $this->defense += 3;
+        $this->specialSkillPower += 6;
+        $this->maxHp += 15;
+        $this->hp += 15;
         $this->maxMp += 1;
-        $this->mp = $this->maxMp;
+        $this->mp = min($this->mp + 1, $this->maxMp);
     }
 }

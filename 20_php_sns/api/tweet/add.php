@@ -35,13 +35,14 @@ if (!$tweet_id) {
     respondJson(500, ['error' => '投稿に失敗しました']);
 }
 
-$data = $tweet->findWithUser((int) $tweet_id);
+$data = $tweet->findWithUser((int) $tweet_id, (int) $auth_user['id']);
 if (!$data) {
     respondJson(500, ['error' => '投稿データの取得に失敗しました']);
 }
 
-$data['like_count'] = 0;
-$data['liked'] = false;
+$data['like_count'] = (int) ($data['like_count'] ?? 0);
+$data['reply_count'] = (int) ($data['reply_count'] ?? 0);
+$data['liked'] = (bool) ($data['liked'] ?? false);
 $data['profile_image_url'] = User::profileImage($data['profile_image']);
 $data['image_path'] = empty($data['image_path']) ? null : $data['image_path'];
 

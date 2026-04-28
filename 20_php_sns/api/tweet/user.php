@@ -2,7 +2,6 @@
 require_once '../../app.php';
 
 use App\Models\AuthUser;
-use App\Models\Like;
 use App\Models\Tweet;
 use App\Models\User;
 
@@ -24,13 +23,12 @@ if (!$user_id) {
 }
 
 $tweet  = new Tweet();
-$tweets = $tweet->getByUserID($user_id);
+$tweets = $tweet->getByUserID($user_id, (int) $auth_user['id']);
 
 if ($tweets) {
-    $like = new Like();
     foreach ($tweets as &$t) {
         $t['profile_image_url'] = User::profileImage($t['profile_image']);
-        $t['liked']             = (bool) $like->fetch($t['id'], $auth_user['id']);
+        $t['liked']             = (bool) ($t['liked'] ?? false);
         if (empty($t['image_path'])) {
             $t['image_path'] = null;
         }

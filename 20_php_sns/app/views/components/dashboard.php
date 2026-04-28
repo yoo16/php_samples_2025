@@ -9,21 +9,21 @@ use App\Models\User;
     </div>
     <div class="text-center">
         <?php if ($auth_user['id'] == $user_data['id']): ?>
-            <a href="user/edit.php" class="border border-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg">プロフィールを編集</a>
+            <a href="<?= BASE_URL ?>user/edit.php" class="border border-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg">プロフィールを編集</a>
         <?php elseif ($is_following ?? false): ?>
-            <form action="user/unfollow.php" method="post">
+            <form action="<?= BASE_URL ?>user/unfollow.php" method="post">
                 <input type="hidden" name="followee_id" value="<?= $user_data['id'] ?>">
                 <button type="submit" class="font-bold py-2 px-5 rounded-full border border-slate-300 text-slate-900 hover:bg-red-50 hover:text-red-500 hover:border-red-300 transition">
                     フォロー解除
                 </button>
             </form>
         <?php else: ?>
-            <form action="user/follow.php" method="post">
+            <form action="<?= BASE_URL ?>user/follow.php" method="post">
                 <input type="hidden" name="followee_id" value="<?= $user_data['id'] ?>">
                 <button type="submit" class="font-bold py-2 px-5 rounded-full bg-slate-900 text-white hover:bg-slate-700 transition">
                     フォロー
                 </button>
-            </form>
+                </form>
         <?php endif ?>
     </div>
 
@@ -46,14 +46,14 @@ use App\Models\User;
                 <span class="font-bold text-lg"><?= $tweet_count ?? 0 ?></span>
                 <span class="text-gray-600 text-sm">ツイート</span>
             </div>
-            <div class="text-center">
+            <a href="<?= BASE_URL ?>user/following.php?id=<?= (int) $user_data['id'] ?>" class="text-center hover:opacity-70 transition">
                 <span class="font-bold text-lg"><?= $follow_count ?? 0 ?></span>
                 <span class="text-gray-600 text-sm">フォロー中</span>
-            </div>
-            <div class="text-center">
+            </a>
+            <a href="<?= BASE_URL ?>user/followers.php?id=<?= (int) $user_data['id'] ?>" class="text-center hover:opacity-70 transition">
                 <span id="follower-count" class="font-bold text-lg"><?= $follower_count ?? 0 ?></span>
                 <span class="text-gray-600 text-sm">フォロワー</span>
-            </div>
+            </a>
         </div>
     </div>
 </div>
