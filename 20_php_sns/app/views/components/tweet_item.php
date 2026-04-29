@@ -1,15 +1,8 @@
 <?php
-if (!isset($tweet)) return;
-if (!isset($auth_user)) return;
+if (!isset($tweet) || !is_array($tweet)) return;
+if (!isset($auth_user) || !is_array($auth_user)) return;
 ?>
-<div class="tweet-card px-4 py-4 border-b border-slate-100 hover:bg-slate-50 transition"
-    data-tweet-id="<?= (int) $tweet['id'] ?>"
-    data-display-name="<?= h($tweet['display_name']) ?>"
-    data-account-name="<?= h($tweet['account_name']) ?>"
-    data-created-at="<?= h($tweet['created_at']) ?>"
-    data-message="<?= h($tweet['message']) ?>"
-    data-profile-image-url="<?= h($tweet['profile_image_url']) ?>"
-    data-image-path="<?= h((string) ($tweet['image_path'] ?? '')) ?>">
+<div class="tweet-card px-4 py-4 border-b border-slate-100 hover:bg-slate-50 transition">
     <div class="flex gap-3">
         <a href="user/?id=<?= (int) $tweet['user_id'] ?>" class="shrink-0">
             <img src="<?= h($tweet['profile_image_url']) ?>" class="rounded-full w-10 h-10 object-cover">
@@ -23,8 +16,10 @@ if (!isset($auth_user)) return;
                 <span class="text-slate-400 text-sm">·</span>
                 <span class="text-slate-400 text-sm"><?= h($tweet['created_at']) ?></span>
             </div>
-            <div class="mt-1 text-slate-800 text-sm leading-relaxed tweet-message cursor-pointer" data-id="<?= (int) $tweet['id'] ?>">
-                <?= nl2br(h($tweet['message'])) ?>
+            <div class="tweet-message mt-1 text-slate-800 text-sm leading-relaxed" data-id="<?= (int) $tweet['id'] ?>">
+                <a href="home/detail.php?id=<?= (int) $tweet['id'] ?>" class="cursor-pointer">
+                    <?= nl2br(h($tweet['message'])) ?>
+                </a>
             </div>
 
             <?php if (!empty($tweet['image_path'])) : ?>
