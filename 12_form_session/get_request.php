@@ -11,6 +11,8 @@ $queries = $_GET;
 // 表示用のキーワードとカテゴリ
 $keyword = $queries['keyword'] ?? '';
 $category = $queries['category'] ?? '';
+// TODO: SERVERグローバル変数からリクエストURIを取得
+$uri = $_SERVER['REQUEST_URI'] ?? '';
 ?>
 
 <!DOCTYPE html>
@@ -121,16 +123,13 @@ $category = $queries['category'] ?? '';
                         <div class="mt-6 p-4 rounded-xl bg-sky-50 border border-sky-100">
                             <p class="text-[10px] font-bold text-sky-600 mb-1 uppercase tracking-wider">Generated URL</p>
                             <code class="text-[10px] text-sky-800 break-all leading-relaxed">
-                                <?= htmlspecialchars($_SERVER['REQUEST_URI']) ?>
+                                <?= htmlspecialchars($uri) ?>
                             </code>
                         </div>
                     </div>
                 <?php endif; ?>
             </div>
         </div>
-
-        <!-- Dashboard Link -->
-        <?php include '../components/footer.php'; ?>
     </main>
 </body>
 
