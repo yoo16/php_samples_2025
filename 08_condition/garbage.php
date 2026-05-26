@@ -6,24 +6,31 @@ $targetDate = isset($_GET['date']) ? new DateTime($_GET['date']) : new DateTime(
 $weekIndex = (int)$targetDate->format('w');
 
 // 日本語の曜日名を取得 (IntlDateFormatterを使用)
-$formatter = new IntlDateFormatter('ja_JP', IntlDateFormatter::NONE, IntlDateFormatter::NONE, null, null, 'E');
-$weekDay = $formatter->format($targetDate);
+// $formatter = new IntlDateFormatter('ja_JP', IntlDateFormatter::NONE, IntlDateFormatter::NONE, null, null, 'E');
+// $weekDay = $formatter->format($targetDate);
+// 簡易的な曜日名の配列
+$weekDays = ['日', '月', '火', '水', '木', '金', '土'];
+$weekDay = $weekDays[$weekIndex];
 
-// ゴミ出しの判定 (PHP 8.0+ match式)
+// ゴミ出しのルールを定義
+// 1, 3 → 月、水 → 燃えるゴミ
+// 5 → 金 → 燃えないゴミ
+// 2, 4, 6, 0 → 火、木、土、日 → 回収なし
+$burnable = ["is_garbage" => true, "label" => "燃えるゴミ", "color" => "bg-rose-500"];
+$unburnable = ["is_garbage" => true, "label" => "燃えないゴミ", "color" => "bg-amber-500"];
+$none = ["is_garbage" => false, "label" => "回収なし", "color" => "bg-slate-400"];
+
+// TODO: ゴミ出しの判定 (PHP 8.0+ match式)
 $garbage = match ($weekIndex) {
-    1, 3 => "燃えるゴミ",
-    5    => "燃えないゴミ",
-    default => "回収なし"
+    1, 3 => $burnable,
+    5 => $unburnable,
+    default => $none
 };
 
 // レイアウト用の色設定
-$statusColor = match ($garbage) {
-    "燃えるゴミ" => "bg-rose-500",
-    "燃えないゴミ" => "bg-amber-500",
-    default => "bg-slate-400"
-};
+$statusColor = $garbage['color'];
 
-$message = ($garbage === "回収なし") ? "今日はゆっくり過ごしましょう。" : "朝8時までに集積所へ！";
+$message = $garbage['is_garbage'] ? "朝8時までに集積所へ！" : "今日はゆっくり過ごしましょう。";
 ?>
 
 <!DOCTYPE html>
@@ -68,7 +75,7 @@ $message = ($garbage === "回収なし") ? "今日はゆっくり過ごしまし
 
                 <h2 class="text-slate-400 text-sm font-bold uppercase tracking-widest mb-2">本日の回収内容</h2>
                 <div class="text-4xl font-black text-slate-900 tracking-tight mb-2">
-                    <?= $garbage ?>
+                    <?= $garbage['label'] ?>
                 </div>
                 <p class="text-slate-400 text-sm italic">
                     <?= $message ?>
