@@ -1,6 +1,6 @@
 <?php
 require_once "env.php";
-?>'
+?>
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -26,7 +26,7 @@ require_once "env.php";
     <div class="mx-auto max-w-4xl flex items-center gap-3">
       <span class="text-2xl">🗺️</span>
       <div>
-        <p class="text-xs font-semibold uppercase tracking-widest text-blue-600">Gemini API</p>
+        <p class="text-xs font-semibold uppercase tracking-widest text-blue-600">Mock API</p>
         <h1 class="text-xl font-bold text-slate-900">観光スポット紹介ガイド</h1>
       </div>
     </div>
@@ -84,7 +84,7 @@ require_once "env.php";
     <!-- ===== ローディング ===== -->
     <div id="loading" class="hidden text-center py-10">
       <div class="inline-block h-10 w-10 animate-spin rounded-full border-4 border-blue-200 border-t-blue-600"></div>
-      <p class="mt-4 text-sm text-slate-500">Gemini が観光スポットを考えています…</p>
+      <p class="mt-4 text-sm text-slate-500">サンプルデータから観光スポットを探しています…</p>
     </div>
 
     <!-- ===== エラー ===== -->
