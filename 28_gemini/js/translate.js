@@ -4,6 +4,7 @@ const statusElement = document.getElementById('status');
 const fromLangSelect = document.getElementById('fromLang');
 const toLangSelect = document.getElementById('toLang');
 const chatHistoryElement = document.getElementById('chatHistory');
+const emptyHistoryElement = document.getElementById('emptyHistory');
 
 var historyList = [];
 SpeechRecognition = webkitSpeechRecognition || SpeechRecognition;
@@ -55,10 +56,11 @@ const handleTranslate = () => {
  */
 const translate = async (origin, fromLang, toLang) => {
     statusElement.textContent = "翻訳中...";
+    startButton.disabled = true;
+    startButton.classList.add('opacity-60', 'cursor-not-allowed');
 
     const data = { origin, fromLang, toLang }
     try {
-        // Fetch APIを使用して翻訳リクエストを送信
         const response = await fetch(TRANSLATION_URI, {
             method: 'POST',
             headers: {
@@ -67,22 +69,28 @@ const translate = async (origin, fromLang, toLang) => {
             body: JSON.stringify(data)
         });
 
-        statusElement.textContent = "";
-
         if (!response.ok) {
             throw new Error(`Network error: ${response.status}`);
         }
 
         const result = await response.json();
         console.log(result);
+
+        if (result.status === 'error') {
+            throw new Error(result.message || 'Translation error');
+        }
+
+        statusElement.textContent = "";
         renderTranslation(result);
 
     } catch (error) {
         console.error('Fetch error:', error);
         statusElement.textContent = "翻訳中にエラーが発生しました。";
+    } finally {
+        startButton.disabled = false;
+        startButton.classList.remove('opacity-60', 'cursor-not-allowed');
     }
 };
-
 
 // 翻訳結果を表示
 const renderTranslation = (translationData) => {
@@ -91,13 +99,15 @@ const renderTranslation = (translationData) => {
 };
 
 const addOrigin = (text, lang) => {
+    emptyHistoryElement?.remove();
+
     // 翻訳前の吹き出しを作成（左側）
     const originalMessageDiv = document.createElement('div');
     originalMessageDiv.classList.add('flex', 'justify-start');
 
     const originalBubble = document.createElement('div');
-    originalBubble.classList.add('bg-teal-500', 'text-white', 'rounded-lg', 'p-3', 'max-w-xs', 'text-left');
-    originalBubble.innerHTML = text;
+    originalBubble.classList.add('max-w-[82%]', 'rounded-lg', 'bg-sky-600', 'p-4', 'text-left', 'leading-7', 'text-white', 'shadow-sm');
+    originalBubble.textContent = text;
 
     originalMessageDiv.appendChild(originalBubble);
     chatHistoryElement.appendChild(originalMessageDiv);
@@ -110,14 +120,14 @@ const addTranslation = (result) => {
 
     // 吹き出し本体
     const translationBubble = document.createElement('div');
-    translationBubble.classList.add('bg-gray-300', 'text-gray-800', 'rounded-lg', 'p-3', 'max-w-xs', 'text-left');
+    translationBubble.classList.add('max-w-[82%]', 'rounded-lg', 'border', 'border-slate-200', 'bg-white', 'p-4', 'text-left', 'leading-7', 'text-slate-800', 'shadow-sm');
     const translationText = result.translate ? result.translate : "Translation error.";
     translationBubble.textContent = translationText;
 
-    // 🔊 再生ボタン
+    // 再生ボタン
     const playButton = document.createElement('button');
-    playButton.innerHTML = '🔊';
-    playButton.classList.add('text-xl', 'hover:text-blue-500', 'transition');
+    playButton.textContent = '再生';
+    playButton.classList.add('rounded-lg', 'border', 'border-slate-200', 'bg-white', 'px-3', 'py-2', 'text-sm', 'font-semibold', 'text-slate-700', 'shadow-sm', 'transition', 'hover:border-sky-300', 'hover:text-sky-700');
     playButton.title = '翻訳結果を読み上げ';
 
     // クリック時に読み上げる
@@ -130,7 +140,6 @@ const addTranslation = (result) => {
     translationMessageDiv.appendChild(playButton);
     chatHistoryElement.appendChild(translationMessageDiv);
 };
-
 
 const playText = () => {
     if (lastTranslation) {
@@ -179,3 +188,5 @@ document.addEventListener('keydown', (event) => {
         swapLanguages();
     }
 });
+
+startButton.addEventListener('click', handleTranslate);
