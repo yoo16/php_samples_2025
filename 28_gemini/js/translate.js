@@ -7,6 +7,7 @@ const chatHistoryElement = document.getElementById('chatHistory');
 const emptyHistoryElement = document.getElementById('emptyHistory');
 
 var historyList = [];
+// SpeechRecognition APIが利用可能かチェック
 SpeechRecognition = webkitSpeechRecognition || SpeechRecognition;
 const recognition = new SpeechRecognition();
 recognition.interimResults = false;
@@ -61,6 +62,9 @@ const translate = async (origin, fromLang, toLang) => {
 
     const data = { origin, fromLang, toLang }
     try {
+        // 翻訳APIのURLを設定 --- env.jsの設定 ---
+        const TRANSLATION_URI = `${HOST}${BASE_PATH}/api/ai/translate.php`;
+        // APIに翻訳リクエストを送信:POST & JSON形式
         const response = await fetch(TRANSLATION_URI, {
             method: 'POST',
             headers: {
@@ -149,7 +153,6 @@ const playText = () => {
     }
 }
 
-// TODO: Chromeで利用できない
 // 翻訳結果を音声で読み上げ
 const speakTranslation = (text) => {
     console.log('speakTranslation', text, toLangSelect.value)
@@ -164,6 +167,9 @@ const speakTranslation = (text) => {
     });
 };
 
+/**
+ * 言語を入れ替える
+ */
 const swapLanguages = () => {
     const fromLang = fromLangSelect.value;
     const toLang = toLangSelect.value;

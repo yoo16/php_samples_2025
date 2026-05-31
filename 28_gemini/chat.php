@@ -6,7 +6,8 @@ $prompt = $_POST['prompt'] ?? '';
 $result = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $result = (new GeminiService())->chat($prompt);
+    $gemini = new GeminiService();
+    $result = $gemini->chat($prompt);
 }
 ?>
 <!DOCTYPE html>
