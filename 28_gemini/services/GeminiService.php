@@ -20,6 +20,7 @@ class GeminiService
      */
     function chat(string $prompt): ?string
     {
+        if (empty($prompt)) return "プロンプトが空です";
         $url = sprintf(
             '%s%s:generateContent?key=%s',
             $this->baseURL,
@@ -124,6 +125,9 @@ class GeminiService
      */
     function translate(string $origin, string $fromLang, string $toLang): ?string
     {
+        if (empty($origin)) return "翻訳元のテキストが空です";
+        if (empty($fromLang) || empty($toLang)) return "翻訳元または翻訳先の言語コードが空です";
+
         $url = sprintf(
             '%s%s:generateContent?key=%s',
             $this->baseURL,
